@@ -1,5 +1,5 @@
-All files in this repository, excluding this file, `fate-recv.sh`, 
-`public/stylesheets/fate.css`, `views/header*.ejs`, and 
+All files in this repository, excluding this file, `fate-recv.sh`,
+`public/stylesheets/fate.css`, `views/header*.ejs`, and
 `views/footer.ejs`, are licensed under the MIT license:
 
 > Copyright (c) 2014 Tiancheng "Timothy" Gu <timothygu99@gmail.com>
