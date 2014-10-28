@@ -1,0 +1,246 @@
+/*
+ * Copyright (c) 2011 Mans Rullgard <mans@mansr.com>
+ * Copyright (c) 2014 Tiancheng "Timothy" Gu <timothygu99@gmail.com>
+ *
+ * Permission to use, copy, modify, and distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHORS DISCLAIM ALL WARRANTIES
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR
+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ */
+
+@Cpass:   #5cb85c;
+@Cfail:   #d9534f;
+@Cwarn:   #ffeb3b;
+
+@Cinvert: hsl(0, 0%, 90%);
+@Cmain:                 hsl(0, 0%,    19%);
+@Cmaindark:          darken(@Cmain,    5%);
+@Cmaindarkdark:      darken(@Cmain,   10%);
+@Cborder:            darken(@Cmain,   13%);
+@Cmainlight:        lighten(@Cmain,    5%);
+@Cmainlightlight:   lighten(@Cmain,   10%);
+@Cmainlightlightl:  lighten(@Cmain,   55%);
+
+.recent  { font-weight: bold; }
+.ancient { color: #888; }
+
+.fail {
+    background: @Cfail !important;
+    color: white;
+}
+.pass {
+    background: @Cpass !important;
+    color: white;
+}
+.warn {
+    background: @Cwarn !important;
+    color: black;
+}
+
+.table th {
+  white-space: nowrap;
+}
+
+.table > thead > tr,
+.table > tbody > tr,
+.table > tfoot > tr {
+    > td.pass,
+    > th.pass,
+    &.pass > td,
+    &.pass > th {
+        background-color: @Cpass;
+        color: white;
+    }
+    > td.fail,
+    > th.fail,
+    &.fail > td,
+    &.fail > th {
+        background-color: @Cfail;
+        color: white;
+    }
+    > td.warn,
+    > th.warn,
+    &.warn > td,
+    &.warn > th {
+        background-color: @Cwarn;
+        color: black;
+    }
+}
+
+.dl-config {
+    background-color: white;
+    > dd {
+        margin-left: 0;
+        padding: 8px;
+        background-color: @Cmaindark;
+        > code {
+            width: 100%;
+            overflow-y: auto;
+        }
+    }
+    > dt {
+        padding: 8px;
+        background-color: @Cmainlightlight;
+        border-bottom: 2px solid @Cmainlightlightl;
+    }
+}
+
+.fate-alert { color: #911; }
+.rejoice { color: #191; }
+
+#failometer {
+    padding: 0;
+}
+
+#failometer .progress {
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    margin-bottom: inherit;
+}
+
+/* index and history listings */
+
+.replist {
+    width: 100%;
+}
+
+.replist a {
+    color: inherit;
+    text-decoration: none;
+}
+
+th a:link, th a:visited {
+    color: inherit;
+    text-decoration: none;
+}
+
+th a:hover {
+    text-decoration: underline;
+}
+
+#index .comment     { max-width: 13em; }
+
+#index .toggle {
+    cursor: pointer;
+}
+
+tr.slotfail {
+    display: none;
+}
+
+table.minirep {
+    width: 100%;
+}
+
+.minirep th {
+    padding: 0 0.5em;
+    text-align: left;
+}
+
+/* config summary */
+
+#config td:first-child {
+    font-weight: bold;
+    padding-right: 3em;
+    vertical-align: top;
+}
+
+/* test listing */
+
+#tests {
+    margin-top: 2em;
+    width: 100%;
+}
+
+#tests .fail th {
+    background: @Cfail;
+    border-bottom: 2px solid #fcc;
+}
+
+#tests .pass th {
+    background: @Cpass;
+    border-bottom: 2px solid #9f9;
+    border-top: 0;
+}
+
+#tests .toggle {
+    width: 5em;
+    cursor: pointer;
+    text-align: center;
+}
+
+.errcode {
+    width: 3em;
+    text-align: center;
+}
+
+#tests .lastpass {
+    width: 12em;
+}
+
+.toggled {
+    display: none;
+}
+
+#passed_tests span {
+    padding: 0.25em;
+}
+
+code {
+    white-space: nowrap;
+}
+
+pre {
+    white-space: pre;
+}
+
+/* Button style */
+.btn-fail {
+    color: #fff;
+    background-color: @Cfail;
+    border-color: #d4403a;
+}
+.btn-fail:hover,
+.btn-fail:focus,
+.btn-fail:active,
+.btn-fail.active,.open
+    > .dropdown-toggle.btn-fail {
+    color: #fff;
+    background-color: #c9312c;
+    border-color: #bc2e29;
+}
+.btn-pass {
+    color: #fff;
+    background-color: @Cpass;
+    border-color: #4cae4c;
+}
+.btn-pass:hover,
+.btn-pass:focus,
+.btn-pass:active,
+.btn-pass.active,.open
+    > .dropdown-toggle.btn-pass {
+    color: #fff;
+    background-color: #449c44;
+    border-color: #3a833a;
+}
+a.btn-default {
+    color: #333;
+}
+
+/* Tab Styles */
+.nav-tabs > li {
+  &.active > a {
+    &,
+    &:hover,
+    &:focus {
+      color: @Cmain;
+    }
+  }
+}

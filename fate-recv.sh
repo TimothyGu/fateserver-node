@@ -32,9 +32,22 @@ cd $reptmp
 tar xzk
 
 header=$(head -n1 report)
-date=$(expr "$header" : 'fate:0:\([0-9]*\):')
-slot=$(expr "$header" : 'fate:0:[0-9]*:\([A-Za-z0-9_.-]*\):')
-rev=$(expr "$header" : "fate:0:$date:$slot:\([A-Za-z0-9_.-]*\):")
+# Can't use expr on this one because $version might be 0
+version=$(echo "$header" | sed "s/^fate:\([0-9]*\):.*/\1/")
+date=$(expr "$header" : "fate:$version:\([0-9]*\):")
+slot=$(expr "$header" : "fate:$version:$date*:\([A-Za-z0-9_.-]*\):")
+rev=$(expr "$header" : "fate:$version:$date:$slot:\([A-Za-z0-9_.-]*\):")
+branch=master
+if [ $version -eq 1 ]; then
+    branch=$(expr "$header" : "fate:$version:$date:$slot:$rev:[0-9]*:[ A-Za-z0-9_.-]*:\([A-Za-z0-9_.-\/]*\):")
+    branch=$(echo "$branch" | sed 's,^release/,v,')
+fi
+
+test -e "$FATEDIR/branches" || touch "$FATEDIR/branches"
+grep -q "^$branch$" "$FATEDIR/branches" || \
+    [ "$branch" = 'master' ] || \
+    (echo "$branch" >>"$FATEDIR/branches" && \
+     echo "Setting up new branch $branch" >&2)
 
 test -n "$date" && test -n "$slot" || die "Invalid report header"
 
@@ -58,7 +71,7 @@ IFS=:
 
 exec >pass
 while read name status rest; do
-    if [ "$status" = 0 ]; then
+    if [ "$status" -eq 0 ]; then
         echo "$name:$date:$rev"
         npass=$(($npass+1))
     fi
@@ -68,7 +81,11 @@ exec <&- >&-
 
 upass(){
     read pname pdate prev || return 0
+    # Because we `sort`ed the input before passing it to upass, same tests
+    # always in couplets in the order of new to old.
     while read lname ldate lrev; do
+        # If the second line describes the same test, discard it because it's
+        # the old result.
         test "$lname" != "$pname" && echo "$pname:$pdate:$prev"
         pname=$lname
         pdate=$ldate
@@ -87,15 +104,15 @@ fi
 
 unset IFS
 
-nwarn=$(grep -Eci '\<warning\>' compile.log) || true
+nwarn=$(grep -Eci '\<warning\>' compile.log) || nwarn=0
 
 echo "stats:$ntest:$npass:$nwarn" >>summary
 
 repdir=$slotdir/$date
 mkdir $repdir
 gzip -9 *.log
-xz -8 report
-cp -p summary report.xz *.log.gz $repdir
+xz -0 report
+cp -p summary summary.json report.xz *.log.gz $repdir
 chmod 644 $repdir/*
 rm -f $slotdir/previous
 test -e $slotdir/latest && mv $slotdir/latest $slotdir/previous

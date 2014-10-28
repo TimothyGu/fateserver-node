@@ -1,0 +1,56 @@
+#!/usr/bin/env node
+/*
+ * The executable application.
+ *
+ * Copyright (c) 2014 Tiancheng "Timothy" Gu <timothygu99@gmail.com>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
+'use strict'
+
+var debug = require('debug')('f:www')
+
+var util = require('../lib/util')
+
+function dropSudo () {
+  try {
+    console.log('Current uid: ' + process.getuid())
+    console.log('Current gid: ' + process.getgid())
+    process.initgroups(process.env.SUDO_USER, +process.env.SUDO_GID)
+    console.log('Dropping sudo group privileges as ' + process.env.SUDO_GID)
+    process.setgid(+process.env.SUDO_GID)
+    console.log('Dropping sudo privileges as ' + process.env.SUDO_UID)
+    process.setuid(+process.env.SUDO_UID)
+  } catch (e) {
+    console.log('Cowardly refusing to keep the process alive as root.')
+    throw e
+  }
+}
+
+var app = require('../app')
+
+app.set('port', util.port)
+
+var server = app.listen(app.get('port'), function () {
+  console.log('Express server listening on', server.address().port)
+  if (process.env.SUDO_UID || process.env.SUDO_GID) {
+    dropSudo()
+  }
+})

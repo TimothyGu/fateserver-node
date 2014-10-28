@@ -1,0 +1,30 @@
+        </div> <!-- page-content-inset -->
+      </div> <!-- page-content-wrapper -->
+    </div> <!-- wrapper -->
+
+    <script src="https://ffmpeg.org/js/jquery.min.js"></script>
+    <script src="https://ffmpeg.org/js/bootstrap.min.js"></script>
+
+    <!-- Custom JavaScript for the Menu Toggle -->
+    <script>
+      $("#menu-toggle").click(function (e) {
+        e.preventDefault()
+        $("#wrapper").toggleClass("active")
+      })
+    </script>
+    <script src="/js/footable.js"></script>
+    <script src="/js/footable.sort.min.js"></script>
+    <script>
+      $('.footable').footable({
+        breakpoints: {
+          xs: 360
+        , sm: 750
+        , md: 970
+        }
+      })
+      $(function () {
+        $('.footable').footable()
+      })
+    </script>
+  </body>
+</html>

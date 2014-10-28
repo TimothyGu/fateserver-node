@@ -1,0 +1,259 @@
+<%#
+ % Report page.
+ %
+ % Copyright (c) 2014 Tiancheng "Timothy" Gu <timothygu99@gmail.com>
+ %
+ % Permission is hereby granted, free of charge, to any person obtaining a copy
+ % of this software and associated documentation files (the "Software"), to deal
+ % in the Software without restriction, including without limitation the rights
+ % to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ % copies of the Software, and to permit persons to whom the Software is
+ % furnished to do so, subject to the following conditions:
+ %
+ % The above copyright notice and this permission notice shall be included in
+ % all copies or substantial portions of the Software.
+ %
+ % THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ % IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ % FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ % AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ % LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ % OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ % THE SOFTWARE.
+ %-%>
+
+<% var l = locals -%>
+
+<% include header1.ejs %>
+<title><%= l.slot %> <%= l.summary.rev %> - <%= l.util.branding %> FATE</title>
+<link rel="stylesheet" href="/css/prism.css" />
+<% include header2.ejs %>
+Report of <%= l.slot %> <%= l.summary.rev %>
+<% include header3.ejs %>
+
+<ul class="pager">
+  <li class="previous">
+    <a href="/">&larr; Index</a>
+  </li>
+  <li class="previous">
+    <a href="/history/<%= l.slot %>">&larr; Slot History</a>
+  </li>
+</ul>
+
+<div class="alert <%- l.summary.rclass %>" role="alert">
+  <% if (l.summary.status === 3) { -%>
+    <strong>Error configuring!</strong>
+  <% } else if (l.summary.status === 2) { -%>
+    <strong>Error compiling!</strong>
+  <% } else if (l.summary.status === 1) { -%>
+    <% if (!l.summary.ntests) { -%>
+         <strong>Error testing!</strong>
+    <% } else { -%>
+         <strong>Partially failed:</strong> <%= l.summary.rtext %> passed!
+    <% } -%>
+  <% } else if (l.summary.status === 0) { -%>
+    <% if (l.summary.ntests) { -%>
+         <strong>All tests passed!</strong>
+    <% } else { -%>
+         <strong>Built successfully!</strong>
+    <% } -%>
+  <% } -%>
+</div>
+
+<ul class="nav nav-tabs" role="tablist" id="reportTab">
+  <li role="presentation" class="active">
+    <a href="#info" role="tab" data-toggle="tab">Information</a>
+  </li>
+  <% if (l.summary.status === 1) { -%>
+  <li role="presentation">
+    <a href="#failed_tests" role="tab" data-toggle="tab">
+      Failed Tests
+      <span class="badge <%= l.summary.rclass %>"><%= l.summary.nfail %></span>
+    </a>
+  </li>
+  <% } -%>
+  <% if (l.summary.npass > 0) { -%>
+  <li role="presentation">
+    <a href="#passed_tests" role="tab" data-toggle="tab">
+      Passed Tests
+      <span class="badge pass"><%= l.summary.npass %></span>
+    </a>
+  </li>
+  <% } -%>
+</ul>
+
+<div class="tab-content">
+<div role="tabpanel" class="tab-pane fade in active" id="info">
+  <div class="table-responsive">
+    <table id="config" class="replist table">
+      <thead>
+        <tr><th colspan="2">Information</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>Architecture</th>
+          <td><%= l.summary.arch %></td>
+        </tr>
+        <tr>
+          <th>Arch variant</th>
+          <td><%= l.summary.subarch %></td>
+        </tr>
+        <tr>
+          <th>CPU</th>
+          <td><%= l.summary.cpu %></td>
+        </tr>
+        <tr>
+          <th>OS</th>
+          <td><%= l.summary.os %></td>
+        </tr>
+        <tr>
+          <th>Owner</th>
+          <td><%= l.owner %></td>
+        </tr>
+        <tr>
+          <th>Compiler</th>
+          <td><%= l.summary.cc %></td>
+        </tr>
+        <tr>
+          <th>Configuration</th>
+          <td><code><%- l.util.formatConfig(l.summary.config) %></code></td>
+        </tr>
+        <tr>
+          <th>Comment</th>
+          <td><%= l.summary.comment %></td>
+        </tr>
+        <tr>
+          <th>Revision</th>
+          <td><%- l.util.linkGitHist(l.summary.rev) %></td>
+        </tr>
+        <tr>
+          <th>Date</th>
+          <% var m = l.ts.getMoment(l.summary.date) -%>
+          <td><%= m.format('YYYY-MM-DD hh:mm:ss') %> UTC (<%= m.fromNow() %>)</td>
+        </tr>
+        <tr>
+          <th>Warnings</th>
+          <td><%= l.summary.nwarn %></td>
+        </tr>
+        <tr>
+          <th>Logs</th>
+          <td>
+            <a role="button" href="/log/<%= l.slot %>/<%= l.summary.date %>/configure"
+               class="btn btn-sm
+                      <%- l.summary.status === 3 ? 'btn-fail' : 'btn-pass' %>">
+              Configuration
+            </a>
+            <a role="button" href="/log/<%= l.slot %>/<%= l.summary.date %>/compile"
+               class="btn btn-sm
+                      <%- l.summary.status === 3 ? 'btn-default disabled' : (
+                          l.summary.status === 2 ? 'btn-fail' : 'btn-pass') %>">
+              Compilation
+            </a>
+            <a role="button" href="/log/<%= l.slot %>/<%= l.summary.date %>/test"
+               class="btn btn-sm
+                      <%- l.summary.status >= 2 ||
+                          l.summary.status == 0 && !l.summary.ntests ?
+                            'btn-default disabled' : (
+                              l.summary.status === 1 ? 'btn-fail' : 'btn-pass')
+                      %>">
+              Testing
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<% if (l.summary.status === 1) { -%>
+<div role="tabpanel" class="tab-pane fade" id="failed_tests">
+  <div class="table-responsive">
+    <table class="replist table" id="tests">
+      <thead>
+        <tr>
+          <th colspan>Name</th>
+          <th>Status</th>
+          <th>Last Good Rev</th>
+        </tr>
+      </thead>
+      <tbody>
+      <% for (var i = 0; i < l.report.length; i++) { -%>
+        <% var rep = l.report[i]
+           if (rep.status) {
+             var rep      = l.report[i]
+               , trClass  = ''
+               , lastpass = 'N / A'
+             if (l.lastpass[rep.name]) {
+               // Only add link if the lastpass is older than the current rev
+               if (l.summary.rev > l.lastpass[rep.name].rev) {
+                 lastpass = l.util.linkGitHist(l.summary.rev, l.lastpass[rep.name].rev)
+                 // Detect if this is the first time a test failed
+                 if (l.lastpass[rep.name].date === l.prevDate) {
+                   trClass = 'warn'
+                 }
+               } else {
+                 lastpass = l.lastpass[rep.name].rev + ' (fixed)'
+                 trClass = 'pass'
+               }
+             }
+        -%>
+          <tr class="<%- trClass %>">
+            <td>
+              <span class="pull-left">
+                <%= rep.name %>
+              </span>
+              <span class="pull-right">
+                <div class="btn btn-success btn-xs"
+                     id="<%= rep.name + '-diff-btn' %>"
+                     onclick="show_diff('<%= rep.name %>')">
+                  diff
+                </div>
+                <div class="btn btn-success btn-xs"
+                     id="<%= rep.name + '-stderr-btn' %>"
+                     onclick="show_err('<%= rep.name %>')">
+                  stderr
+                </div>
+              </span>
+            </td>
+            <td class="errcode"><%= rep.status %></td>
+            <td><%- lastpass %></td>
+          </tr>
+          <tr class="toggled" id="<%= rep.name %>-diff"><td colspan="5">
+            <pre class="line-numbers"><code class="language-git">Loading...</code></pre>
+          </td></tr>
+          <tr class="toggled" id="<%= rep.name %>-stderr"><td colspan="5">
+            <!-- Even though it is not a diff, language-git is still needed
+                 somehow for line numbers. -->
+            <pre class="line-numbers"><code class="language-git">Loading...</code></pre>
+          </td></tr>
+        <% } -%>
+      <% } -%>
+      </tbody>
+    </table>
+  </div>
+</div>
+<% } -%>
+
+<% if (l.summary.npass > 0) { -%>
+<div role="tabpanel" class="tab-pane fade" id="passed_tests">
+  <% var allPassed = l.report.filter(function (value) {
+       return value.status === 0
+     })
+     for (var i = 0; i < allPassed.length; i++) { -%>
+       <span class="col-xs-12 col-sm-4 col-md-3">
+         <%= allPassed[i].name %>
+       </span>
+  <% } -%>
+</div>
+<% } -%>
+
+</div>
+
+<script>
+  var slot = '<%- l.slot.replace("'", "\\'") %>'
+  var date = <%- l.summary.date %>
+</script>
+<script src="/js/report.js"></script>
+<script src="/js/prism.js"></script>
+
+<% include footer.ejs %>
