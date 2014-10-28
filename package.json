@@ -1,0 +1,26 @@
+{
+  "name": "fateserver",
+  "version": "0.0.0-alpha",
+  "description": "Server for FFmpeg Automatic Test Environment (FATE)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TimothyGu/fateserver-node.git"
+  },
+  "license": "MIT",
+  "author": "Timothy Gu <timothygu99@gmail.com>",
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "compression": "1.2.x",
+    "ejs": "1.0.x",
+    "entities": "1.1.x",
+    "express": "4.10.x",
+    "readline": "0.0.x",
+    "xz-pipe": "0.0.x",
+    "debug": "2.1.x",
+    "morgan": "1.4.x",
+    "moment": "2.8.x"
+  },
+  "engine": "node >= 0.10.0"
+}

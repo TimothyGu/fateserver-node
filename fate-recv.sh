@@ -50,7 +50,6 @@ else
 fi
 
 exec <report
-head -n2 >summary
 
 ntest=0
 npass=0
@@ -68,7 +67,11 @@ exec <&- >&-
 
 upass(){
     read pname pdate prev || return 0
+    # Because we `sort`ed the input before passing it to upass, same tests
+    # always in couplets in the order of new to old.
     while read lname ldate lrev; do
+        # If the second line describes the same test, discard it because it's
+        # the old result.
         test "$lname" != "$pname" && echo "$pname:$pdate:$prev"
         pname=$lname
         pdate=$ldate
@@ -87,15 +90,15 @@ fi
 
 unset IFS
 
-nwarn=$(grep -Eci '\<warning\>' compile.log) || true
+nwarn=$(grep -Eci '\<warning\>' compile.log) || nwarn = 0
 
-echo "stats:$ntest:$npass:$nwarn" >>summary
+`dirname $0`/generateSummary.js report $nwarn > summary.json
 
 repdir=$slotdir/$date
 mkdir $repdir
 gzip -9 *.log
 xz -8 report
-cp -p summary report.xz *.log.gz $repdir
+cp -p summary.json report.xz *.log.gz $repdir
 chmod 644 $repdir/*
 rm -f $slotdir/previous
 test -e $slotdir/latest && mv $slotdir/latest $slotdir/previous

@@ -18,6 +18,10 @@
 .recent  { font-weight: bold; }
 .ancient { color: #888; }
 
+.table-responsive {
+    border: none;
+}
+
 .fail {
     background: #d9534f !important;
     color: white;
