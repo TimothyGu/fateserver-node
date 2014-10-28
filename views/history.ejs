@@ -1,0 +1,100 @@
+<%/*
+ * History page.
+ *
+ * Copyright (c) 2014 Tiancheng "Timothy" Gu <timothygu99@gmail.com>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */%>
+
+<% var repsSorted = reps.sort(ts.sortByDate)
+                        .reverse()
+                        .slice(begin, begin + nEntries) %>
+
+<% include header1.ejs %>
+<title>Slot <%= slot %> - <%= config.branding %> FATE</title>
+<% include header2.ejs %>
+Report history for <%= slot %>
+<% include header3.ejs %>
+<div class="table-responsive">
+  <table class="table" id="config">
+    <thead>
+      <tr><th colspan="2">Information of the Last Run</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th>Owner</th>
+        <td><%= owner %></td>
+      </tr>
+      <tr>
+        <th>Architecture</th>
+        <td><%= repsSorted[0].subarch %></td>
+      </tr>
+      <tr>
+        <th>OS</th>
+        <td><%= repsSorted[0].os %></td>
+      </tr>
+      <tr>
+        <th>Compiler</th>
+        <td><%= repsSorted[0].cc %></td>
+      </tr>
+      <tr>
+        <th>Configuration</th>
+        <td><code><%- util.formatConfig(repsSorted[0].config) %></code></td>
+      </tr>
+      <tr>
+        <th>Comment</th>
+        <td><%= repsSorted[0].comment %></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="table-responsive">
+  <table class="replist table table-bordered" id="history">
+    <thead>
+      <tr>
+        <th>Time</th>
+        <th>Rev</th>
+        <th>Warnings</th>
+        <th>Tests</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% var propsToDisplay = ['date', 'rev', 'nwarn', 'results'] %>
+      <% include replist.ejs %>
+    </tbody>
+  </table>
+  <nav>
+    <ul class="pager">
+      <% if (begin !== 0) { %>
+        <% var prevBegin = Math.max(0, begin - nEntries) %>
+        <li><a href="/history/<%= slot %>?begin=<%= prevBegin %>">Previous</a></li>
+      <% } else { %>
+        <li class="disabled"><a href="#">Previous</a></li>
+      <% } %>
+      <% if (total > begin + nEntries) { %>
+        <li><a href="/history/<%= slot %>?begin=<%= begin + nEntries %>">Next</a></li>
+      <% } else { %>
+        <li class="disabled"><a href="#">Next</a></li>
+      <% } %>
+    </ul>
+  </nav>
+</div>
+<% include footer.ejs %>
+

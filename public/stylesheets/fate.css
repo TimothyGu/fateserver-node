@@ -18,6 +18,10 @@
 .recent  { font-weight: bold; }
 .ancient { color: #888; }
 
+.table-responsive {
+    border: none;
+}
+
 .fail {
     background: #d9534f !important;
     color: white;
@@ -124,26 +128,51 @@ table.minirep {
     width: 12em;
 }
 
-.diff {
+.toggled {
     display: none;
 }
 
-.diff-new, .diff-old, .diff-hnk {
-    font-weight: bold;
+#passed_tests span {
+    padding: 0.25em;
 }
 
-.diff-new, .diff-add {
-    color: #4cae4c;
+code {
+    white-space: nowrap;
 }
 
-.diff-old, .diff-del {
-    color: #d9534f;
+pre {
+    white-space: pre;
 }
 
-.diff-hnk {
-    color: #226;
+/* Button style */
+.btn-fail {
+    color: #fff;
+    background-color: #d9534f;
+    border-color: #d4403a;
 }
-
-code, pre {
-    white-space: pre-wrap;
+.btn-fail:hover,
+.btn-fail:focus,
+.btn-fail:active,
+.btn-fail.active,.open
+    > .dropdown-toggle.btn-fail {
+    color: #fff;
+    background-color: #c9312c;
+    border-color: #bc2e29;
+}
+.btn-pass {
+    color: #fff;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+}
+.btn-pass:hover,
+.btn-pass:focus,
+.btn-pass:active,
+.btn-pass.active,.open
+    > .dropdown-toggle.btn-pass {
+    color: #fff;
+    background-color: #449c44;
+    border-color: #3a833a;
+}
+a.btn-default {
+    color: #333;
 }
