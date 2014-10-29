@@ -244,17 +244,61 @@ code {
 .table {
     margin: 20px 0;
     border-radius: 4px;
-    th, td, tr {
-	border: 1px solid @Cmaindarkdark;
+    // Stripes
+    > tbody > tr:nth-child(odd) {
+        > td {
+            background-color: @Cmaindark;
+        }
+        > th {
+            background-color: @Cmain;
+        }
     }
-    tr {
-	th {
-	    background-color: @Cmainlight;
-	    border-bottom: 2px solid @Cinvert;
-	}
+    // Cells
+    > thead,
+    > tbody,
+    > tfoot {
+        > tr {
+            > th,
+            > td {
+                border-top: 1px solid @Cmaindarkdark;
+                border-bottom: 1px solid @Cmaindarkdark;
+            }
+            > th {
+                background-color: @Cmainlight;
+            }
+        }
     }
-    tr:nth-child(odd) {
-	background-color: @Cmaindark;
+    // Bottom align for column headings
+    > thead > tr > th {
+        border-bottom: 2px solid @Cmaindarkdark;
+    }
+    // Account for multiple tbody instances
+    > tbody + tbody {
+        border-top: 2px solid @Cmaindarkdark;
+    }
+    // Nesting
+    .table {
+        background-color: @Cmain;
+    }
+}
+
+.table-bordered {
+    border: 1px solid @Cmaindarkdark;
+    > thead,
+    > tbody,
+    > tfoot {
+        > tr {
+            > th,
+            > td {
+                border: 1px solid @Cmaindarkdark;
+            }
+        }
+    }
+    > thead > tr {
+        > th,
+        > td {
+            border-bottom-width: 2px;
+        }
     }
 }
 
