@@ -23,28 +23,28 @@
  */%>
 
 <% include header1.ejs %>
-<title>Slot <%= slot %> - FFmpeg FATE</title>
+<title>Slot <%= slot %> - <%= config.branding %> FATE</title>
 <% include header2.ejs %>
 Report history for <%= slot %>
 <% include header3.ejs %>
 <div class="table-responsive">
- <table class="replist table" id="history">
-  <thead>
-   <tr>
-    <th>Time</th>
-    <th>Rev</th>
-    <th>Arch</th>
-    <th>OS</th>
-    <th>Compiler</th>
-    <th>Warnings</th>
-    <th>Tests</th>
-   </tr>
-  </thead>
-  <tbody>
-   <% var repsSorted = reps.sort(utils.sortByDate).reverse() %>
-   <% include replist.ejs %>
-  </tbody>
- </table>
+  <table class="replist table" id="history">
+    <thead>
+      <tr>
+        <th>Time</th>
+        <th>Rev</th>
+        <th>Arch</th>
+        <th>OS</th>
+        <th>Compiler</th>
+        <th>Warnings</th>
+        <th>Tests</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% var repsSorted = reps.sort(ts.sortByDate).reverse() %>
+      <% include replist.ejs %>
+    </tbody>
+  </table>
 </div>
 <% include footer.ejs %>
 

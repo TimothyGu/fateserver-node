@@ -24,9 +24,9 @@
 
 var express = require('express')
 var path = require('path')
-    //var logger = require('morgan')
+//var logger = require('morgan')
 
-//var routes = require('./routes/index')
+//var index = require('./routes/index')
 var history = require('./routes/history')
 var ts      = require('./lib/timestamp')
 var config  = require('./lib/config')

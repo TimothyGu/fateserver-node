@@ -22,5 +22,9 @@
     "morgan": "1.4.x",
     "moment": "2.8.x"
   },
-  "engine": "node >= 0.10.0"
+  "engine": "node >= 0.10.0",
+  "devDependencies": {
+    "nodemon": "~1.2.1",
+    "jsdoc": "~3.3.0-alpha10"
+  }
 }

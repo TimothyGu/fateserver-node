@@ -52,7 +52,7 @@ function handleHistory(slot, res, next) {
         // i is for the summary we are fetch**ing**.
         var done = 0
         for (var i = 0; i < reps.length; i++) {
-            parse.loadSummary(slot, reps[i], function(data){
+            parse.loadSummary(slot, reps[i], function(data) {
                 repsJSON[done] = data
                 if (done === reps.length - 1) {
                     res.locals.reps = repsJSON
