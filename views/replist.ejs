@@ -36,24 +36,24 @@
 <% for (var i = 0; i < repsSorted.length; i++) { %>
   <% var rep = repsSorted[i] %>
   <% var repClass = '' %>
-  <% var repMoment = utils.getMoment(rep.h.date) %>
-  <% if (now.unix() < repMoment.unix() + utils.recentAge) {
-       repClass = 'recent'
-     } else if (now.unix() > repMoment.unix() + utils.ancientAge) {
-       repClass = 'ancient'
-     } else if (now.unix() > repMoment.unix() + utils.hiddenAge) {
-       continue
-     } %>
-  <tr class=<%= repClass %>>
+  <% var repMoment = ts.getMoment(rep.date) %>
+  <% if (now.unix() < repMoment.unix() + ts.recentAge) {
+      repClass = 'recent'
+    } else if (now.unix() > repMoment.unix() + ts.ancientAge) {
+      repClass = 'ancient'
+    } else if (now.unix() > repMoment.unix() + ts.hiddenAge) {
+      continue
+    } %>
+  <tr class="<%= repClass %>">
     <td><%= repMoment.fromNow() %></td>
-    <td><%= rep.h.rev %></td>
-    <td><%= rep.c.subarch %></td>
-    <td><%= rep.c.os %></td>
-    <td><%= rep.c.cc %></td>
-    <td><%= rep.s.nwarn %></td>
-    <td class="<%= rep.s.rclass %>">
-      <a href="<%= '/report/' + slot + '/' + rep.h.date %>">
-        <%= rep.s.rtext %>
+    <td><%= rep.rev %></td>
+    <td><%= rep.subarch %></td>
+    <td><%= rep.os %></td>
+    <td><%= rep.cc %></td>
+    <td><%= rep.nwarn %></td>
+    <td class="<%= rep.rclass %>">
+      <a href="<%= '/report/' + slot + '/' + rep.date %>">
+        <%= rep.rtext %>
       </a>
     </td>
   </tr>

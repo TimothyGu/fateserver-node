@@ -32,7 +32,7 @@ var fs = require('fs')
 var readline = require('readline')
 var path = require('path')
 
-var fate = require('./lib/parse')
+var parse = require('./lib/parse')
 
 function generateSummary(reportFile, nwarn) {
     var header = null, config = null
@@ -54,14 +54,14 @@ function generateSummary(reportFile, nwarn) {
         switch (line.split(':')[0]) {
         case 'fate':
             if (!header)
-                header = fate.splitHeader(line)
+                header = parse.splitHeader(line)
             break
         case 'config':
             if (!config)
-                config = fate.splitConfig(line)
+                config = parse.splitConfig(line)
             break
         default:
-            var rec = fate.splitRec(line)
+            var rec = parse.splitRec(line)
             if (rec) {
                 stats.ntests++
                 if (rec.status == 0)
@@ -69,22 +69,9 @@ function generateSummary(reportFile, nwarn) {
             }
         }
     }).on('close', function() {
-        stats.nfail = stats.ntests - stats.npass
-        if (stats.npass) {
-            stats.rclass = stats.nfail ? 'warn' : 'pass'
-            stats.rtext  = stats.npass + ' / ' + stats.ntests
-        } else if (!stats.ntests && !header.status) {
-            stats.rclass = 'pass'
-            stats.rtext  = 'build only'
-        } else {
-            stats.rclass = 'fail'
-            stats.rtext  = header.errstr
-        }
-        console.log(JSON.stringify({
-                'h': header,
-                'c': config,
-                's': stats
-        }))
+        console.log(JSON.stringify(
+            new parse.metadata(header, config, stats).addAddlProps()
+        ))
     })
 }
 

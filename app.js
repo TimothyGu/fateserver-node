@@ -28,6 +28,8 @@ var path = require('path')
 
 //var routes = require('./routes/index')
 var history = require('./routes/history')
+var ts      = require('./lib/timestamp')
+var config  = require('./lib/config')
 
 var app = express()
 
@@ -35,8 +37,10 @@ var app = express()
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 
-app.locals.utils = require('./lib/utils')
+// locals
+app.locals.ts     = ts
 app.locals.moment = require('moment')
+app.locals.config = config
 
 //app.use(logger('dev'))
 
