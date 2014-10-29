@@ -39,7 +39,6 @@ function generateSummary(reportFile, nwarn) {
     var stats = {
         ntests: 0,
         npass : 0,
-        nfail : 0,
         nwarn : nwarn
     }
 
@@ -70,7 +69,7 @@ function generateSummary(reportFile, nwarn) {
         }
     }).on('close', function() {
         console.log(JSON.stringify(
-            new parse.metadata(header, config, stats).addAddlProps()
+            new parse.metadata(header, config, stats)
         ))
     })
 }
