@@ -149,5 +149,5 @@ table.minirep {
 }
 
 code, pre {
-    white-space: pre-wrap;
+    white-space: nowrap;
 }

@@ -29,7 +29,9 @@ var fs       = require('fs'),
 var config   = require('../lib/config'),
     parse    = require('../lib/parse')
 
-function handleHistory(slot, res, next) {
+var nEntries = 50
+
+function handleHistory(slot, begin, res, next) {
     var slotdir = path.join(config.dir, slot)
 
     var reps = [], repsJSON = []
@@ -42,17 +44,29 @@ function handleHistory(slot, res, next) {
             newErr.stack = err.stack
             return next(newErr)
         }
+
+        res.locals.slot     = slot
+        try {
+            res.locals.owner = parse.getSlotOwner(slot)
+        } catch (errInner) {
+            return next(errInner)
+        }
+
         reps = files.filter(function(val) {
             return val.match(/^[0-9]/)
         })
-
-        res.locals.slot = slot
+        res.locals.begin    = begin
+        res.locals.nEntries = nEntries
+        res.locals.total    = reps.length
 
         // We need a separate counter for how many summaries are fetched.
         // i is for the summary we are fetch**ing**.
         var done = 0
         for (var i = 0; i < reps.length; i++) {
-            parse.loadSummary(slot, reps[i], function(data) {
+            parse.loadSummary(slot, reps[i], function(errInner, data) {
+                if (errInner) {
+                    return next(errInner)
+                }
                 repsJSON[done] = data
                 if (done === reps.length - 1) {
                     res.locals.reps = repsJSON

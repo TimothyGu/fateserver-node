@@ -22,4 +22,10 @@
  * THE SOFTWARE.
  */%>
 
-<%= message %>
+Error <%= error.status %>:
+
+<% if (error) { %>
+  <%= error.stack %>
+<% } else { %>
+  <%= message %>
+<% } %>

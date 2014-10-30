@@ -33,6 +33,9 @@
  */%>
 
 <% var now = moment.utc() %>
+<% propsToDisplay = propsToDisplay || ['date', 'rev', 'subarch', 'os',
+                                       'cc', 'nwarn', 'results'] %>
+
 <% for (var i = 0; i < repsSorted.length; i++) { %>
   <% var rep = repsSorted[i] %>
   <% var repClass = '' %>
@@ -45,16 +48,18 @@
       continue
     } %>
   <tr class="<%= repClass %>">
-    <td><%= repMoment.fromNow() %></td>
-    <td><%= rep.rev %></td>
-    <td><%= rep.subarch %></td>
-    <td><%= rep.os %></td>
-    <td><%= rep.cc %></td>
-    <td><%= rep.nwarn %></td>
-    <td class="<%= rep.rclass %>">
-      <a href="<%= '/report/' + slot + '/' + rep.date %>">
-        <%= rep.rtext %>
-      </a>
-    </td>
+    <% for (var j = 0; j < propsToDisplay.length; j++) { %>
+      <% if (propsToDisplay[j] === 'date') { %>
+        <td><%= repMoment.fromNow() %></td>
+      <% } else if (propsToDisplay[j] === 'results') { %>
+        <td class="<%= rep.rclass %>">
+          <a href="<%= '/report/' + slot + '/' + rep.date %>">
+            <%= rep.rtext %>
+          </a>
+        </td>
+      <% } else { %>
+        <td><%= rep[propsToDisplay[j]] %></td>
+      <% } %>
+    <% } %>
   </tr>
 <% } %>

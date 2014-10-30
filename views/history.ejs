@@ -22,29 +22,71 @@
  * THE SOFTWARE.
  */%>
 
+<% var repsSorted = reps.sort(ts.sortByDate)
+                        .reverse()
+                        .slice(begin, begin + nEntries) %>
+
 <% include header1.ejs %>
 <title>Slot <%= slot %> - <%= config.branding %> FATE</title>
 <% include header2.ejs %>
 Report history for <%= slot %>
 <% include header3.ejs %>
 <div class="table-responsive">
-  <table class="replist table" id="history">
+  <table class="table" id="config">
+    <thead>
+      <th colspan="2">Information</th>
+    </thead>
+    <tbody>
+      <tr>
+        <th>Owner</th>
+        <td><%= owner %></td>
+      </tr>
+      <tr>
+        <th>Architecture</th>
+        <td><%= repsSorted[0].subarch %></td>
+      </tr>
+      <tr>
+        <th>OS</th>
+        <td><%= repsSorted[0].os %></td>
+      </tr>
+      <tr>
+        <th>Compiler</th>
+        <td><%= repsSorted[0].cc %></td>
+      </tr>
+      <tr>
+        <th>Configuration</th>
+        <td><code><%- repsSorted[0].config.replace(/ /g, ' <wbr>') %></code></td>
+      </tr>
+      <tr>
+        <th>Comment</th>
+        <td><%= repsSorted[0].comment %></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="table-responsive">
+  <table class="replist table table-bordered" id="history">
     <thead>
       <tr>
         <th>Time</th>
         <th>Rev</th>
-        <th>Arch</th>
-        <th>OS</th>
-        <th>Compiler</th>
         <th>Warnings</th>
         <th>Tests</th>
       </tr>
     </thead>
     <tbody>
-      <% var repsSorted = reps.sort(ts.sortByDate).reverse() %>
+      <% var propsToDisplay = ['date', 'rev', 'nwarn', 'results'] %>
       <% include replist.ejs %>
     </tbody>
   </table>
+  <% if (begin !== 0) { %>
+    <% var prevBegin = Math.max(0, begin - nEntries) %>
+    <a href="/history/<%= slot %>?begin=<%= prevBegin %>">Previous</a>
+  <% } %>
+  <% if (total > begin + nEntries) { %>
+    <a href="/history/<%= slot %>?begin=<%= begin + nEntries %>">Next</a>
+  <% } %>
 </div>
 <% include footer.ejs %>
 
