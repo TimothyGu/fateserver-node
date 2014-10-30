@@ -83,7 +83,7 @@ app.use(function(err, req, res, next) {
     res.status(status)
     res.render('error', {
         message: err.message,
-        error: {}
+        error: {},
         status: status
     })
 })
