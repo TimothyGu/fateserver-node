@@ -1,0 +1,94 @@
+<%/*
+ * Report page.
+ *
+ * Copyright (c) 2014 Tiancheng "Timothy" Gu <timothygu99@gmail.com>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */%>
+
+<% include header1.ejs %>
+<title><%= slot %> <%= summary.rev %> - <%= config.branding %> FATE</title>
+<% include header2.ejs %>
+Report of <%= slot %> <%= summary.rev %>
+<% include header3.ejs %>
+
+<div class="table-responsive">
+  <table id="config" class="table">
+    <thead>
+      <th colspan="2">Information</th>
+    </thead>
+    <tbody>
+      <tr>
+        <th>Architecture</th>
+        <td><%= summary.arch %></td>
+      </tr>
+      <tr>
+        <th>Arch variant</th>
+        <td><%= summary.subarch %></td>
+      </tr>
+      <tr>
+        <th>CPU</th>
+        <td><%= summary.cpu %></td>
+      </tr>
+      <tr>
+        <th>OS</th>
+        <td><%= summary.os %></td>
+      </tr>
+      <tr>
+        <th>Owner</th>
+        <td><%= owner %></td>
+      </tr>
+      <tr>
+        <th>Compiler</th>
+        <td><%= summary.cc %></td>
+      </tr>
+      <tr>
+        <th>Configuration</th>
+        <td><code><%- summary.config.replace(/ /g, ' <wbr>') %></code></td>
+      </tr>
+      <tr>
+        <th>Comment</th>
+        <td><%= summary.comment %></td>
+      </tr>
+      <tr>
+        <th>Revision</th>
+        <td><%= summary.rev %></td>
+      </tr>
+      <tr>
+        <th>Date</th>
+        <% var dateMoment = ts.getMoment(summary.date) %>
+        <td><%= dateMoment.format('YYYY-MM-DD hh:mm:ss') %> UTC (<%= dateMoment.fromNow() %>)</td>
+      </tr>
+      <tr>
+        <th>Status</th>
+        <td><%= summary.rtext %></td>
+      </tr>
+      <tr>
+        <th>Warnings</th>
+        <td><%= summary.nwarn %></td>
+      </tr>
+      <tr>
+        <th>Logs</th>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<% include footer.ejs %>

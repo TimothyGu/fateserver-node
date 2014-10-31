@@ -28,6 +28,8 @@ var path = require('path')
 
 //var index = require('./routes/index')
 var history = require('./routes/history')
+var report  = require('./routes/report')
+
 var ts      = require('./lib/timestamp')
 var config  = require('./lib/config')
 
@@ -51,6 +53,13 @@ app.get('/history/:slot', function(req, res, next) {
 })
 app.get('/history.cgi', function(req, res, next) {
     history(req.query.slot, req.query.begin || 0, res, next)
+})
+
+app.get('/report/:slot/:time', function(req, res, next) {
+    report(req.params.slot, req.params.time, res, next)
+})
+app.get('/report.cgi', function(req, res, next) {
+    report(req.query.slot, req.query.time, res, next)
 })
 
 // catch 404 and forward to error handler

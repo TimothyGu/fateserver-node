@@ -35,6 +35,8 @@ var path = require('path')
 var parse = require('./lib/parse')
 
 function generateSummary(reportFile, nwarn) {
+    if (!reportFile)
+        throw new Error('No report file specified')
     var header = null, config = null
     var stats = {
         ntests: 0,
