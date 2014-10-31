@@ -24,11 +24,13 @@
 
 var express = require('express')
 var path = require('path')
+var debug = require('debug')('app')
 //var logger = require('morgan')
 
 //var index = require('./routes/index')
 var history = require('./routes/history')
 var report  = require('./routes/report')
+var log     = require('./routes/log')
 
 var ts      = require('./lib/timestamp')
 var config  = require('./lib/config')
@@ -38,6 +40,13 @@ var app = express()
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
+
+/*
+app.use(function(req, res, next) {
+    debug(req.headers)
+    next()
+})
+*/
 
 // locals
 app.locals.ts     = ts
@@ -60,6 +69,13 @@ app.get('/report/:slot/:time', function(req, res, next) {
 })
 app.get('/report.cgi', function(req, res, next) {
     report(req.query.slot, req.query.time, res, next)
+})
+
+app.get('/log/:slot/:time/:log', function(req, res, next) {
+    log(req.params.slot, req.params.time, req.params.log, req, res, next)
+})
+app.get('/log.cgi', function(req, res, next) {
+    log(req.query.slot, req.query.time, req.query.log, req, res, next)
 })
 
 // catch 404 and forward to error handler
