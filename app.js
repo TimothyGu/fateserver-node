@@ -23,9 +23,10 @@
  */
 
 var express = require('express')
-var path = require('path')
-var debug = require('debug')('app')
+var path    = require('path')
+var debug   = require('debug')('app')
 //var logger = require('morgan')
+var compression = require('compression')
 
 //var index = require('./routes/index')
 var history = require('./routes/history')
@@ -37,7 +38,7 @@ var config  = require('./lib/config')
 
 var app = express()
 
-// view engine setup
+// VIEW ENGINE SETUP
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 
@@ -48,12 +49,25 @@ app.use(function(req, res, next) {
 })
 */
 
-// locals
+// EJS LOCALS
 app.locals.ts     = ts
 app.locals.moment = require('moment')
 app.locals.config = config
+app.locals.util   = require('./lib/ejs-util.js')
 
 //app.use(logger('dev'))
+
+// ROUTING
+app.get('/log/:slot/:time/:log', function(req, res, next) {
+    log(req.params.slot, req.params.time, req.params.log, req, res, next)
+})
+app.get('/log.cgi', function(req, res, next) {
+    log(req.query.slot, req.query.time, req.query.log, req, res, next)
+})
+
+// Intentioanlly move log before auto-compression because we deal with it
+// differently.
+app.use(compression({ threshold: '1kb' }))
 
 app.use(express.static(path.join(__dirname, 'public')))
 
@@ -71,12 +85,7 @@ app.get('/report.cgi', function(req, res, next) {
     report(req.query.slot, req.query.time, res, next)
 })
 
-app.get('/log/:slot/:time/:log', function(req, res, next) {
-    log(req.params.slot, req.params.time, req.params.log, req, res, next)
-})
-app.get('/log.cgi', function(req, res, next) {
-    log(req.query.slot, req.query.time, req.query.log, req, res, next)
-})
+// ERROR HANDLING
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -85,11 +94,9 @@ app.use(function(req, res, next) {
     next(err)
 })
 
-// error handlers
-
 // development error handler
 // will print stacktrace
-if (app.get('env') === 'development') {
+/*if (app.get('env') === 'development') {
     app.use(function(err, req, res, next) {
         var status = err.status || 500
         res.status(status)
@@ -99,16 +106,17 @@ if (app.get('env') === 'development') {
             status: status
         })
     })
-}
+}*/
 
 // production error handler
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
     var status = err.status || 500
     res.status(status)
+    debug('msg: ' + err.message)
     res.render('error', {
         message: err.message,
-        error: {},
+        error: null,
         status: status
     })
 })

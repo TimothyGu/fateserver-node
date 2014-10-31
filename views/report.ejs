@@ -31,7 +31,7 @@ Report of <%= slot %> <%= summary.rev %>
 <div class="table-responsive">
   <table id="config" class="table">
     <thead>
-      <th colspan="2">Information</th>
+      <tr><th colspan="2">Information</th></tr>
     </thead>
     <tbody>
       <tr>
@@ -60,7 +60,7 @@ Report of <%= slot %> <%= summary.rev %>
       </tr>
       <tr>
         <th>Configuration</th>
-        <td><code><%- summary.config.replace(/ /g, ' <wbr>') %></code></td>
+        <td><code><%- util.formatConfig(summary.config) %></code></td>
       </tr>
       <tr>
         <th>Comment</th>
@@ -85,7 +85,20 @@ Report of <%= slot %> <%= summary.rev %>
       </tr>
       <tr>
         <th>Logs</th>
-        <td></td>
+        <td>
+          <a href="/log/<%= slot %>/<%= summary.date %>/configure"
+             class="btn btn-sm btn-info">
+            Configuration
+          </a>
+          <a href="/log/<%= slot %>/<%= summary.date %>/compile" 
+             class="btn btn-sm btn-info">
+            Compilation
+          </a>
+          <a href="/log/<%= slot %>/<%= summary.date %>/test"
+             class="btn btn-sm btn-info">
+            Testing
+          </a>
+        </td>
       </tr>
     </tbody>
   </table>

@@ -34,7 +34,7 @@ Report history for <%= slot %>
 <div class="table-responsive">
   <table class="table" id="config">
     <thead>
-      <th colspan="2">Information</th>
+      <tr><th colspan="2">Information of the Last Run</th></tr>
     </thead>
     <tbody>
       <tr>
@@ -55,7 +55,7 @@ Report history for <%= slot %>
       </tr>
       <tr>
         <th>Configuration</th>
-        <td><code><%- repsSorted[0].config.replace(/ /g, ' <wbr>') %></code></td>
+        <td><code><%- util.formatConfig(repsSorted[0].config) %></code></td>
       </tr>
       <tr>
         <th>Comment</th>

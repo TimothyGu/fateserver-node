@@ -45,7 +45,7 @@ function handleLog(slot, date, log, req, res, next) {
 
         res.set('Content-Type', 'text/plain')
         var acceptedEncoding = req.get('Accept-Encoding')
-        if (acceptedEncoding && acceptEncoding.match(/gzip/)) {
+        if (acceptedEncoding && acceptedEncoding.match(/gzip/)) {
             res.set('Content-Encoding', 'gzip')
             return res.send(data)
         } else {
