@@ -80,13 +80,21 @@ Report history for <%= slot %>
       <% include replist.ejs %>
     </tbody>
   </table>
-  <% if (begin !== 0) { %>
-    <% var prevBegin = Math.max(0, begin - nEntries) %>
-    <a href="/history/<%= slot %>?begin=<%= prevBegin %>">Previous</a>
-  <% } %>
-  <% if (total > begin + nEntries) { %>
-    <a href="/history/<%= slot %>?begin=<%= begin + nEntries %>">Next</a>
-  <% } %>
+  <nav>
+    <ul class="pager">
+      <% if (begin !== 0) { %>
+        <% var prevBegin = Math.max(0, begin - nEntries) %>
+        <li><a href="/history/<%= slot %>?begin=<%= prevBegin %>">Previous</a></li>
+      <% } else { %>
+        <li class="disabled"><a href="#">Previous</a></li>
+      <% } %>
+      <% if (total > begin + nEntries) { %>
+        <li><a href="/history/<%= slot %>?begin=<%= begin + nEntries %>">Next</a></li>
+      <% } else { %>
+        <li class="disabled"><a href="#">Next</a></li>
+      <% } %>
+    </ul>
+  </nav>
 </div>
 <% include footer.ejs %>
 

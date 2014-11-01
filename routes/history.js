@@ -55,7 +55,7 @@ function handleHistory(slot, begin, res, next) {
         reps = files.filter(function(val) {
             return val.match(/^[0-9]/)
         })
-        res.locals.begin    = begin
+        res.locals.begin    = Number(begin)
         res.locals.nEntries = nEntries
         res.locals.total    = reps.length
 

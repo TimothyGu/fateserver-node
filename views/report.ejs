@@ -24,84 +24,211 @@
 
 <% include header1.ejs %>
 <title><%= slot %> <%= summary.rev %> - <%= config.branding %> FATE</title>
+<script type="text/javascript">
+  function toggle(id) {
+      var e = document.getElementById(id);
+      e.style.display = e.style.display == 'table-row' ? 'none' : 'table-row';
+  }
+  function hide(id) {
+      var e = document.getElementById(id);
+      e.style.display = 'none';
+  }
+  function show_diff(name) {
+      hide(name + '-err');
+      toggle(name + '-diff');
+  }
+  function show_err(name) {
+      hide(name + '-diff');
+      toggle(name + '-err');
+  }
+</script>
 <% include header2.ejs %>
 Report of <%= slot %> <%= summary.rev %>
 <% include header3.ejs %>
 
-<div class="table-responsive">
-  <table id="config" class="table">
-    <thead>
-      <tr><th colspan="2">Information</th></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <th>Architecture</th>
-        <td><%= summary.arch %></td>
-      </tr>
-      <tr>
-        <th>Arch variant</th>
-        <td><%= summary.subarch %></td>
-      </tr>
-      <tr>
-        <th>CPU</th>
-        <td><%= summary.cpu %></td>
-      </tr>
-      <tr>
-        <th>OS</th>
-        <td><%= summary.os %></td>
-      </tr>
-      <tr>
-        <th>Owner</th>
-        <td><%= owner %></td>
-      </tr>
-      <tr>
-        <th>Compiler</th>
-        <td><%= summary.cc %></td>
-      </tr>
-      <tr>
-        <th>Configuration</th>
-        <td><code><%- util.formatConfig(summary.config) %></code></td>
-      </tr>
-      <tr>
-        <th>Comment</th>
-        <td><%= summary.comment %></td>
-      </tr>
-      <tr>
-        <th>Revision</th>
-        <td><%= summary.rev %></td>
-      </tr>
-      <tr>
-        <th>Date</th>
-        <% var dateMoment = ts.getMoment(summary.date) %>
-        <td><%= dateMoment.format('YYYY-MM-DD hh:mm:ss') %> UTC (<%= dateMoment.fromNow() %>)</td>
-      </tr>
-      <tr>
-        <th>Status</th>
-        <td><%= summary.rtext %></td>
-      </tr>
-      <tr>
-        <th>Warnings</th>
-        <td><%= summary.nwarn %></td>
-      </tr>
-      <tr>
-        <th>Logs</th>
-        <td>
-          <a href="/log/<%= slot %>/<%= summary.date %>/configure"
-             class="btn btn-sm btn-info">
-            Configuration
-          </a>
-          <a href="/log/<%= slot %>/<%= summary.date %>/compile" 
-             class="btn btn-sm btn-info">
-            Compilation
-          </a>
-          <a href="/log/<%= slot %>/<%= summary.date %>/test"
-             class="btn btn-sm btn-info">
-            Testing
-          </a>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+<ul class="pager">
+  <li class="previous">
+    <a href="/history/<%= slot %>">&larr; Slot History</a>
+  </li>
+</ul>
+
+<div class="alert <%- summary.rclass %>" role="alert">
+  <% if (summary.status === 3) { %>
+    <strong>Error configuring!</strong>
+  <% } else if (summary.status === 2) { %>
+    <strong>Error compiling!</strong>
+  <% } else if (summary.status === 1) { %>
+    <% if (!summary.ntests) { %>
+         <strong>Error testing!</strong>
+    <% } else { %>
+         <strong>Partially failed:</strong> <%= summary.rtext %> passed!
+    <% } %>
+  <% } else if (summary.status === 0) { %>
+    <% if (summary.ntests) { %>
+         <strong>All tests passed!</strong>
+    <% } else { %>
+         <strong>Built successfully!</strong>
+    <% } %>
+  <% } %>
+</div>
+
+<ul class="nav nav-tabs" role="tablist" id="reportTab">
+  <li role="presentation" class="active">
+    <a href="#info" role="tab" data-toggle="tab">Information</a>
+  </li>
+  <% if (summary.status === 1) { %>
+  <li role="presentation">
+    <a href="#failed_tests" role="tab" data-toggle="tab">
+      Failed Tests
+      <span class="badge <%= summary.rclass %>"><%= summary.nfail %>/<%= summary.ntests %></span>
+    </a>
+  </li>
+  <% } %>
+  <% if (summary.npass > 0) { %>
+  <li role="presentation">
+    <a href="#passed_tests" role="tab" data-toggle="tab">
+      Passed Tests
+      <span class="badge pass"><%= summary.npass %></span>
+    </a>
+  </li>
+  <% } %>
+</ul>
+
+<div class="tab-content">
+<div role="tabpanel" class="tab-pane fade in active" id="info">
+  <div class="table-responsive">
+    <table id="config" class="replist table">
+      <thead>
+        <tr><th colspan="2">Information</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>Architecture</th>
+          <td><%= summary.arch %></td>
+        </tr>
+        <tr>
+          <th>Arch variant</th>
+          <td><%= summary.subarch %></td>
+        </tr>
+        <tr>
+          <th>CPU</th>
+          <td><%= summary.cpu %></td>
+        </tr>
+        <tr>
+          <th>OS</th>
+          <td><%= summary.os %></td>
+        </tr>
+        <tr>
+          <th>Owner</th>
+          <td><%= owner %></td>
+        </tr>
+        <tr>
+          <th>Compiler</th>
+          <td><%= summary.cc %></td>
+        </tr>
+        <tr>
+          <th>Configuration</th>
+          <td><code><%- util.formatConfig(summary.config) %></code></td>
+        </tr>
+        <tr>
+          <th>Comment</th>
+          <td><%= summary.comment %></td>
+        </tr>
+        <tr>
+          <th>Revision</th>
+          <td><%= summary.rev %></td>
+        </tr>
+        <tr>
+          <th>Date</th>
+          <% var m = ts.getMoment(summary.date) %>
+          <td><%= m.format('YYYY-MM-DD hh:mm:ss') %> UTC (<%= m.fromNow() %>)</td>
+        </tr>
+        <tr>
+          <th>Warnings</th>
+          <td><%= summary.nwarn %></td>
+        </tr>
+        <tr>
+          <th>Logs</th>
+          <td>
+            <a role="button" href="/log/<%= slot %>/<%= summary.date %>/configure"
+               class="btn btn-sm
+                      <%- summary.status === 3 ? 'btn-fail' : 'btn-pass' %>">
+              Configuration
+            </a>
+            <a role="button" href="/log/<%= slot %>/<%= summary.date %>/compile" 
+               class="btn btn-sm
+                      <%- summary.status === 3 ? 'btn-default disabled' : (
+                            summary.status === 2 ? 'btn-fail' : 'btn-pass') %>">
+              Compilation
+            </a>
+            <a role="button" href="/log/<%= slot %>/<%= summary.date %>/test"
+               class="btn btn-sm
+                      <%- summary.status >= 2 ||
+                          summary.status == 0 && !summary.ntests ?
+                            'btn-default disabled' : (
+                              summary.status === 1 ? 'btn-fail' : 'btn-pass')
+                      %>">
+              Testing
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<% if (summary.status < 2) { %>
+<div role="tabpanel" class="tab-pane fade" id="failed_tests">
+  <div class="table-responsive">
+    <table class="replist table table-bordered" id="tests">
+      <thead>
+        <tr>
+          <th colspan=3>Name</th>
+          <th>Status</th>
+          <th>Last Good Rev</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for (var i = 0; i < report.length; i++) { %>
+          <% var rep = report[i] %>
+          <% if (rep.status) { %>
+            <tr>
+              <td class="toggle" onclick="show_diff('<%= rep.name %>')">
+                diff
+              </td>
+              <td class="toggle" onclick="show_err('<%= rep.name %>')">
+                stderr
+              </td>
+              <td><%= rep.name %></td>
+              <td class="errcode"><%= rep.status %></td>
+              <td><%/* TODO */%>N / A</td>
+            </tr>
+            <tr class="toggled" id="<%= rep.name %>-diff"><td colspan="5">
+              <pre><%= new Buffer(rep.diff, 'base64').toString('utf8') %></pre>
+            </td></tr>
+            <tr class="toggled" id="<%= rep.name %>-err"><td colspan="5">
+              <pre><%= new Buffer(rep.stderr, 'base64').toString('utf8') %></pre>
+            </td></tr>
+          <% } %>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<% } %>
+
+<div role="tabpanel" class="tab-pane fade" id="passed_tests">
+  <% var allPassed = report.filter(function(value) {
+       return value.status === 0
+     })
+     for (var i = 0; i < allPassed.length; i++) { %>
+       <span class="col-xs-4 col-sm-3">
+         <%= allPassed[i].name %>
+       </span>
+  <% } %>
+</div>
+
+
 </div>
 
 <% include footer.ejs %>

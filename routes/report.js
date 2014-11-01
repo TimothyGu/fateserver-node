@@ -34,22 +34,45 @@ function handleReport(slot, date, res, next) {
 
     var reps = [], repsJSON = []
 
+    if (!slot || !date) {
+        var err = new Error('Slot or date not specified')
+        err.status = 404
+        return next(err)
+    }
     res.locals.slot = slot
     res.locals.date = date
-        try {
-            res.locals.owner = parse.getSlotOwner(slot)
-        } catch (err) {
-            return next(err)
-        }
+    try {
+        res.locals.owner = parse.getSlotOwner(slot)
+    } catch (err) {
+        return next(err)
+    }
 
+    var otherProcessDone = false
     parse.loadSummary(slot, date, function(err, summary) {
-        res.locals.summary = summary
-        res.render('report.ejs')
+        if (err)
+            return next(err)
+        else {
+            res.locals.summary = summary
+            if (otherProcessDone && !err) {
+                res.render('report.ejs')
+                debug('no!')
+            } else
+                otherProcessDone = true
+        }
     })
-//    parse.loadReport(slot, date, function(err, data) {
-//        res.locals.repsJSON = date
-//        res.render('report.ejs')
-//    })
+    parse.loadReport(slot, date, function(err, records) {
+        if (err) {
+            debug('uh')
+            return next(err)
+        } else {
+            res.locals.report = records
+            if (otherProcessDone && !err) {
+                res.render('report.ejs')
+                debug('no2')
+            } else
+                otherProcessDone = true
+        }
+    })
 }
 
 module.exports = handleReport

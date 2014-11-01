@@ -71,7 +71,7 @@ function generateSummary(reportFile, nwarn) {
         }
     }).on('close', function() {
         console.log(JSON.stringify(
-            new parse.metadata(header, config, stats)
+            new parse.Summary(header, config, stats)
         ))
     })
 }

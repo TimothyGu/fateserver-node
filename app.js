@@ -115,7 +115,7 @@ app.use(function(err, req, res, next) {
     res.status(status)
     debug('msg: ' + err.message)
     res.render('error', {
-        message: err.message,
+        message: err.HTMLMessage || err.message,
         error: null,
         status: status
     })
