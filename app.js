@@ -30,8 +30,8 @@ var compression = require('compression')
 
 //var index = require('./routes/index')
 var history = require('./routes/history')
-var report  = require('./routes/report')
-var log     = require('./routes/log')
+//var report  = require('./routes/report')
+//var log     = require('./routes/log')
 
 var ts      = require('./lib/timestamp')
 var config  = require('./lib/config')
@@ -40,7 +40,7 @@ var app = express()
 
 // VIEW ENGINE SETUP
 app.set('views', path.join(__dirname, 'views'))
-app.set('view engine', 'ejs')
+app.set('view engine', 'jade')
 
 /*
 app.use(function(req, res, next) {
@@ -53,7 +53,6 @@ app.use(function(req, res, next) {
 app.locals.ts     = ts
 app.locals.moment = require('moment')
 app.locals.config = config
-app.locals.util   = require('./lib/ejs-util.js')
 
 app.use(logger('short'))
 
@@ -99,6 +98,7 @@ app.use(function(req, res, next) {
 /*if (app.get('env') === 'development') {
     app.use(function(err, req, res, next) {
         var status = err.status || 500
+        debug('msg: ' + err)
         res.status(status)
         res.render('error', {
             message: err.message,
@@ -106,20 +106,20 @@ app.use(function(req, res, next) {
             status: status
         })
     })
-}*/
+}
 
 // production error handler
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
     var status = err.status || 500
     res.status(status)
-    debug('msg: ' + err.message)
+    debug('msg: ' + err)
     res.render('error', {
         message: err.HTMLMessage || err.message,
         error: null,
         status: status
     })
-})
+})*/
 
 
 module.exports = app

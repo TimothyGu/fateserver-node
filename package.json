@@ -19,7 +19,8 @@
     "xz-pipe": "0.0.x",
     "debug": "2.1.x",
     "morgan": "1.4.x",
-    "moment": "2.8.x"
+    "moment": "2.8.x",
+    "jade": "~1.7.0"
   },
   "engine": "node >= 0.10.0",
   "devDependencies": {

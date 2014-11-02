@@ -27,7 +27,8 @@ var fs       = require('fs'),
     debug    = require('debug')('history')
 
 var config   = require('../lib/config'),
-    parse    = require('../lib/parse')
+    parse    = require('../lib/parse'),
+    ts       = require('../lib/timestamp')
 
 var nEntries = 50
 
@@ -35,6 +36,8 @@ function handleHistory(slot, begin, res, next) {
     var slotdir = path.join(config.dir, slot)
 
     var reps = [], repsJSON = []
+
+    begin = Number(begin)
 
     fs.readdir(slotdir, function(err, files) {
         if (err) {
@@ -55,7 +58,7 @@ function handleHistory(slot, begin, res, next) {
         reps = files.filter(function(val) {
             return val.match(/^[0-9]/)
         })
-        res.locals.begin    = Number(begin)
+        res.locals.begin    = begin
         res.locals.nEntries = nEntries
         res.locals.total    = reps.length
 
@@ -69,8 +72,10 @@ function handleHistory(slot, begin, res, next) {
                 }
                 repsJSON[done] = data
                 if (done === reps.length - 1) {
-                    res.locals.reps = repsJSON
-                    res.render('history.ejs')
+                    res.locals.reps = repsJSON.sort(ts.sortByDate)
+                                              .reverse()
+                                              .slice(begin, begin + nEntries)
+                    res.render('history.jade')
                 }
                 done++
             })
