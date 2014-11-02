@@ -25,7 +25,7 @@
 var express = require('express')
 var path    = require('path')
 var debug   = require('debug')('app')
-//var logger = require('morgan')
+var logger = require('morgan')
 var compression = require('compression')
 
 //var index = require('./routes/index')
@@ -55,7 +55,7 @@ app.locals.moment = require('moment')
 app.locals.config = config
 app.locals.util   = require('./lib/ejs-util.js')
 
-//app.use(logger('dev'))
+app.use(logger('short'))
 
 // ROUTING
 app.get('/log/:slot/:time/:log', function(req, res, next) {

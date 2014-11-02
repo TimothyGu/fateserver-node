@@ -16,7 +16,6 @@
     "ejs": "1.0.x",
     "entities": "1.1.x",
     "express": "4.10.x",
-    "readline": "0.0.x",
     "xz-pipe": "0.0.x",
     "debug": "2.1.x",
     "morgan": "1.4.x",
@@ -24,7 +23,7 @@
   },
   "engine": "node >= 0.10.0",
   "devDependencies": {
-    "nodemon": "~1.2.1",
-    "jsdoc": "~3.3.0-alpha10"
+    "nodemon": "~1.2",
+    "jsdoc": "~3.3"
   }
 }
