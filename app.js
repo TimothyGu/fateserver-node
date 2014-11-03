@@ -25,7 +25,7 @@
 var express = require('express')
 var path    = require('path')
 var debug   = require('debug')('app')
-var logger = require('morgan')
+var logger  = require('morgan')
 var compression = require('compression')
 
 //var index = require('./routes/index')

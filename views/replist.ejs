@@ -49,16 +49,21 @@
     } %>
   <tr class="<%= repClass %>">
     <% for (var j = 0; j < propsToDisplay.length; j++) { %>
-      <% if (propsToDisplay[j] === 'date') { %>
+      <% var prop = propsToDisplay[j] %>
+      <% if (prop === 'date') { %>
         <td><%= repMoment.fromNow() %></td>
-      <% } else if (propsToDisplay[j] === 'results') { %>
+      <% } else if (prop === 'rev') { %>
+        <td><a href="<%= config.getGitwebHist(rep.rev) %>">
+          <%= rep.rev %>
+        </a></td>
+      <% } else if (prop === 'results') { %>
         <td class="<%= rep.rclass %>">
           <a href="<%= '/report/' + slot + '/' + rep.date %>">
             <%= rep.rtext %>
           </a>
         </td>
       <% } else { %>
-        <td><%= rep[propsToDisplay[j]] %></td>
+        <td><%= rep[prop] %></td>
       <% } %>
     <% } %>
   </tr>
