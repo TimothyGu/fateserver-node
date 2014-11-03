@@ -1,2 +1,15 @@
 mixin formatConfig(str)
   != str.replace(/ /g, ' <wbr>')
+
+mixin linkGitwebCommit(rev)
+  a(href=config.getGitwebCommit(rev))=rev
+
+mixin linkGitwebHistory(newer, older)
+  a(href=config.getGitwebCommit(newer, older))
+    if block
+      block
+    else if older
+      =older
+    else
+      =newer
+

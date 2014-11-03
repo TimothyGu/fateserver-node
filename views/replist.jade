@@ -1,0 +1,25 @@
+
+mixin replist(propsToDisplay, reps)
+  - var now = moment.utc()
+  - var propsToDisplay = propsToDisplay || ['date', 'rev', 'subarch', 'os', 'cc', 'nwarn', 'results']
+  each rep, i in reps
+    - var repClass = ''
+    - var repMoment = ts.getMoment(rep.date)
+    if now.unix() < repMoment.unix() + ts.recentAge
+      - repClass = 'recent'
+    else if now.unix() > repMoment.unix() + ts.ancientAge
+      - repClass = 'ancient'
+    else if now.unix() > repMoment.unix() + ts.hiddenAge
+      - continue
+    tr(class=repClass)
+      each prop, i in propsToDisplay
+        if prop === 'date'
+          td= repMoment.fromNow()
+        else if prop === 'rev'
+          td
+            +linkGitwebHistory(rep.rev)
+        else if prop === 'results'
+          td(class=rep.rclass)
+            a(href='/report/' + slot + '/' + rep.date)= rep.rtext
+        else
+          td= rep[prop]

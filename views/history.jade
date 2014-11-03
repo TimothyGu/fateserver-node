@@ -22,7 +22,7 @@
   THE SOFTWARE.
 
 include ./utils.jade
-//- include ./replist.jade
+include ./replist.jade
 
 extends ./layout.jade
 
@@ -30,7 +30,7 @@ block head
   title Slot #{slot} - #{config.branding} FATE
 
 block title
-  Report history for #{slot}
+  | Report history for #{slot}
 
 block content
   .table-responsive
@@ -65,9 +65,9 @@ block content
         th Rev
         th Warnings
         th Tests
-    tbody
-      - var propsToDisplay = ['date', 'rev', 'nwarn', 'results']
-      //- +replist(propsToDisplay, reps)
+      tbody
+        - var propsToDisplay = ['date', 'rev', 'nwarn', 'results']
+        +replist(propsToDisplay, reps)
 
   nav
     ul.pager
