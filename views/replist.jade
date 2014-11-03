@@ -13,13 +13,14 @@ mixin replist(propsToDisplay, reps)
       - continue
     tr(class=repClass)
       each prop, i in propsToDisplay
-        if prop === 'date'
-          td= repMoment.fromNow()
-        else if prop === 'rev'
-          td
-            +linkGitwebHistory(rep.rev)
-        else if prop === 'results'
-          td(class=rep.rclass)
-            a(href='/report/' + slot + '/' + rep.date)= rep.rtext
-        else
-          td= rep[prop]
+        case prop
+          when 'date'
+            td= repMoment.fromNow()
+          when 'rev'
+            td
+              +linkGitwebHistory(rep.rev)
+          when 'results'
+            td(class=rep.rclass)
+              a(href='/report/' + slot + '/' + rep.date)= rep.rtext
+          default
+            td= rep[prop]
