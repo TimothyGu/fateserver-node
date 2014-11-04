@@ -27,7 +27,8 @@ var fs       = require('fs'),
     debug    = require('debug')('history')
 
 var config   = require('../lib/config'),
-    parse    = require('../lib/parse')
+    parse    = require('../lib/parse'),
+    ts       = require('../lib/timestamp')
 
 var nEntries = 50
 
@@ -69,7 +70,9 @@ function handleHistory(slot, begin, res, next) {
                 }
                 repsJSON[done] = data
                 if (done === reps.length - 1) {
-                    res.locals.reps = repsJSON
+                    res.locals.reps = repsJSON.sort(ts.sortByDate)
+                                              .reverse()
+                                              .slice(begin, begin + nEntries)
                     res.render('history.ejs')
                 }
                 done++

@@ -22,10 +22,6 @@
  * THE SOFTWARE.
  */%>
 
-<% var repsSorted = reps.sort(ts.sortByDate)
-                        .reverse()
-                        .slice(begin, begin + nEntries) %>
-
 <% include header1.ejs %>
 <title>Slot <%= slot %> - <%= config.branding %> FATE</title>
 <% include header2.ejs %>
@@ -43,23 +39,23 @@ Report history for <%= slot %>
       </tr>
       <tr>
         <th>Architecture</th>
-        <td><%= repsSorted[0].subarch %></td>
+        <td><%= reps[0].subarch %></td>
       </tr>
       <tr>
         <th>OS</th>
-        <td><%= repsSorted[0].os %></td>
+        <td><%= reps[0].os %></td>
       </tr>
       <tr>
         <th>Compiler</th>
-        <td><%= repsSorted[0].cc %></td>
+        <td><%= reps[0].cc %></td>
       </tr>
       <tr>
         <th>Configuration</th>
-        <td><code><%- util.formatConfig(repsSorted[0].config) %></code></td>
+        <td><code><%- util.formatConfig(reps[0].config) %></code></td>
       </tr>
       <tr>
         <th>Comment</th>
-        <td><%= repsSorted[0].comment %></td>
+        <td><%= reps[0].comment %></td>
       </tr>
     </tbody>
   </table>
