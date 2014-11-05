@@ -54,8 +54,7 @@ function handleReport(slot, date, res, next) {
         else {
             res.locals.summary = summary
             if (otherProcessDone && !err) {
-                res.render('report.ejs')
-                debug('no!')
+                res.render('report.ejs', { _with: false })
             } else
                 otherProcessDone = true
         }
@@ -67,8 +66,7 @@ function handleReport(slot, date, res, next) {
         } else {
             res.locals.report = records
             if (otherProcessDone && !err) {
-                res.render('report.ejs')
-                debug('no2')
+                res.render('report.ejs', { _with: false })
             } else
                 otherProcessDone = true
         }

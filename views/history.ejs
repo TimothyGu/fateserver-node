@@ -22,10 +22,12 @@
  * THE SOFTWARE.
  */%>
 
+<% var l = locals %>
+
 <% include header1.ejs %>
-<title>Slot <%= slot %> - <%= config.branding %> FATE</title>
+<title>Slot <%= l.slot %> - <%= l.config.branding %> FATE</title>
 <% include header2.ejs %>
-Report history for <%= slot %>
+Report history for <%= l.slot %>
 <% include header3.ejs %>
 <div class="table-responsive">
   <table class="table" id="config">
@@ -35,27 +37,27 @@ Report history for <%= slot %>
     <tbody>
       <tr>
         <th>Owner</th>
-        <td><%= owner %></td>
+        <td><%= l.owner %></td>
       </tr>
       <tr>
         <th>Architecture</th>
-        <td><%= reps[0].subarch %></td>
+        <td><%= l.reps[0].subarch %></td>
       </tr>
       <tr>
         <th>OS</th>
-        <td><%= reps[0].os %></td>
+        <td><%= l.reps[0].os %></td>
       </tr>
       <tr>
         <th>Compiler</th>
-        <td><%= reps[0].cc %></td>
+        <td><%= l.reps[0].cc %></td>
       </tr>
       <tr>
         <th>Configuration</th>
-        <td><code><%- util.formatConfig(reps[0].config) %></code></td>
+        <td><code><%- l.util.formatConfig(l.reps[0].config) %></code></td>
       </tr>
       <tr>
         <th>Comment</th>
-        <td><%= reps[0].comment %></td>
+        <td><%= l.reps[0].comment %></td>
       </tr>
     </tbody>
   </table>
@@ -79,14 +81,14 @@ Report history for <%= slot %>
 </div>
 <nav>
   <ul class="pager">
-    <% if (begin !== 0) { %>
-      <% var prevBegin = Math.max(0, begin - nEntries) %>
-      <li><a href="/history/<%= slot %>?begin=<%= prevBegin %>">Previous</a></li>
+    <% if (l.begin !== 0) { %>
+      <% var prevBegin = Math.max(0, l.begin - l.nEntries) %>
+      <li><a href="/history/<%= l.slot %>?begin=<%= prevBegin %>">Previous</a></li>
     <% } else { %>
       <li class="disabled"><a href="#">Previous</a></li>
     <% } %>
-    <% if (total > begin + nEntries) { %>
-      <li><a href="/history/<%= slot %>?begin=<%= begin + nEntries %>">Next</a></li>
+    <% if (l.total > l.begin + l.nEntries) { %>
+      <li><a href="/history/<%= l.slot %>?begin=<%= l.begin + l.nEntries %>">Next</a></li>
     <% } else { %>
       <li class="disabled"><a href="#">Next</a></li>
     <% } %>

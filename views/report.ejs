@@ -22,8 +22,10 @@
  * THE SOFTWARE.
  */%>
 
+<% var l = locals %>
+
 <% include header1.ejs %>
-<title><%= slot %> <%= summary.rev %> - <%= config.branding %> FATE</title>
+<title><%= l.slot %> <%= l.summary.rev %> - <%= l.config.branding %> FATE</title>
 <script type="text/javascript">
   function toggle(id) {
       var e = document.getElementById(id);
@@ -43,28 +45,28 @@
   }
 </script>
 <% include header2.ejs %>
-Report of <%= slot %> <%= summary.rev %>
+Report of <%= l.slot %> <%= l.summary.rev %>
 <% include header3.ejs %>
 
 <ul class="pager">
   <li class="previous">
-    <a href="/history/<%= slot %>">&larr; Slot History</a>
+    <a href="/history/<%= l.slot %>">&larr; Slot History</a>
   </li>
 </ul>
 
-<div class="alert <%- summary.rclass %>" role="alert">
-  <% if (summary.status === 3) { %>
+<div class="alert <%- l.summary.rclass %>" role="alert">
+  <% if (l.summary.status === 3) { %>
     <strong>Error configuring!</strong>
-  <% } else if (summary.status === 2) { %>
+  <% } else if (l.summary.status === 2) { %>
     <strong>Error compiling!</strong>
-  <% } else if (summary.status === 1) { %>
-    <% if (!summary.ntests) { %>
+  <% } else if (l.summary.status === 1) { %>
+    <% if (!l.summary.ntests) { %>
          <strong>Error testing!</strong>
     <% } else { %>
-         <strong>Partially failed:</strong> <%= summary.rtext %> passed!
+         <strong>Partially failed:</strong> <%= l.summary.rtext %> passed!
     <% } %>
-  <% } else if (summary.status === 0) { %>
-    <% if (summary.ntests) { %>
+  <% } else if (l.summary.status === 0) { %>
+    <% if (l.summary.ntests) { %>
          <strong>All tests passed!</strong>
     <% } else { %>
          <strong>Built successfully!</strong>
@@ -76,7 +78,7 @@ Report of <%= slot %> <%= summary.rev %>
   <li role="presentation" class="active">
     <a href="#info" role="tab" data-toggle="tab">Information</a>
   </li>
-  <% if (summary.status === 1) { %>
+  <% if (l.summary.status === 1) { %>
   <li role="presentation">
     <a href="#failed_tests" role="tab" data-toggle="tab">
       Failed Tests
@@ -84,11 +86,11 @@ Report of <%= slot %> <%= summary.rev %>
     </a>
   </li>
   <% } %>
-  <% if (summary.npass > 0) { %>
+  <% if (l.summary.npass > 0) { %>
   <li role="presentation">
     <a href="#passed_tests" role="tab" data-toggle="tab">
       Passed Tests
-      <span class="badge pass"><%= summary.npass %></span>
+      <span class="badge pass"><%= l.summary.npass %></span>
     </a>
   </li>
   <% } %>
@@ -104,69 +106,69 @@ Report of <%= slot %> <%= summary.rev %>
       <tbody>
         <tr>
           <th>Architecture</th>
-          <td><%= summary.arch %></td>
+          <td><%= l.summary.arch %></td>
         </tr>
         <tr>
           <th>Arch variant</th>
-          <td><%= summary.subarch %></td>
+          <td><%= l.summary.subarch %></td>
         </tr>
         <tr>
           <th>CPU</th>
-          <td><%= summary.cpu %></td>
+          <td><%= l.summary.cpu %></td>
         </tr>
         <tr>
           <th>OS</th>
-          <td><%= summary.os %></td>
+          <td><%= l.summary.os %></td>
         </tr>
         <tr>
           <th>Owner</th>
-          <td><%= owner %></td>
+          <td><%= l.owner %></td>
         </tr>
         <tr>
           <th>Compiler</th>
-          <td><%= summary.cc %></td>
+          <td><%= l.summary.cc %></td>
         </tr>
         <tr>
           <th>Configuration</th>
-          <td><code><%- util.formatConfig(summary.config) %></code></td>
+          <td><code><%- l.util.formatConfig(l.summary.config) %></code></td>
         </tr>
         <tr>
           <th>Comment</th>
-          <td><%= summary.comment %></td>
+          <td><%= l.summary.comment %></td>
         </tr>
         <tr>
           <th>Revision</th>
-          <td><%= summary.rev %></td>
+          <td><%= l.summary.rev %></td>
         </tr>
         <tr>
           <th>Date</th>
-          <% var m = ts.getMoment(summary.date) %>
+          <% var m = l.ts.getMoment(l.summary.date) %>
           <td><%= m.format('YYYY-MM-DD hh:mm:ss') %> UTC (<%= m.fromNow() %>)</td>
         </tr>
         <tr>
           <th>Warnings</th>
-          <td><%= summary.nwarn %></td>
+          <td><%= l.summary.nwarn %></td>
         </tr>
         <tr>
           <th>Logs</th>
           <td>
-            <a role="button" href="/log/<%= slot %>/<%= summary.date %>/configure"
+            <a role="button" href="/log/<%= l.slot %>/<%= l.summary.date %>/configure"
                class="btn btn-sm
-                      <%- summary.status === 3 ? 'btn-fail' : 'btn-pass' %>">
+                      <%- l.summary.status === 3 ? 'btn-fail' : 'btn-pass' %>">
               Configuration
             </a>
-            <a role="button" href="/log/<%= slot %>/<%= summary.date %>/compile" 
+            <a role="button" href="/log/<%= l.slot %>/<%= l.summary.date %>/compile" 
                class="btn btn-sm
-                      <%- summary.status === 3 ? 'btn-default disabled' : (
-                            summary.status === 2 ? 'btn-fail' : 'btn-pass') %>">
+                      <%- l.summary.status === 3 ? 'btn-default disabled' : (
+                          l.summary.status === 2 ? 'btn-fail' : 'btn-pass') %>">
               Compilation
             </a>
-            <a role="button" href="/log/<%= slot %>/<%= summary.date %>/test"
+            <a role="button" href="/log/<%= l.slot %>/<%= l.summary.date %>/test"
                class="btn btn-sm
-                      <%- summary.status >= 2 ||
-                          summary.status == 0 && !summary.ntests ?
+                      <%- l.summary.status >= 2 ||
+                          l.summary.status == 0 && !l.summary.ntests ?
                             'btn-default disabled' : (
-                              summary.status === 1 ? 'btn-fail' : 'btn-pass')
+                              l.summary.status === 1 ? 'btn-fail' : 'btn-pass')
                       %>">
               Testing
             </a>
@@ -177,7 +179,7 @@ Report of <%= slot %> <%= summary.rev %>
   </div>
 </div>
 
-<% if (summary.status < 2) { %>
+<% if (l.summary.status < 2) { %>
 <div role="tabpanel" class="tab-pane fade" id="failed_tests">
   <div class="table-responsive">
     <table class="replist table table-bordered" id="tests">
@@ -189,8 +191,8 @@ Report of <%= slot %> <%= summary.rev %>
         </tr>
       </thead>
       <tbody>
-        <% for (var i = 0; i < report.length; i++) { %>
-          <% var rep = report[i] %>
+        <% for (var i = 0; i < l.report.length; i++) { %>
+          <% var rep = l.report[i] %>
           <% if (rep.status) { %>
             <tr>
               <td class="toggle" onclick="show_diff('<%= rep.name %>')">
@@ -218,7 +220,7 @@ Report of <%= slot %> <%= summary.rev %>
 <% } %>
 
 <div role="tabpanel" class="tab-pane fade" id="passed_tests">
-  <% var allPassed = report.filter(function(value) {
+  <% var allPassed = l.report.filter(function(value) {
        return value.status === 0
      })
      for (var i = 0; i < allPassed.length; i++) { %>

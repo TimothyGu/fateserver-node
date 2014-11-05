@@ -25,26 +25,26 @@
 <%/*
  * To use this, do something like this:
  *
- *     var reps = [ parse.loadSummary('c', 20140101000000),
- *                  parse.loadSummary('d', 20140102000000) ]
+ *     l.reps = [ parse.loadSummary('c', 20140101000000),
+ *                parse.loadSummary('d', 20140102000000) ]
  *
  * Then include this file. The input array of summaries must be in
- * `reps`.
+ * `l.reps`.
  */%>
 
-<% var now = moment.utc() %>
+<% var now = l.moment.utc() %>
 <% propsToDisplay = propsToDisplay || ['date', 'rev', 'subarch', 'os',
                                        'cc', 'nwarn', 'results'] %>
 
-<% for (var i = 0; i < reps.length; i++) { %>
-  <% var rep = reps[i] %>
+<% for (var i = 0; i < l.reps.length; i++) { %>
+  <% var rep = l.reps[i] %>
   <% var repClass = '' %>
-  <% var repMoment = ts.getMoment(rep.date) %>
-  <% if (now.unix() < repMoment.unix() + ts.recentAge) {
+  <% var repMoment = l.ts.getMoment(rep.date) %>
+  <% if (now.unix() < repMoment.unix() + l.ts.recentAge) {
       repClass = 'recent'
-    } else if (now.unix() > repMoment.unix() + ts.ancientAge) {
+    } else if (now.unix() > repMoment.unix() + l.ts.ancientAge) {
       repClass = 'ancient'
-    } else if (now.unix() > repMoment.unix() + ts.hiddenAge) {
+    } else if (now.unix() > repMoment.unix() + l.ts.hiddenAge) {
       continue
     } %>
   <tr class="<%= repClass %>">
@@ -53,12 +53,12 @@
       <% if (prop === 'date') { %>
         <td><%= repMoment.fromNow() %></td>
       <% } else if (prop === 'rev') { %>
-        <td><a href="<%= config.getGitwebHist(rep.rev) %>">
+        <td><a href="<%= l.config.getGitwebHist(rep.rev) %>">
           <%= rep.rev %>
         </a></td>
       <% } else if (prop === 'results') { %>
         <td class="<%= rep.rclass %>">
-          <a href="<%= '/report/' + slot + '/' + rep.date %>">
+          <a href="<%= '/report/' + l.slot + '/' + rep.date %>">
             <%= rep.rtext %>
           </a>
         </td>

@@ -73,7 +73,7 @@ function handleHistory(slot, begin, res, next) {
                     res.locals.reps = repsJSON.sort(ts.sortByDate)
                                               .reverse()
                                               .slice(begin, begin + nEntries)
-                    res.render('history.ejs')
+                    res.render('history.ejs', { _with: false })
                 }
                 done++
             })
