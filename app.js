@@ -37,11 +37,15 @@ var ts      = require('./lib/timestamp')
 var config  = require('./lib/config')
 
 var app = express()
+app.set('env', config.env)
 
 // VIEW ENGINE SETUP
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 
+if (app.get('env') !== 'development') {
+    app.enable('view cache')
+}
 /*
 app.use(function(req, res, next) {
     debug(req.headers)
@@ -96,7 +100,7 @@ app.use(function(req, res, next) {
 
 // development error handler
 // will print stacktrace
-/*if (app.get('env') === 'development') {
+if (app.get('env') === 'development') {
     app.use(function(err, req, res, next) {
         var status = err.status || 500
         res.status(status)
@@ -106,7 +110,7 @@ app.use(function(req, res, next) {
             status: status
         })
     })
-}*/
+}
 
 // production error handler
 // no stacktraces leaked to user
