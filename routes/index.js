@@ -1,5 +1,5 @@
 /*
- * Nothing.
+ * Index page.
  *
  * Copyright (c) 2014 Tiancheng "Timothy" Gu <timothygu99@gmail.com>
  *
@@ -22,12 +22,59 @@
  * THE SOFTWARE.
  */
 
-var express = require('express')
-var router = express.Router()
+var fs       = require('fs'),
+    path     = require('path'),
+    debug    = require('debug')('history')
 
-/* GET home page. */
-router.get('/', function(req, res) {
-  res.render('index', { title: 'Express' })
-})
+var config   = require('../lib/config'),
+    parse    = require('../lib/parse'),
+    ts       = require('../lib/timestamp')
 
-module.exports = router
+var nEntries = 50
+
+function handleIndex(req, res, next) {
+    var slotdir = path.join(config.dir, slot)
+
+    var reps = [], repsJSON = []
+
+    fs.readdir(config.dir, function(err, slots) {
+        if (err) {
+            err.message = 'config.dir not found. Did you set up lib/config.js'
+                        + 'correctly?'
+            err.HTMLMessage = 'FATE data not found.'
+            err.status = 404
+            return next(err)
+        }
+
+        for (var i = 0; i < slots.length; i++) {
+            var slot = slots[i]
+
+            reps = files.filter(function(val) {
+                return val.match(/^[0-9]/)
+            })
+            res.locals.begin    = Number(begin)
+            res.locals.nEntries = nEntries
+            res.locals.total    = reps.length
+
+            // We need a separate counter for how many summaries are fetched.
+            // i is for the summary we are fetch**ing**.
+            var done = 0
+            for (var i = 0; i < reps.length; i++) {
+                parse.loadSummary(slot, reps[i], function(errInner, data) {
+                    if (errInner) {
+                    return next(errInner)
+                }
+                repsJSON[done] = data
+                if (done === reps.length - 1) {
+                    res.locals.reps = repsJSON.sort(ts.sortByDate)
+                                              .reverse()
+                                              .slice(begin, begin + nEntries)
+                    res.render('history.ejs')
+                }
+                done++
+            })
+        }
+    })
+}
+
+module.exports = handleHistory
