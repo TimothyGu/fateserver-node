@@ -9,7 +9,7 @@
   "license": "MIT",
   "author": "Timothy Gu <timothygu99@gmail.com>",
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "./bin/www"
   },
   "dependencies": {
     "compression": "1.2.x",
