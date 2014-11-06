@@ -179,7 +179,7 @@ Report of <%= l.slot %> <%= l.summary.rev %>
   </div>
 </div>
 
-<% if (l.summary.status < 2) { %>
+<% if (l.summary.status === 1) { %>
 <div role="tabpanel" class="tab-pane fade" id="failed_tests">
   <div class="table-responsive">
     <table class="replist table table-bordered" id="tests">
