@@ -107,7 +107,8 @@ if (app.get('env') === 'development') {
         res.render('error', {
             message: err.message,
             error: err,
-            status: status
+            status: status,
+            _with: false
         })
     })
 }
@@ -121,7 +122,8 @@ app.use(function(err, req, res, next) {
     res.render('error', {
         message: err.HTMLMessage || err.message,
         error: null,
-        status: status
+        status: status,
+        _with: false
     })
 })
 

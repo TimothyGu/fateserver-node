@@ -22,10 +22,10 @@
  * THE SOFTWARE.
  */%>
 
-Error <%= status %>:
+Error <%= locals.status %>:
 
-<% if (error) { %>
-  <%= error.stack %>
+<% if (locals.error) { %>
+  <%= locals.error.stack %>
 <% } else { %>
-  <%= message %>
+  <%= locals.message %>
 <% } %>
