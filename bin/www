@@ -28,6 +28,8 @@ var app = require('../app')
 
 var config = require('../lib/config')
 
+'use strict'
+
 app.set('port', config.port)
 
 var server = app.listen(app.get('port'), function() {
