@@ -22,6 +22,8 @@
  * THE SOFTWARE.
  */
 
+'use strict'
+
 var express = require('express')
 var path    = require('path')
 var debug   = require('debug')('app')
@@ -35,8 +37,6 @@ var log     = require('./routes/log')
 
 var ts      = require('./lib/timestamp')
 var config  = require('./lib/config')
-
-'use strict'
 
 var app = express()
 app.set('env', config.env)

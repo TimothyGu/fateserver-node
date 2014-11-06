@@ -23,12 +23,12 @@
  * THE SOFTWARE.
  */
 
+'use strict'
+
 var debug = require('debug')('www')
 var app = require('../app')
 
 var config = require('../lib/config')
-
-'use strict'
 
 app.set('port', config.port)
 
