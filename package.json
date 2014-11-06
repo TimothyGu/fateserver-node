@@ -9,7 +9,7 @@
   "license": "MIT",
   "author": "Timothy Gu <timothygu99@gmail.com>",
   "scripts": {
-    "start": "./bin/www"
+    "start": "$(npm bin)/nodemon ./bin/www"
   },
   "dependencies": {
     "compression": "1.2.x",
