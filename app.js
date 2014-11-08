@@ -30,7 +30,7 @@ var debug   = require('debug')('app')
 var logger  = require('morgan')
 var compression = require('compression')
 var toobusy = require('toobusy')
-toobusy.maxLag(50)
+toobusy.maxLag(100)
 
 //var index = require('./routes/index')
 var history = require('./routes/history')
