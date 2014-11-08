@@ -41,7 +41,7 @@ var log     = require('./routes/log')
 var ts      = require('./lib/timestamp')
 var config  = require('./lib/config')
 
-memwatch.on('leak', console.error);
+memwatch.on('leak', require('debug')('memwatch'))
 
 var app = express()
 app.set('env', config.env)

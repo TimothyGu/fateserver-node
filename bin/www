@@ -25,13 +25,28 @@
 
 'use strict'
 
+var cluster = require('cluster')
 var debug = require('debug')('www')
-var app = require('../app')
 
-var config = require('../lib/config')
+if (cluster.isMaster) {
+    var cpuCount = require('os').cpus().length
+    // debugging:
+    cpuCount = cpuCount > 2 ? cpuCount : 2
+    debug(cpuCount + ' CPUs detected.')
 
-app.set('port', config.port)
+    // Create a worker for each CPU
+    for (var i = 0; i < cpuCount; i++) {
+        debug('Worker ' + i + ' spawned.')
+        cluster.fork()
+    }
+} else {
+    var app = require('../app')
 
-var server = app.listen(app.get('port'), function() {
-    debug('Express server listening on port ' + server.address().port)
-})
+    var config = require('../lib/config')
+
+    app.set('port', config.port)
+
+    var server = app.listen(app.get('port'), function() {
+        debug('Express server listening on port ' + server.address().port)
+    })
+}
