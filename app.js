@@ -29,6 +29,8 @@ var path    = require('path')
 var debug   = require('debug')('app')
 var logger  = require('morgan')
 var compression = require('compression')
+var toobusy = require('toobusy')
+toobusy.maxLag(50)
 
 //var index = require('./routes/index')
 var history = require('./routes/history')
@@ -61,7 +63,15 @@ app.locals.moment = require('moment')
 app.locals.config = config
 app.locals.util   = require('./lib/ejs-util.js')
 
-app.use(logger('short'))
+app.use(function(req, res, next) {
+    if (toobusy()) {
+        res.status(503).send("Server too busy. Please try again later.");
+    } else {
+        next();
+    } 
+});
+
+//app.use(logger('short'))
 
 // ROUTING
 app.get('/log/:slot/:time/:log', function(req, res, next) {
