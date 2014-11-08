@@ -29,6 +29,7 @@ var path    = require('path')
 var debug   = require('debug')('app')
 var logger  = require('morgan')
 var compression = require('compression')
+var memwatch = require('memwatch')
 var toobusy = require('toobusy')
 toobusy.maxLag(100)
 
@@ -39,6 +40,8 @@ var log     = require('./routes/log')
 
 var ts      = require('./lib/timestamp')
 var config  = require('./lib/config')
+
+memwatch.on('leak', console.error);
 
 var app = express()
 app.set('env', config.env)
