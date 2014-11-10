@@ -97,7 +97,7 @@ nwarn=$(grep -Eci '\<warning\>' compile.log) || nwarn = 0
 repdir=$slotdir/$date
 mkdir $repdir
 gzip -9 *.log
-xz -8 report
+xz -0 report
 cp -p summary.json report.xz *.log.gz $repdir
 chmod 644 $repdir/*
 rm -f $slotdir/previous
