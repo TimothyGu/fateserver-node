@@ -66,11 +66,15 @@ function handleHistory(slot, begin, res, next) {
         for (var i = 0; i < reps.length; i++) {
             parse.loadSummary(slot, reps[i], function(errInner, data) {
                 if (errInner) {
-                    return next(errInner)
+                    // Ignore possible errors in one specific report in order
+                    // not to destroy the entire history page.
+                    repsJSON[done] = null
                 }
                 repsJSON[done] = data
                 if (done === reps.length - 1) {
-                    res.locals.reps = repsJSON.sort(ts.sortByDate)
+                    res.locals.reps = repsJSON.filter(function(n){
+                                                  return n != null
+                                              }).sort(ts.sortByDate)
                                               .reverse()
                                               .slice(begin, begin + nEntries)
                     res.render('history.ejs', { _with: false })
