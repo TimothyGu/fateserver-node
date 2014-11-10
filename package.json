@@ -15,10 +15,10 @@
     "compression": "1.2.x",
     "ejs": "1.0.x",
     "entities": "1.1.x",
-    "express": "4.10.x",
+    "express": "~4.10.2",
     "xz-pipe": "0.0.x",
     "debug": "2.1.x",
-    "morgan": "1.4.x",
+    "morgan": "~1.5.0",
     "moment": "2.8.x",
     "toobusy": "~0.2.4"
   },
