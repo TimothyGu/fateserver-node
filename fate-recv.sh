@@ -90,7 +90,7 @@ fi
 
 unset IFS
 
-nwarn=$(grep -Eci '\<warning\>' compile.log) || nwarn = 0
+nwarn=$(grep -Eci '\<warning\>' compile.log) || nwarn=0
 
 `dirname $0`/generateSummary.js report $nwarn > summary.json
 
