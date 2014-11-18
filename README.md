@@ -13,7 +13,10 @@ Why Not Jade? It's so much cleaner...
 -------------------------------------
 
 It is not *that* cleaner than EJS, but a lot slower (up to 16x slower in my
-test, i.e. even slower than the old fateserver).
+test without caching, i.e. even slower than the old fateserver).
+
+If caching **is** enabled, and `with(){}` syntax is disabled, my tests show
+that it is 1.7x slower.
 
 See for yourself in the jade branch (only history page ported).
 
