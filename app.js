@@ -52,6 +52,7 @@ app.set('view engine', 'ejs')
 
 if (app.get('env') !== 'development') {
     app.enable('view cache')
+    debug('Cache enabled')
 }
 /*
 app.use(function(req, res, next) {
