@@ -28,21 +28,16 @@
 var cluster = require('cluster')
 var debug = require('debug')('www')
 
-if (cluster.isMaster) {
-    var cpuCount = require('os').cpus().length
-    // debugging:
-    cpuCount = cpuCount > 2 ? cpuCount : 2
-    debug(cpuCount + ' CPUs detected.')
+var config = require('../lib/config')
 
+if (cluster.isMaster) {
     // Create a worker for each CPU
-    for (var i = 0; i < cpuCount; i++) {
+    for (var i = 0; i < config.cpus; i++) {
         debug('Worker ' + i + ' spawned.')
         cluster.fork()
     }
 } else {
     var app = require('../app')
-
-    var config = require('../lib/config')
 
     app.set('port', config.port)
 
