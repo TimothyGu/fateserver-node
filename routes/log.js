@@ -24,10 +24,10 @@
 
 var fs       = require('fs'),
     path     = require('path'),
-    debug    = require('debug')('log')
+    debug    = require('debug')('r:log')
 
-var config   = require('../lib/config'),
-    parse    = require('../lib/parse')
+var config   = require('../lib/config')
+  , parse    = require('../lib/parse')
 
 function handleLog(slot, date, log, req, res, next) {
     var logFile = path.join(slot, date, log + '.log.gz')

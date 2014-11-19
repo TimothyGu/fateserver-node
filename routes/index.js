@@ -22,13 +22,13 @@
  * THE SOFTWARE.
  */
 
-var fs       = require('fs'),
-    path     = require('path'),
-    debug    = require('debug')('history')
+var fs       = require('fs')
+  , path     = require('path')
+  , debug    = require('debug')('r:index')
 
-var config   = require('../lib/config'),
-    parse    = require('../lib/parse'),
-    ts       = require('../lib/timestamp')
+var config   = require('../lib/config')
+  , parse    = require('../lib/parse')
+  , ts       = require('../lib/timestamp')
 
 var nEntries = 50
 

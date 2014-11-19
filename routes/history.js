@@ -24,7 +24,7 @@
 
 var fs       = require('fs')
   , path     = require('path')
-  , debug    = require('debug')('history')
+  , debug    = require('debug')('r:history')
   , async    = require('async')
 
 var config   = require('../lib/config')
