@@ -33,8 +33,8 @@ var path    = require('path')
   , toobusy = require('toobusy')
 toobusy.maxLag(100)
 
-//var index = require('./routes/index')
-var history = require('./routes/history')
+var index   = require('./routes/index')
+  , history = require('./routes/history')
   , report  = require('./routes/report')
   , log     = require('./routes/log')
 
@@ -90,6 +90,13 @@ app.get('/log.cgi', function(req, res, next) {
 app.use(compression({ threshold: '1kb' }))
 
 app.use(express.static(path.join(__dirname, 'public')))
+
+app.get('/', function(req, res, next) {
+    index(req, res, next)
+})
+app.get('/index.cgi', function(req, res, next) {
+    index(req, res, next)
+})
 
 app.get('/history/:slot', function(req, res, next) {
     history(req.params.slot, req.query.begin || 0, res, next)

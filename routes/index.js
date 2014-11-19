@@ -27,6 +27,7 @@
 var fs       = require('fs')
   , path     = require('path')
   , debug    = require('debug')('f:r:index')
+  , async    = require('async')
 
 var config   = require('../lib/config')
   , parse    = require('../lib/parse')
@@ -35,10 +36,6 @@ var config   = require('../lib/config')
 //var nEntries = 50
 
 function handleIndex(req, res, next) {
-    var slotdir = path.join(config.dir, slot)
-
-    var reps = [], repsJSON = []
-
     fs.readdir(config.dir, function(err, slots) {
         if (err) {
             err.message = 'config.dir not found. Did you set up lib/config.js'
@@ -47,36 +44,30 @@ function handleIndex(req, res, next) {
             err.status = 404
             return next(err)
         }
+        async.map(slots, function iterator(slot, out) {
+            var slotdir = path.join(config.dir, slot)
 
-        for (var i = 0; i < slots.length; i++) {
-            var slot = slots[i]
+            if (fs.existsSync(path.join(slotdir, 'hidden'))) {
+                return out(null, null)
+            }
 
-            reps = files.filter(function(val) {
-                return val.match(/^[0-9]/)
+            parse.loadSummary(slot, 'latest',
+                              function summaryCb(err, summary) {
+                // Ignore possible errors in one specific report in order
+                // not to destroy the entire history page.
+                return out(null, err ? null : summary)
             })
-            res.locals.begin    = Number(begin)
-            res.locals.nEntries = nEntries
-            res.locals.total    = reps.length
-
-            // We need a separate counter for how many summaries are fetched.
-            // i is for the summary we are fetch**ing**.
-            var done = 0
-            for (var i = 0; i < reps.length; i++) {
-                parse.loadSummary(slot, reps[i], function(errInner, data) {
-                    if (errInner) {
-                    return next(errInner)
-                }
-                repsJSON[done] = data
-                if (done === reps.length - 1) {
-                    res.locals.reps = repsJSON.sort(ts.sortByDate)
-                                              .reverse()
-                                              .slice(begin, begin + nEntries)
-                    res.render('history.ejs')
-                }
-                done++
-            })
-        }
+        }, function end(err, reps) {
+            // TODO sorting
+            res.locals.reps  =
+                reps.filter(function(n){  // Filter out empty/invalid ones
+                        return n != null
+                    })
+                    .sort(ts.sortByDate)  // Oldest to newest
+                    .reverse()            // Newest to oldest
+            res.render('index.ejs', { _with: false })
+        })
     })
 }
 
-module.exports = handleHistory
+module.exports = handleIndex

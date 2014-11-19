@@ -69,8 +69,9 @@ function handleHistory(slot, begin, res, next) {
         }, function end(err, reps) {
             res.locals.reps  =
                 reps.filter(function(n){  // Filter out empty/invalid ones
-                      return n != null
-                  }).sort(ts.sortByDate)  // Oldest to newest
+                        return n != null
+                    })
+                    .sort(ts.sortByDate)  // Oldest to newest
                     .reverse()            // Newest to oldest
                     .slice(begin, begin + nEntries)
             res.locals.total = reps.length

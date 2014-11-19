@@ -51,14 +51,20 @@
     <% for (var j = 0; j < propsToDisplay.length; j++) { %>
       <% var prop = propsToDisplay[j] %>
       <% if (prop === 'date') { %>
-        <td><%= repMoment.fromNow() %></td>
+        <td><%= l.ts.formatDate(repMoment) %></td>
+      <% } else if (prop === 'date-link') { %>
+        <td><a href="<%= '/history/' + rep.slot %>"
+               title="View history for <%= rep.slot %>"
+               aria-label="View history for this slot">
+          <%= l.ts.formatDate(repMoment) %>
+        </a></td>
       <% } else if (prop === 'rev') { %>
         <td><a href="<%= l.config.getGitwebHist(rep.rev) %>">
           <%= rep.rev %>
         </a></td>
       <% } else if (prop === 'results') { %>
-        <td class="<%= rep.rclass %>">
-          <a href="<%= '/report/' + l.slot + '/' + rep.date %>">
+        <td class="<%- rep.rclass %>">
+          <a href="<%= '/report/' + rep.slot + '/' + rep.date %>">
             <%= rep.rtext %>
           </a>
         </td>
