@@ -29,8 +29,8 @@
  */
 
 var fs = require('fs')
-var readline = require('readline')
-var path = require('path')
+  , readline = require('readline')
+  , path = require('path')
 
 var parse = require('./lib/parse')
 

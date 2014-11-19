@@ -22,9 +22,9 @@
  * THE SOFTWARE.
  */
 
-var fs       = require('fs'),
-    path     = require('path'),
-    debug    = require('debug')('r:log')
+var fs       = require('fs')
+  , path     = require('path')
+  , debug    = require('debug')('r:log')
 
 var config   = require('../lib/config')
   , parse    = require('../lib/parse')

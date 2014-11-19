@@ -26,20 +26,20 @@
 
 var express = require('express')
 var path    = require('path')
-var debug   = require('debug')('app')
-var logger  = require('morgan')
-var compression = require('compression')
-var memwatch = require('memwatch')
-var toobusy = require('toobusy')
+  , debug   = require('debug')('app')
+  , logger  = require('morgan')
+  , compression = require('compression')
+  , memwatch = require('memwatch')
+  , toobusy = require('toobusy')
 toobusy.maxLag(100)
 
 //var index = require('./routes/index')
 var history = require('./routes/history')
-var report  = require('./routes/report')
-var log     = require('./routes/log')
+  , report  = require('./routes/report')
+  , log     = require('./routes/log')
 
 var ts      = require('./lib/timestamp')
-var config  = require('./lib/config')
+  , config  = require('./lib/config')
 
 memwatch.on('leak', require('debug')('memwatch'))
 
