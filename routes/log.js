@@ -36,11 +36,9 @@ function handleLog(slot, date, log, req, res, next) {
 
     fs.readFile(logPath, function(err, data) {
         if (err) {
-            var newErr = new Error('Log "' + logFile + '" not found.')
-            newErr.status = 404
-            // Use old stack trace
-            newErr.stack = err.stack
-            return next(newErr)
+            err.HTMLMessage = 'Log "' + logFile + '" not found.'
+            err.status = 404
+            return next(err)
         }
 
         res.set('Content-Type', 'text/plain')

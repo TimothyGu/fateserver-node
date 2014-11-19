@@ -30,7 +30,7 @@ var config   = require('../lib/config')
   , parse    = require('../lib/parse')
   , ts       = require('../lib/timestamp')
 
-var nEntries = 50
+//var nEntries = 50
 
 function handleIndex(req, res, next) {
     var slotdir = path.join(config.dir, slot)

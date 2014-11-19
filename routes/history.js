@@ -40,11 +40,9 @@ function handleHistory(slot, begin, res, next) {
 
     fs.readdir(slotdir, function(err, files) {
         if (err) {
-            var newErr = new Error('Slot "' + slot + '" not found.')
-            newErr.status = 404
-            // Use old stack trace
-            newErr.stack = err.stack
-            return next(newErr)
+            err.HTMLMessage = 'Slot "' + slot + '" not found.')
+            err.status = 404
+            return next(err)
         }
 
         res.locals.slot     = slot
