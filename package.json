@@ -25,7 +25,7 @@
   },
   "engine": "node >= 0.10.0",
   "devDependencies": {
-    "nodemon": "~1.2",
-    "jsdoc": "~3.3"
+    "nodemon": "*",
+    "jsdoc": "*"
   }
 }
