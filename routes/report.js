@@ -53,9 +53,12 @@ function handleReport(slot, date, res, next) {
     async.parallel({
         summary: function(callback) {
             parse.loadSummary(slot, date, callback)
-        },
-        report: function(callback) {
+        }
+      , report: function(callback) {
             parse.loadReport(slot, date, callback)
+        }
+      , lastpass: function(callback) {
+            parse.loadLastPass(slot, callback)
         }
     }, function(err, results) {
         if (err) {
