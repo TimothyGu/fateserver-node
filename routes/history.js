@@ -22,20 +22,21 @@
  * THE SOFTWARE.
  */
 
-var fs       = require('fs'),
-    path     = require('path'),
-    debug    = require('debug')('history')
+var fs       = require('fs')
+  , path     = require('path')
+  , debug    = require('debug')('history')
+  , async    = require('async')
 
-var config   = require('../lib/config'),
-    parse    = require('../lib/parse'),
-    ts       = require('../lib/timestamp')
+var config   = require('../lib/config')
+  , parse    = require('../lib/parse')
+  , ts       = require('../lib/timestamp')
 
 var nEntries = 50
 
 function handleHistory(slot, begin, res, next) {
     var slotdir = path.join(config.dir, slot)
 
-    var reps = [], repsJSON = []
+    var repsName = []
 
     fs.readdir(slotdir, function(err, files) {
         if (err) {
@@ -53,35 +54,28 @@ function handleHistory(slot, begin, res, next) {
             return next(errInner)
         }
 
-        reps = files.filter(function(val) {
+        repsName = files.filter(function(val) {
             return val.match(/^[0-9]/)
         })
         res.locals.begin    = Number(begin)
         res.locals.nEntries = nEntries
-        res.locals.total    = reps.length
 
-        // We need a separate counter for how many summaries are fetched.
-        // i is for the summary we are fetch**ing**.
-        var done = 0
-        for (var i = 0; i < reps.length; i++) {
-            parse.loadSummary(slot, reps[i], function(errInner, data) {
-                if (errInner) {
-                    // Ignore possible errors in one specific report in order
-                    // not to destroy the entire history page.
-                    repsJSON[done] = null
-                }
-                repsJSON[done] = data
-                if (done === reps.length - 1) {
-                    res.locals.reps = repsJSON.filter(function(n){
-                                                  return n != null
-                                              }).sort(ts.sortByDate)
-                                              .reverse()
-                                              .slice(begin, begin + nEntries)
-                    res.render('history.ejs', { _with: false })
-                }
-                done++
+        async.map(repsName, function iterator(repName, out) {
+            parse.loadSummary(slot, repName, function summaryCb(err, summary) {
+                // Ignore possible errors in one specific report in order
+                // not to destroy the entire history page.
+                return out(null, err ? null : summary)
             })
-        }
+        }, function end(err, reps) {
+            res.locals.reps  =
+                reps.filter(function(n){  // Filter out empty/invalid ones
+                      return n != null
+                  }).sort(ts.sortByDate)  // Oldest to newest
+                    .reverse()            // Newest to oldest
+                    .slice(begin, begin + nEntries)
+            res.locals.total = reps.length
+            res.render('history.ejs', { _with: false })
+        })
     })
 }
 
