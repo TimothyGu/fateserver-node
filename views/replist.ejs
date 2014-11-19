@@ -36,6 +36,25 @@
 <% propsToDisplay = propsToDisplay || ['date', 'rev', 'subarch', 'os',
                                        'cc', 'nwarn', 'results'] %>
 
+<% var headings = {
+     date      : 'Time'
+   ,'date-link': 'Time'
+   , rev       : 'Revision'
+   , subarch   : 'Arch'
+   , os        : 'OS'
+   , cc        : 'Compiler'
+   , comment   : 'Comment'
+   , nwarn     : 'Warnings'
+   , results   : 'Results'
+   } %>
+
+<thead><tr>
+<% for (var j = 0; j < propsToDisplay.length; j++) { %>
+  <th><%= headings[propsToDisplay[j]] %></th>
+<% } %>
+</tr></thead>
+
+<tbody>
 <% for (var i = 0; i < l.reps.length; i++) { %>
   <% var rep = l.reps[i] %>
   <% var repClass = '' %>
@@ -74,3 +93,4 @@
     <% } %>
   </tr>
 <% } %>
+</tbody>

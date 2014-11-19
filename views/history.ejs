@@ -72,18 +72,8 @@ Report history for <%= l.slot %>
 
 <div class="table-responsive">
   <table class="replist table table-bordered" id="history">
-    <thead>
-      <tr>
-        <th>Time</th>
-        <th>Rev</th>
-        <th>Warnings</th>
-        <th>Tests</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% var propsToDisplay = ['date', 'rev', 'nwarn', 'results'] %>
-      <% include replist.ejs %>
-    </tbody>
+    <% var propsToDisplay = ['date', 'rev', 'nwarn', 'results'] %>
+    <% include replist.ejs %>
   </table>
 </div>
 <nav>
