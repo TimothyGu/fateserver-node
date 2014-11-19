@@ -20,7 +20,8 @@
     "debug": "2.1.x",
     "morgan": "~1.5.0",
     "moment": "2.8.x",
-    "toobusy": "~0.2.4"
+    "toobusy": "~0.2.4",
+    "async": "~0.9.0"
   },
   "engine": "node >= 0.10.0",
   "devDependencies": {

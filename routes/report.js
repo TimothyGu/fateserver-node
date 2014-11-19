@@ -22,12 +22,13 @@
  * THE SOFTWARE.
  */
 
-var fs       = require('fs'),
-    path     = require('path'),
-    debug    = require('debug')('report')
+var fs       = require('fs')
+  , path     = require('path')
+  , debug    = require('debug')('report')
+  , async    = require('async') 
 
-var config   = require('../lib/config'),
-    parse    = require('../lib/parse')
+var config   = require('../lib/config')
+  , parse    = require('../lib/parse')
 
 function handleReport(slot, date, res, next) {
     var repdir = path.join(config.dir, slot, date)
@@ -47,28 +48,21 @@ function handleReport(slot, date, res, next) {
         return next(err)
     }
 
-    var otherProcessDone = false
-    parse.loadSummary(slot, date, function(err, summary) {
-        if (err)
-            return next(err)
-        else {
-            res.locals.summary = summary
-            if (otherProcessDone && !err) {
-                res.render('report.ejs', { _with: false })
-            } else
-                otherProcessDone = true
+    async.parallel({
+        summary: function(callback) {
+            parse.loadSummary(slot, date, callback)
+        },
+        report: function(callback) {
+            parse.loadReport(slot, date, callback)
         }
-    })
-    parse.loadReport(slot, date, function(err, records) {
+    }, function(err, results) {
         if (err) {
-            debug('uh')
             return next(err)
         } else {
-            res.locals.report = records
-            if (otherProcessDone && !err) {
-                res.render('report.ejs', { _with: false })
-            } else
-                otherProcessDone = true
+            // .render() supports both options and locals
+            // Putting an option into the locals object.
+            results._with = false
+            res.render('report.ejs', results)
         }
     })
 }
