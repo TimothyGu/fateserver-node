@@ -22,9 +22,11 @@
  * THE SOFTWARE.
  */
 
+'use strict'
+
 var fs       = require('fs')
   , path     = require('path')
-  , debug    = require('debug')('r:index')
+  , debug    = require('debug')('f:r:index')
 
 var config   = require('../lib/config')
   , parse    = require('../lib/parse')

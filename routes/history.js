@@ -22,9 +22,11 @@
  * THE SOFTWARE.
  */
 
+'use strict'
+
 var fs       = require('fs')
   , path     = require('path')
-  , debug    = require('debug')('r:history')
+  , debug    = require('debug')('f:r:history')
   , async    = require('async')
 
 var config   = require('../lib/config')
@@ -40,7 +42,7 @@ function handleHistory(slot, begin, res, next) {
 
     fs.readdir(slotdir, function(err, files) {
         if (err) {
-            err.HTMLMessage = 'Slot "' + slot + '" not found.')
+            err.HTMLMessage = 'Slot "' + slot + '" not found.'
             err.status = 404
             return next(err)
         }

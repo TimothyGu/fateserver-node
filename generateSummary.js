@@ -28,6 +28,8 @@
  * Usage: generateSummary <report> <nwarn>
  */
 
+'use strict'
+
 var fs = require('fs')
   , readline = require('readline')
   , path = require('path')

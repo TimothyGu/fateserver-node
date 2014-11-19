@@ -26,8 +26,8 @@
 
 var express = require('express')
 var path    = require('path')
-  , debug   = require('debug')('app')
-  , logger  = require('morgan')
+  , debug   = require('debug')('f:app')
+  , morgan  = require('morgan')
   , compression = require('compression')
   , memwatch = require('memwatch')
   , toobusy = require('toobusy')
@@ -75,7 +75,7 @@ app.use(function(req, res, next) {
     } 
 });
 
-//app.use(logger('short'))
+app.use(morgan('short'))
 
 // ROUTING
 app.get('/log/:slot/:time/:log', function(req, res, next) {
