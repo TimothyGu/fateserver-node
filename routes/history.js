@@ -32,6 +32,7 @@ var fs       = require('fs')
 var config   = require('../lib/config')
   , parse    = require('../lib/parse')
   , ts       = require('../lib/timestamp')
+  , sort     = require('../lib/sort')
 
 var nEntries = 50
 
@@ -71,7 +72,7 @@ function handleHistory(slot, begin, res, next) {
                 reps.filter(function(n){  // Filter out empty/invalid ones
                         return n != null
                     })
-                    .sort(ts.sortByDate)  // Oldest to newest
+                    .sort(sort.sortBy('date'))  // Oldest to newest
                     .reverse()            // Newest to oldest
                     .slice(begin, begin + nEntries)
             res.locals.total = reps.length
