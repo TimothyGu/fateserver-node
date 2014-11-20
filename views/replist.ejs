@@ -50,7 +50,17 @@
 
 <thead><tr>
 <% for (var j = 0; j < propsToDisplay.length; j++) { %>
-  <th><%= headings[propsToDisplay[j]] %></th>
+  <th>
+  <% if (l.sortEnabled) { %>
+    <a href="?sort=<%= l.sort && l.sort[1] === propsToDisplay[j]
+                     ? l.sort[2]
+                     : propsToDisplay[j] %>">
+      <%= headings[propsToDisplay[j]] %>
+    </a>
+  <% } else { %>
+    <%= headings[propsToDisplay[j]] %>
+  <% } %>
+  </th>
 <% } %>
 </tr></thead>
 

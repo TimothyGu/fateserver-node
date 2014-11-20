@@ -19,4 +19,3 @@ If caching **is** enabled, and `with(){}` syntax is disabled, my tests show
 that it is 1.7x slower.
 
 See for yourself in the jade branch (only history page ported).
-

@@ -43,13 +43,17 @@ function handleIndex(req, res, next) {
             err.status = 404
             return next(err)
         }
+        // For every slot get the summary of the latest results.
         async.map(slots, function iterator(slot, out) {
             var slotdir = path.join(config.dir, slot)
 
+            // If the slot is marked as hidden then skip over it.
+            // All the null members of the array will be cleaned in end().
             if (fs.existsSync(path.join(slotdir, 'hidden'))) {
                 return out(null, null)
             }
 
+            // Load summary
             parse.loadSummary(slot, 'latest',
                               function summaryCb(err, summary) {
                 // Ignore possible errors in one specific report in order
@@ -58,8 +62,21 @@ function handleIndex(req, res, next) {
             })
         }, function end(err, reps) {
             var sortingKeys = ['subarch', 'os', 'cc', 'comment', 'slot']
-            res.locals.reps  =
-                reps.filter(function (n){  // Filter out empty/invalid ones
+            if (req.query.sort) {
+                // Put it as the first sorting key
+                sortingKeys.unshift(req.query.sort)
+                // Remove any redundant or conflicting keys from default
+                var regex = new RegExp('(desc-)?' + req.query.sort)
+                for (var i = 1; i < sortingKeys.length; i++) {
+                    if (sortingKeys[i].match(regex)) {
+                        sortingKeys[i] = null
+                    }
+                }
+            }
+            res.locals.sortEnabled = true
+            res.locals.sort = sort.matchDesc(req.query.sort)
+            res.locals.reps =
+                reps.filter(function (n){  // Filter out null/invalid ones
                         return n != null
                     })
                     .sort(sort.byKeys(sortingKeys))
