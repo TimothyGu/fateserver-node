@@ -9,7 +9,8 @@
   "license": "MIT",
   "author": "Timothy Gu <timothygu99@gmail.com>",
   "scripts": {
-    "start": "$(npm bin)/nodemon ./bin/www"
+    "start": "$(npm bin)/nodemon ./bin/www",
+    "docs": "$(npm bin)/jsdoc -c jsdoc.json"
   },
   "dependencies": {
     "compression": "1.2.x",
