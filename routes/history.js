@@ -72,8 +72,7 @@ function handleHistory(slot, begin, res, next) {
                 reps.filter(function(n){  // Filter out empty/invalid ones
                         return n != null
                     })
-                    .sort(sort.sortBy('date'))  // Oldest to newest
-                    .reverse()            // Newest to oldest
+                    .sort(sort.by('desc-date'))  // Newest to oldest
                     .slice(begin, begin + nEntries)
             res.locals.total = reps.length
             res.render('history.ejs', { _with: false })

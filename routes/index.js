@@ -34,8 +34,6 @@ var config   = require('../lib/config')
   , ts       = require('../lib/timestamp')
   , sort     = require('../lib/sort')
 
-//var nEntries = 50
-
 function handleIndex(req, res, next) {
     fs.readdir(config.dir, function(err, slots) {
         if (err) {
@@ -59,13 +57,12 @@ function handleIndex(req, res, next) {
                 return out(null, err ? null : summary)
             })
         }, function end(err, reps) {
-            // TODO sorting
+            var sortingKeys = ['subarch', 'os', 'cc', 'comment', 'slot']
             res.locals.reps  =
                 reps.filter(function(n){  // Filter out empty/invalid ones
                         return n != null
                     })
-                    .sort(sort.sortBy('date'))  // Oldest to newest
-                    .reverse()            // Newest to oldest
+                    .sort(sort.byKeys(sortingKeys))
             res.render('index.ejs', { _with: false })
         })
     })
