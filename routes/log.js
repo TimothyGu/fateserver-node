@@ -36,7 +36,7 @@ function handleLog(slot, date, log, req, res, next) {
     var logPath = path.join(config.dir, logFile)
     debug('logPath: ' + logPath)
 
-    fs.readFile(logPath, function(err, data) {
+    fs.readFile(logPath, function (err, data) {
         if (err) {
             err.HTMLMessage = 'Log "' + logFile + '" not found.'
             err.status = 404
@@ -51,7 +51,7 @@ function handleLog(slot, date, log, req, res, next) {
         } else {
             var zlib = require('zlib')
             debug('non-gzip')
-            zlib.gunzip(data, function(err, data) {
+            zlib.gunzip(data, function (err, data) {
                 if (err) {
                     err.status = 500
                     next(err)

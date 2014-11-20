@@ -55,7 +55,7 @@ if (app.get('env') !== 'development') {
     debug('Cache enabled')
 }
 /*
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     debug(req.headers)
     next()
 })
@@ -67,7 +67,7 @@ app.locals.moment = require('moment')
 app.locals.config = config
 app.locals.util   = require('./lib/ejs-util.js')
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     if (toobusy()) {
         res.status(503).send("Server too busy. Please try again later.");
     } else {
@@ -78,10 +78,10 @@ app.use(function(req, res, next) {
 app.use(morgan('short'))
 
 // ROUTING
-app.get('/log/:slot/:time/:log', function(req, res, next) {
+app.get('/log/:slot/:time/:log', function (req, res, next) {
     log(req.params.slot, req.params.time, req.params.log, req, res, next)
 })
-app.get('/log.cgi', function(req, res, next) {
+app.get('/log.cgi', function (req, res, next) {
     log(req.query.slot, req.query.time, req.query.log, req, res, next)
 })
 
@@ -91,31 +91,31 @@ app.use(compression({ threshold: '1kb' }))
 
 app.use(express.static(path.join(__dirname, 'public')))
 
-app.get('/', function(req, res, next) {
+app.get('/', function (req, res, next) {
     index(req, res, next)
 })
-app.get('/index.cgi', function(req, res, next) {
+app.get('/index.cgi', function (req, res, next) {
     index(req, res, next)
 })
 
-app.get('/history/:slot', function(req, res, next) {
+app.get('/history/:slot', function (req, res, next) {
     history(req.params.slot, req.query.begin || 0, res, next)
 })
-app.get('/history.cgi', function(req, res, next) {
+app.get('/history.cgi', function (req, res, next) {
     history(req.query.slot, req.query.begin || 0, res, next)
 })
 
-app.get('/report/:slot/:time', function(req, res, next) {
+app.get('/report/:slot/:time', function (req, res, next) {
     report(req.params.slot, req.params.time, res, next)
 })
-app.get('/report.cgi', function(req, res, next) {
+app.get('/report.cgi', function (req, res, next) {
     report(req.query.slot, req.query.time, res, next)
 })
 
 // ERROR HANDLING
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     var err = new Error('Not Found')
     err.status = 404
     next(err)
@@ -124,7 +124,7 @@ app.use(function(req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-    app.use(function(err, req, res, next) {
+    app.use(function (err, req, res, next) {
         var status = err.status || 500
         res.status(status)
         res.render('error', {
@@ -138,7 +138,7 @@ if (app.get('env') === 'development') {
 
 // production error handler
 // no stacktraces leaked to user
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
     var status = err.status || 500
     res.status(status)
     debug('msg: ' + err.message)

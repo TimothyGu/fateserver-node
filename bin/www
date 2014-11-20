@@ -41,7 +41,7 @@ if (cluster.isMaster) {
 
     app.set('port', config.port)
 
-    var server = app.listen(app.get('port'), function() {
+    var server = app.listen(app.get('port'), function () {
         debug('Express server listening on port ' + server.address().port)
     })
 }

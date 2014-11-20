@@ -35,7 +35,7 @@ var config   = require('../lib/config')
   , sort     = require('../lib/sort')
 
 function handleIndex(req, res, next) {
-    fs.readdir(config.dir, function(err, slots) {
+    fs.readdir(config.dir, function (err, slots) {
         if (err) {
             err.message = 'config.dir not found. Did you set up lib/config.js'
                         + 'correctly?'
@@ -59,7 +59,7 @@ function handleIndex(req, res, next) {
         }, function end(err, reps) {
             var sortingKeys = ['subarch', 'os', 'cc', 'comment', 'slot']
             res.locals.reps  =
-                reps.filter(function(n){  // Filter out empty/invalid ones
+                reps.filter(function (n){  // Filter out empty/invalid ones
                         return n != null
                     })
                     .sort(sort.byKeys(sortingKeys))

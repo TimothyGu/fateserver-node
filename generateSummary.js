@@ -53,7 +53,7 @@ function generateSummary(reportFile, nwarn) {
         terminal: false
     })
 
-    lr.on('line', function(line) {
+    lr.on('line', function (line) {
         switch (line.split(':')[0]) {
         case 'fate':
             if (!header)
@@ -71,7 +71,7 @@ function generateSummary(reportFile, nwarn) {
                     stats.npass++
             }
         }
-    }).on('close', function() {
+    }).on('close', function () {
         console.log(JSON.stringify(
             new parse.Summary(header, config, stats)
         ))

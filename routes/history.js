@@ -41,7 +41,7 @@ function handleHistory(slot, begin, res, next) {
 
     var repsName = []
 
-    fs.readdir(slotdir, function(err, files) {
+    fs.readdir(slotdir, function (err, files) {
         if (err) {
             err.HTMLMessage = 'Slot "' + slot + '" not found.'
             err.status = 404
@@ -55,7 +55,7 @@ function handleHistory(slot, begin, res, next) {
             return next(errInner)
         }
 
-        repsName = files.filter(function(val) {
+        repsName = files.filter(function (val) {
             return val.match(/^[0-9]/)
         })
         res.locals.begin    = Number(begin)
@@ -69,7 +69,7 @@ function handleHistory(slot, begin, res, next) {
             })
         }, function end(err, reps) {
             res.locals.reps  =
-                reps.filter(function(n){  // Filter out empty/invalid ones
+                reps.filter(function (n){  // Filter out empty/invalid ones
                         return n != null
                     })
                     .sort(sort.by('desc-date'))  // Newest to oldest
