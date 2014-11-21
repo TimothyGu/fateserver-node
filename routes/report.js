@@ -27,7 +27,7 @@
 var fs       = require('fs')
   , path     = require('path')
   , debug    = require('debug')('f:r:report')
-  , async    = require('async') 
+  , async    = require('async')
 
 var config   = require('../lib/config')
   , parse    = require('../lib/parse')

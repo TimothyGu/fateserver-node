@@ -31,8 +31,10 @@
 <% include header3.ejs %>
 <div class="table-responsive">
   <table class="replist table table-bordered" id="history">
-    <% var propsToDisplay = ['date-link', 'rev', 'subarch', 'os', 'cc',
-                             'comment','nwarn', 'results'] %>
+    <% var propsToDisplay = [
+           'date-link', 'rev', 'subarch', 'os', 'cc'
+         , 'comment','nwarn', 'results'
+       ] %>
     <% include replist.ejs %>
   </table>
 </div>

@@ -41,16 +41,16 @@ function generateSummary(reportFile, nwarn) {
         throw new Error('No report file specified')
     var header = null, config = null
     var stats = {
-        ntests: 0,
-        npass : 0,
-        nwarn : nwarn
+        ntests: 0
+      , npass : 0
+      , nwarn : nwarn
     }
 
     var reportD = fs.createReadStream(reportFile)
 
     var lr = new readline.createInterface({
-        input: reportD,
-        terminal: false
+        input: reportD
+      , terminal: false
     })
 
     lr.on('line', function (line) {

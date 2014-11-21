@@ -27,21 +27,23 @@
 <% include header1.ejs %>
 <title><%= l.slot %> <%= l.summary.rev %> - <%= l.config.branding %> FATE</title>
 <script type="text/javascript">
+  <%/* Can't use $.toggle() as we are using a custom `display` that is `none`
+       when the page first loads */%>
   function toggle(id) {
-      var e = document.getElementById(id);
-      e.style.display = e.style.display == 'table-row' ? 'none' : 'table-row';
+      var e = document.getElementById(id)
+      e.style.display = e.style.display == 'table-row' ? 'none' : 'table-row'
   }
   function hide(id) {
-      var e = document.getElementById(id);
-      e.style.display = 'none';
+      var e = document.getElementById(id)
+      e.style.display = 'none'
   }
   function show_diff(name) {
-      hide(name + '-err');
-      toggle(name + '-diff');
+      hide(name + '-err')
+      toggle(name + '-diff')
   }
   function show_err(name) {
-      hide(name + '-diff');
-      toggle(name + '-err');
+      hide(name + '-diff')
+      toggle(name + '-err')
   }
 </script>
 <% include header2.ejs %>
@@ -160,7 +162,7 @@ Report of <%= l.slot %> <%= l.summary.rev %>
                       <%- l.summary.status === 3 ? 'btn-fail' : 'btn-pass' %>">
               Configuration
             </a>
-            <a role="button" href="/log/<%= l.slot %>/<%= l.summary.date %>/compile" 
+            <a role="button" href="/log/<%= l.slot %>/<%= l.summary.date %>/compile"
                class="btn btn-sm
                       <%- l.summary.status === 3 ? 'btn-default disabled' : (
                           l.summary.status === 2 ? 'btn-fail' : 'btn-pass') %>">

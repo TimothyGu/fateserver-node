@@ -69,11 +69,11 @@ app.locals.util   = require('./lib/ejs-util.js')
 
 app.use(function (req, res, next) {
     if (toobusy()) {
-        res.status(503).send("Server too busy. Please try again later.");
+        res.status(503).send("Server too busy. Please try again later.")
     } else {
-        next();
-    } 
-});
+        next()
+    }
+})
 
 app.use(morgan('short'))
 
@@ -128,10 +128,10 @@ if (app.get('env') === 'development') {
         var status = err.status || 500
         res.status(status)
         res.render('error', {
-            message: err.message,
-            error: err,
-            status: status,
-            _with: false
+            message: err.message
+          , error: err
+          , status: status
+          , _with: false
         })
     })
 }
@@ -143,10 +143,10 @@ app.use(function (err, req, res, next) {
     res.status(status)
     debug('msg: ' + err.message)
     res.render('error', {
-        message: err.HTMLMessage || err.message,
-        error: null,
-        status: status,
-        _with: false
+        message: err.HTMLMessage || err.message
+      , error: null
+      , status: status
+      , _with: false
     })
 })
 
