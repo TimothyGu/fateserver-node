@@ -208,7 +208,7 @@ Report of <%= l.slot %> <%= l.summary.rev %>
               </td>
               <td><%= rep.name %></td>
               <td class="errcode"><%= rep.status %></td>
-              <td><%/* TODO */%>N / A</td>
+              <td><%= 'N / A' %></td>
             </tr>
             <tr class="toggled" id="<%= rep.name %>-diff"><td colspan="5">
               <pre><%= new Buffer(rep.diff, 'base64').toString('utf8') %></pre>

@@ -72,11 +72,11 @@
   <% var rep = l.reps[i] %>
   <% var repClass = '' %>
   <% var repMoment = l.ts.getMoment(rep.date) %>
-  <% if (now.unix() < repMoment.unix() + l.ts.recentAge) {
+  <% if (now.unix() < repMoment.unix() + l.ts.RECENT_AGE) {
       repClass = 'recent'
-    } else if (now.unix() > repMoment.unix() + l.ts.ancientAge) {
+    } else if (now.unix() > repMoment.unix() + l.ts.ANCIENT_AGE) {
       repClass = 'ancient'
-    } else if (now.unix() > repMoment.unix() + l.ts.hiddenAge) {
+    } else if (now.unix() > repMoment.unix() + l.ts.HIDDEN_AGE) {
       continue
     } %>
   <tr class="<%= repClass %>">
