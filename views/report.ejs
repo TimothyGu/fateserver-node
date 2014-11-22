@@ -143,7 +143,7 @@ Report of <%= l.slot %> <%= l.summary.rev %>
         </tr>
         <tr>
           <th>Revision</th>
-          <td><%= l.summary.rev %></td>
+          <td><%- l.config.linkGitHist(l.summary.rev) %></td>
         </tr>
         <tr>
           <th>Date</th>
@@ -208,7 +208,15 @@ Report of <%= l.slot %> <%= l.summary.rev %>
               </td>
               <td><%= rep.name %></td>
               <td class="errcode"><%= rep.status %></td>
-              <td><%= 'N / A' %></td>
+<% var lastpass = 'N / A'
+  if (l.lastpass[rep.name]) {
+    if (l.summary.rev > l.lastpass[rep.name].rev) {
+      lastpass = l.config.linkGitHist(l.summary.rev, l.lastpass[rep.name].rev)
+    } else {
+      lastpass = l.lastpass[rep.name].rev + ' (fixed)'
+    }
+  } %>
+              <td><%- lastpass %></td>
             </tr>
             <tr class="toggled" id="<%= rep.name %>-diff"><td colspan="5">
               <pre><%= new Buffer(rep.diff, 'base64').toString('utf8') %></pre>

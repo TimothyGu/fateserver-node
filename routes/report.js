@@ -32,7 +32,7 @@ var fs       = require('fs')
 var config   = require('../lib/config')
   , parse    = require('../lib/parse')
 
-function handleReport(slot, date, res, next) {
+function handleReport (slot, date, res, next) {
     var repdir = path.join(config.dir, slot, date)
 
     var reps = [], repsJSON = []

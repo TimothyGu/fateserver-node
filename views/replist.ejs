@@ -91,9 +91,7 @@
           <%= l.ts.formatDate(repMoment) %>
         </a></td>
       <% } else if (prop === 'rev') { %>
-        <td><a href="<%= l.config.getGitwebHist(rep.rev) %>">
-          <%= rep.rev %>
-        </a></td>
+        <td><%- l.config.linkGitHist(rep.rev) %></td>
       <% } else if (prop === 'results') { %>
         <td class="<%- rep.rclass %>">
           <a href="<%= '/report/' + rep.slot + '/' + rep.date %>">
