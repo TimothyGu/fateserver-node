@@ -187,45 +187,56 @@ Report of <%= l.slot %> <%= l.summary.rev %>
 <% if (l.summary.status === 1) { %>
 <div role="tabpanel" class="tab-pane fade" id="failed_tests">
   <div class="table-responsive">
-    <table class="replist table table-bordered" id="tests">
+    <table class="replist table" id="tests">
       <thead>
         <tr>
-          <th colspan=3>Name</th>
+          <th colspan>Name</th>
           <th>Status</th>
           <th>Last Good Rev</th>
         </tr>
       </thead>
       <tbody>
-        <% for (var i = 0; i < l.report.length; i++) { %>
-          <% var rep = l.report[i] %>
-          <% if (rep.status) { %>
-            <tr>
-              <td class="toggle" onclick="show_diff('<%= rep.name %>')">
-                diff
-              </td>
-              <td class="toggle" onclick="show_err('<%= rep.name %>')">
-                stderr
-              </td>
-              <td><%= rep.name %></td>
-              <td class="errcode"><%= rep.status %></td>
-<% var lastpass = 'N / A'
-  if (l.lastpass[rep.name]) {
-    if (l.summary.rev > l.lastpass[rep.name].rev) {
-      lastpass = l.config.linkGitHist(l.summary.rev, l.lastpass[rep.name].rev)
-    } else {
-      lastpass = l.lastpass[rep.name].rev + ' (fixed)'
-    }
-  } %>
-              <td><%- lastpass %></td>
-            </tr>
-            <tr class="toggled" id="<%= rep.name %>-diff"><td colspan="5">
-              <pre><%= new Buffer(rep.diff, 'base64').toString('utf8') %></pre>
-            </td></tr>
-            <tr class="toggled" id="<%= rep.name %>-err"><td colspan="5">
-              <pre><%= new Buffer(rep.stderr, 'base64').toString('utf8') %></pre>
-            </td></tr>
-          <% } %>
+      <% for (var i = 0; i < l.report.length; i++) { %>
+        <% var rep = l.report[i]
+           if (rep.status) {
+             var rep      = l.report[i]
+               , trClass  = ''
+               , lastpass = 'N / A'
+             if (l.lastpass[rep.name]) {
+               // Only add link if the lastpass is older than the current rev
+               if (l.summary.rev > l.lastpass[rep.name].rev) {
+                 lastpass = l.config.linkGitHist(l.summary.rev, l.lastpass[rep.name].rev)
+                 // Detect if this is the first time a test failed
+                 if (l.lastpass[rep.name].date === l.prevDate) {
+                   trClass = 'warn'
+                 }
+               } else {
+                 lastpass = l.lastpass[rep.name].rev + ' (fixed)'
+                 trClass = 'pass'
+               }
+             }
+        %>
+          <tr class="<%- trClass %>">
+<!-- Adapt to new style
+            <td class="toggle" onclick="show_diff('<%= rep.name %>')">
+              diff
+            </td>
+            <td class="toggle" onclick="show_err('<%= rep.name %>')">
+              stderr
+            </td>
+-->
+            <td><%= rep.name %></td>
+            <td class="errcode"><%= rep.status %></td>
+            <td><%- lastpass %></td>
+          </tr>
+          <tr class="toggled" id="<%= rep.name %>-diff"><td colspan="5">
+            <pre><%= new Buffer(rep.diff, 'base64').toString('utf8') %></pre>
+          </td></tr>
+          <tr class="toggled" id="<%= rep.name %>-err"><td colspan="5">
+            <pre><%= new Buffer(rep.stderr, 'base64').toString('utf8') %></pre>
+          </td></tr>
         <% } %>
+      <% } %>
       </tbody>
     </table>
   </div>

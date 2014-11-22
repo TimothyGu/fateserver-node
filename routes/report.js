@@ -33,25 +33,25 @@ var config   = require('../lib/config')
   , parse    = require('../lib/parse')
 
 function handleReport (slot, date, res, next) {
-    var repdir = path.join(config.dir, slot, date)
-
-    var reps = [], repsJSON = []
-
     if (!slot || !date) {
         var err = new Error('Slot or date not specified')
         err.status = 404
         return next(err)
     }
+
     res.locals.slot = slot
     res.locals.date = date
-    try {
-        res.locals.owner = parse.getSlotOwner(slot)
-    } catch (err) {
-        return next(err)
-    }
 
     async.parallel({
-        summary: function (callback) {
+        owner: function (callback) {
+            try {
+                var owner = parse.getSlotOwner(slot)
+            } catch (err) {
+                return callback(err)
+            }
+            callback(null, owner)
+        }
+      , summary: function (callback) {
             parse.loadSummary(slot, date, callback)
         }
       , report: function (callback) {
@@ -59,6 +59,25 @@ function handleReport (slot, date, res, next) {
         }
       , lastpass: function (callback) {
             parse.loadLastPass(slot, callback)
+        }
+      , prevDate: function (callback) {
+            fs.readdir(path.join(config.dir, slot), function (err, files) {
+                if (err) {
+                    err.HTMLMessage = 'Slot "' + slot + '" not found.'
+                    err.status = 404
+                    return callback(err)
+                }
+
+                var runs = files.filter(function (val) {
+                    return val.match(/^[0-9]/)
+                })
+                .sort()
+
+                var prevIndex = runs.indexOf(date) - 1
+                callback(null, prevIndex >= 0
+                             ? Number(runs[prevIndex])
+                             : null)
+            })
         }
     }, function (err, results) {
         if (err) {

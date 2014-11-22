@@ -14,165 +14,191 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-
-.recent  { font-weight: bold; }
-.ancient { color: #888; }
-
-.table-responsive {
-    border: none;
+.recent {
+  font-weight: bold;
 }
-
+.ancient {
+  color: #888;
+}
+.table-responsive {
+  border: none;
+}
 .fail {
-    background: #d9534f !important;
-    color: white;
+  background: #d9534f !important;
+  color: white;
 }
 .pass {
-    background: #5cb85c !important;
-    color: white;
+  background: #5cb85c !important;
+  color: white;
 }
 .warn {
-    background: #ecd046 !important;
-    color: black;
+  background: #ecd046 !important;
+  color: black;
 }
-
-.fate-alert { color: #911; }
-.rejoice { color: #191; }
-
+.table > thead > tr > td.pass,
+.table > tbody > tr > td.pass,
+.table > tfoot > tr > td.pass,
+.table > thead > tr > th.pass,
+.table > tbody > tr > th.pass,
+.table > tfoot > tr > th.pass,
+.table > thead > tr.pass > td,
+.table > tbody > tr.pass > td,
+.table > tfoot > tr.pass > td,
+.table > thead > tr.pass > th,
+.table > tbody > tr.pass > th,
+.table > tfoot > tr.pass > th {
+  background-color: #5cb85c;
+  color: white;
+}
+.table > thead > tr > td.fail,
+.table > tbody > tr > td.fail,
+.table > tfoot > tr > td.fail,
+.table > thead > tr > th.fail,
+.table > tbody > tr > th.fail,
+.table > tfoot > tr > th.fail,
+.table > thead > tr.fail > td,
+.table > tbody > tr.fail > td,
+.table > tfoot > tr.fail > td,
+.table > thead > tr.fail > th,
+.table > tbody > tr.fail > th,
+.table > tfoot > tr.fail > th {
+  background-color: #d9534f;
+  color: white;
+}
+.table > thead > tr > td.warn,
+.table > tbody > tr > td.warn,
+.table > tfoot > tr > td.warn,
+.table > thead > tr > th.warn,
+.table > tbody > tr > th.warn,
+.table > tfoot > tr > th.warn,
+.table > thead > tr.warn > td,
+.table > tbody > tr.warn > td,
+.table > tfoot > tr.warn > td,
+.table > thead > tr.warn > th,
+.table > tbody > tr.warn > th,
+.table > tfoot > tr.warn > th {
+  background-color: #ecd046;
+  color: black;
+}
+.fate-alert {
+  color: #911;
+}
+.rejoice {
+  color: #191;
+}
 #failometer {
-    padding: 0;
+  padding: 0;
 }
-
 #failometer .progress {
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
-    margin-bottom: inherit;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  margin-bottom: inherit;
 }
-
 /* index and history listings */
-
 .replist {
-    width: 100%;
+  width: 100%;
 }
-
 .replist a {
-    color: inherit;
-    text-decoration: none;
+  color: inherit;
+  text-decoration: none;
 }
-
-th a:link, th a:visited {
-    color: inherit;
-    text-decoration: none;
+th a:link,
+th a:visited {
+  color: inherit;
+  text-decoration: none;
 }
-
 th a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
-
-#index .comment     { max-width: 13em; }
-
+#index .comment {
+  max-width: 13em;
+}
 #index .toggle {
-    cursor: pointer;
+  cursor: pointer;
 }
-
 tr.slotfail {
-    display: none;
+  display: none;
 }
-
 table.minirep {
-    width: 100%;
+  width: 100%;
 }
-
 .minirep th {
-    padding: 0 0.5em;
-    text-align: left;
+  padding: 0 0.5em;
+  text-align: left;
 }
-
 /* config summary */
-
 #config td:first-child {
-    font-weight: bold;
-    padding-right: 3em;
-    vertical-align: top;
+  font-weight: bold;
+  padding-right: 3em;
+  vertical-align: top;
 }
-
 /* test listing */
-
 #tests {
-    margin-top: 2em;
-    width: 100%;
+  margin-top: 2em;
+  width: 100%;
 }
-
 #tests .fail th {
-    background: #d9534f;
-    border-bottom: 2px solid #fcc;
+  background: #d9534f;
+  border-bottom: 2px solid #fcc;
 }
-
 #tests .pass th {
-    background: #5cb85c;
-    border-bottom: 2px solid #9f9;
-    border-top: 0;
+  background: #5cb85c;
+  border-bottom: 2px solid #9f9;
+  border-top: 0;
 }
-
 #tests .toggle {
-    width: 5em;
-    cursor: pointer;
-    text-align: center;
+  width: 5em;
+  cursor: pointer;
+  text-align: center;
 }
-
 .errcode {
-    width: 3em;
-    text-align: center;
+  width: 3em;
+  text-align: center;
 }
-
 #tests .lastpass {
-    width: 12em;
+  width: 12em;
 }
-
 .toggled {
-    display: none;
+  display: none;
 }
-
 #passed_tests span {
-    padding: 0.25em;
+  padding: 0.25em;
 }
-
 code {
-    white-space: nowrap;
+  white-space: nowrap;
 }
-
 pre {
-    white-space: pre;
+  white-space: pre;
 }
-
 /* Button style */
 .btn-fail {
-    color: #fff;
-    background-color: #d9534f;
-    border-color: #d4403a;
+  color: #fff;
+  background-color: #d9534f;
+  border-color: #d4403a;
 }
 .btn-fail:hover,
 .btn-fail:focus,
 .btn-fail:active,
-.btn-fail.active,.open
-    > .dropdown-toggle.btn-fail {
-    color: #fff;
-    background-color: #c9312c;
-    border-color: #bc2e29;
+.btn-fail.active,
+.open > .dropdown-toggle.btn-fail {
+  color: #fff;
+  background-color: #c9312c;
+  border-color: #bc2e29;
 }
 .btn-pass {
-    color: #fff;
-    background-color: #5cb85c;
-    border-color: #4cae4c;
+  color: #fff;
+  background-color: #5cb85c;
+  border-color: #4cae4c;
 }
 .btn-pass:hover,
 .btn-pass:focus,
 .btn-pass:active,
-.btn-pass.active,.open
-    > .dropdown-toggle.btn-pass {
-    color: #fff;
-    background-color: #449c44;
-    border-color: #3a833a;
+.btn-pass.active,
+.open > .dropdown-toggle.btn-pass {
+  color: #fff;
+  background-color: #449c44;
+  border-color: #3a833a;
 }
 a.btn-default {
-    color: #333;
+  color: #333;
 }
