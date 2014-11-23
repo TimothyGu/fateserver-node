@@ -34,8 +34,8 @@ var config   = require('../lib/config')
   , ts       = require('../lib/timestamp')
   , sort     = require('../lib/sort')
 
-function handleIndex(req, res, next) {
-    fs.readdir(config.dir, function (err, slots) {
+function handleIndex (req, res, next) {
+    fs.readdir(config.dir, function handleSlots (err, slots) {
         if (err) {
             err.message = 'config.dir not found. Did you set up lib/config.js'
                         + 'correctly?'
@@ -44,7 +44,7 @@ function handleIndex(req, res, next) {
             return next(err)
         }
         // For every slot get the summary of the latest results.
-        async.map(slots, function iterator(slot, out) {
+        async.map(slots, function iterator (slot, out) {
             var slotdir = path.join(config.dir, slot)
 
             // If the slot is marked as hidden then skip over it.
@@ -55,12 +55,12 @@ function handleIndex(req, res, next) {
 
             // Load summary
             parse.loadSummary(slot, 'latest',
-                              function summaryCb(err, summary) {
+                              function summaryCb (err, summary) {
                 // Ignore possible errors in one specific report in order
                 // not to destroy the entire history page.
                 return out(null, err ? null : summary)
             })
-        }, function end(err, reps) {
+        }, function end (err, reps) {
             var sortingKeys = ['subarch', 'os', 'cc', 'comment', 'slot']
             if (req.query.sort) {
                 // Put it as the first sorting key
@@ -76,7 +76,7 @@ function handleIndex(req, res, next) {
             res.locals.sortEnabled = true
             res.locals.sort = sort.matchDesc(req.query.sort)
             res.locals.reps =
-                reps.filter(function (n){  // Filter out null/invalid ones
+                reps.filter(function (n) {  // Filter out null/invalid ones
                         return n != null
                     })
                     .sort(sort.byKeys(sortingKeys))

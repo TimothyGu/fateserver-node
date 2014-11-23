@@ -29,19 +29,19 @@
 <script type="text/javascript">
   <%/* Can't use $.toggle() as we are using a custom `display` that is `none`
        when the page first loads */%>
-  function toggle(id) {
+  function toggle (id) {
       var e = document.getElementById(id)
       e.style.display = e.style.display == 'table-row' ? 'none' : 'table-row'
   }
-  function hide(id) {
+  function hide (id) {
       var e = document.getElementById(id)
       e.style.display = 'none'
   }
-  function show_diff(name) {
+  function show_diff (name) {
       hide(name + '-err')
       toggle(name + '-diff')
   }
-  function show_err(name) {
+  function show_err (name) {
       hide(name + '-diff')
       toggle(name + '-err')
   }

@@ -31,12 +31,12 @@ var fs       = require('fs')
 var config   = require('../lib/config')
   , parse    = require('../lib/parse')
 
-function handleLog(slot, date, log, req, res, next) {
+function handleLog (slot, date, log, req, res, next) {
     var logFile = path.join(slot, date, log + '.log.gz')
     var logPath = path.join(config.dir, logFile)
     debug('logPath: ' + logPath)
 
-    fs.readFile(logPath, function (err, data) {
+    fs.readFile(logPath, function handleLogFile (err, data) {
         if (err) {
             err.HTMLMessage = 'Log "' + logFile + '" not found.'
             err.status = 404
@@ -51,7 +51,7 @@ function handleLog(slot, date, log, req, res, next) {
         } else {
             var zlib = require('zlib')
             debug('non-gzip')
-            zlib.gunzip(data, function (err, data) {
+            zlib.gunzip(data, function unzipCb (err, data) {
                 if (err) {
                     err.status = 500
                     next(err)

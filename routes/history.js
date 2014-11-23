@@ -36,12 +36,12 @@ var config   = require('../lib/config')
 
 var nEntries = 50
 
-function handleHistory(slot, begin, res, next) {
+function handleHistory (slot, begin, res, next) {
     var slotdir = path.join(config.dir, slot)
 
     var repsName = []
 
-    fs.readdir(slotdir, function (err, files) {
+    fs.readdir(slotdir, function handleFiles (err, files) {
         if (err) {
             err.HTMLMessage = 'Slot "' + slot + '" not found.'
             err.status = 404
@@ -61,15 +61,15 @@ function handleHistory(slot, begin, res, next) {
         res.locals.begin    = Number(begin)
         res.locals.nEntries = nEntries
 
-        async.map(repsName, function iterator(repName, out) {
-            parse.loadSummary(slot, repName, function summaryCb(err, summary) {
+        async.map(repsName, function iterator (repName, out) {
+            parse.loadSummary(slot, repName, function summaryCb (err, summary) {
                 // Ignore possible errors in one specific report in order
                 // not to destroy the entire history page.
                 return out(null, err ? null : summary)
             })
-        }, function end(err, reps) {
+        }, function end (err, reps) {
             res.locals.reps  =
-                reps.filter(function (n){  // Filter out empty/invalid ones
+                reps.filter(function (n) {  // Filter out empty/invalid ones
                         return n != null
                     })
                     .sort(sort.by('desc-date'))  // Newest to oldest

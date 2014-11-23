@@ -36,7 +36,7 @@ var fs = require('fs')
 
 var parse = require('./lib/parse')
 
-function generateSummary(reportFile, nwarn) {
+function generateSummary (reportFile, nwarn) {
     if (!reportFile)
         throw new Error('No report file specified')
     var header = null, config = null
@@ -53,7 +53,7 @@ function generateSummary(reportFile, nwarn) {
       , terminal: false
     })
 
-    lr.on('line', function (line) {
+    lr.on('line', function handleLine (line) {
         switch (line.split(':')[0]) {
         case 'fate':
             if (!header)
@@ -71,7 +71,7 @@ function generateSummary(reportFile, nwarn) {
                     stats.npass++
             }
         }
-    }).on('close', function () {
+    }).on('close', function finalStringify () {
         console.log(JSON.stringify(
             new parse.Summary(header, config, stats)
         ))
