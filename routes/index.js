@@ -61,20 +61,9 @@ function handleIndex (req, res, next) {
                 return out(null, err ? null : summary)
             })
         }, function end (err, reps) {
+            // The server side sorting is only for default sorting. Client
+            // side sorting through FooTable handles everything else.
             var sortingKeys = ['subarch', 'os', 'cc', 'comment', 'slot']
-            if (req.query.sort) {
-                // Put it as the first sorting key
-                sortingKeys.unshift(req.query.sort)
-                // Remove any redundant or conflicting keys from default
-                var regex = new RegExp('(desc-)?' + req.query.sort)
-                for (var i = 1; i < sortingKeys.length; i++) {
-                    if (sortingKeys[i].match(regex)) {
-                        sortingKeys[i] = null
-                    }
-                }
-            }
-            res.locals.sortEnabled = true
-            res.locals.sort = sort.matchDesc(req.query.sort)
             res.locals.reps =
                 reps.filter(function (n) {  // Filter out null/invalid ones
                         return n != null

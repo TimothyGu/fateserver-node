@@ -71,10 +71,11 @@ Report history for <%= l.slot %>
 </div>
 
 <div class="table-responsive">
-  <table class="replist table" id="history">
+  <table class="replist table footable" id="history">
     <% var propsToDisplay = ['date', 'rev', 'nwarn', 'results']
-         , extraClasses = {
-             rev: 'hidden-xs hidden-sm'
+         , hide = {
+             rev  : 'xs,phone'
+           , nwarn: 'xs,phone,sm'
            } %>
     <% include replist.ejs %>
   </table>

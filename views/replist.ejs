@@ -35,37 +35,31 @@
 
 <% var now = l.moment.utc() %>
 <% propsToDisplay = propsToDisplay || [
-                        'date', 'rev', 'subarch', 'os'
-                      , 'cc', 'nwarn', 'results'
-                      ] %>
-<% extraClasses = extraClasses || {} %>
+                      'date', 'rev', 'subarch', 'os'
+                    , 'cc', 'nwarn', 'results'
+                    ] %>
+<% hide = hide || {} %>
 
-<% var headings = {
-     date      : 'Time'
-   ,'date-link': 'Time'
-   , rev       : 'Revision'
-   , subarch   : 'Arch'
-   , os        : 'OS'
-   , cc        : 'Compiler'
-   , comment   : 'Comment'
-   , nwarn     : 'Warnings'
-   , results   : 'Results'
-   } %>
+<% var headings = { date      : 'Time'
+                  ,'date-link': 'Time'
+                  , rev       : 'Revision'
+                  , subarch   : 'Arch'
+                  , os        : 'OS'
+                  , cc        : 'Compiler'
+                  , comment   : 'Comment'
+                  , nwarn     : 'Warnings'
+                  , results   : 'Results'
+                  }
+   , fooTableOp = { nwarn     : 'data-ignore="true" '
+                  , comment   : 'data-sort-ignore="true" '
+                  }
+   %>
 
 <thead><tr>
 <% for (var j = 0; j < propsToDisplay.length; j++) { %>
   <% var prop = propsToDisplay[j] %>
-  <th <%- extraClasses[prop] ? 'class="' + extraClasses[prop] + '"'
-                             : '' %>>
-  <% if (l.sortEnabled) { %>
-    <a href="?sort=<%= l.sort && l.sort[1] === propsToDisplay[j]
-                     ? l.sort[2]
-                     : propsToDisplay[j] %>">
-      <%= headings[propsToDisplay[j]] %>
-    </a>
-  <% } else { %>
+  <th data-hide="<%- hide[prop] || '' %>" <%- fooTableOp[prop] %>>
     <%= headings[propsToDisplay[j]] %>
-  <% } %>
   </th>
 <% } %>
 </tr></thead>
@@ -85,27 +79,31 @@
   <tr class="<%= repClass %>">
     <% for (var j = 0; j < propsToDisplay.length; j++) { %>
       <% var prop = propsToDisplay[j] %>
-      <% var htmlClasses = (extraClasses[prop] || '')
-                         + (prop === 'results' ? rep.rclass : '') %>
-      <% htmlClasses = htmlClasses ? 'class="' + htmlClasses + '"'
-                                   : '' %>
-      <td <%- htmlClasses %>>
       <% if (prop === 'date') { %>
-        <%= l.ts.formatDate(repMoment) %>
-      <% } else if (prop === 'date-link') { %>
-        <a href="<%= '/history/' + rep.slot %>"
-           title="View history for <%= rep.slot %>"
-           aria-label="View history for this slot">
+        <td>
           <%= l.ts.formatDate(repMoment) %>
-        </a>
+        </td>
+      <% } else if (prop === 'date-link') { %>
+        <td>
+          <a href="<%= '/history/' + rep.slot %>"
+             title="View history for <%= rep.slot %>"
+             aria-label="View history for this slot">
+            <%= l.ts.formatDate(repMoment) %>
+          </a>
+        </td>
       <% } else if (prop === 'rev') { %>
-        <%- l.config.linkGitHist(rep.rev) %>
+        <td>
+          <%- l.config.linkGitHist(rep.rev) %>
+        </td>
       <% } else if (prop === 'results') { %>
-        <a href="<%= '/report/' + rep.slot + '/' + rep.date %>">
-          <%= rep.rtext %>
-        </a>
+        <td class="<%- rep.rclass %>"
+            data-value="<%- rep.status %><%- rep.rtext %>">
+          <a href="<%= '/report/' + rep.slot + '/' + rep.date %>">
+            <%= rep.rtext %>
+          </a>
+        </td>
       <% } else { %>
-        <%= rep[prop] %>
+        <td><%= rep[prop] %></td>
       <% } %>
       </td>
     <% } %>

@@ -30,11 +30,16 @@
 <%= l.config.branding %> FATE
 <% include header3.ejs %>
 <div class="table-responsive">
-  <table class="replist table" id="index">
-    <% var propsToDisplay = [
-           'date-link', 'rev', 'subarch', 'os', 'cc'
-         , 'comment','nwarn', 'results'
-       ] %>
+  <table class="replist table footable" id="index">
+    <% var propsToDisplay = [ 'date-link', 'rev', 'subarch', 'os', 'cc'
+                            , 'comment','nwarn', 'results'
+                            ]
+         , hide = { comment: 'xs,phone,sm'
+                  , nwarn  : 'xs,phone,sm,md'
+                  , cc     : 'xs,phone'
+                  , rev    : 'xs,phone,sm'
+                  , subarch: 'xs'
+                  } %>
     <% include replist.ejs %>
   </table>
 </div>
