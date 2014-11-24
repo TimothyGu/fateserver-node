@@ -26,26 +26,7 @@
 
 <% include header1.ejs %>
 <title><%= l.slot %> <%= l.summary.rev %> - <%= l.config.branding %> FATE</title>
-<script type="text/javascript">
-  <%/* Can't use $.toggle() as we are using a custom `display` that is `none`
-       when the page first loads */%>
-  function toggle (id) {
-      var e = document.getElementById(id)
-      e.style.display = e.style.display == 'table-row' ? 'none' : 'table-row'
-  }
-  function hide (id) {
-      var e = document.getElementById(id)
-      e.style.display = 'none'
-  }
-  function show_diff (name) {
-      hide(name + '-err')
-      toggle(name + '-diff')
-  }
-  function show_err (name) {
-      hide(name + '-diff')
-      toggle(name + '-err')
-  }
-</script>
+<link rel="stylesheet" href="/css/prism.css" />
 <% include header2.ejs %>
 Report of <%= l.slot %> <%= l.summary.rev %>
 <% include header3.ejs %>
@@ -217,23 +198,31 @@ Report of <%= l.slot %> <%= l.summary.rev %>
              }
         %>
           <tr class="<%- trClass %>">
-<!-- Adapt to new style
-            <td class="toggle" onclick="show_diff('<%= rep.name %>')">
-              diff
+            <td>
+              <span class="pull-left">
+                <%= rep.name %>
+              </span>
+              <span class="pull-right">
+                <div class="btn btn-success btn-sm"
+                     onclick="show_diff('<%= rep.name %>')">
+                  diff
+                </div>
+                <div class="btn btn-success btn-sm"
+                     onclick="show_err('<%= rep.name %>')">
+                  stderr
+                </div>
+              </span>
             </td>
-            <td class="toggle" onclick="show_err('<%= rep.name %>')">
-              stderr
-            </td>
--->
-            <td><%= rep.name %></td>
             <td class="errcode"><%= rep.status %></td>
             <td><%- lastpass %></td>
           </tr>
           <tr class="toggled" id="<%= rep.name %>-diff"><td colspan="5">
-            <pre><%= new Buffer(rep.diff, 'base64').toString('utf8') %></pre>
+            <pre class="line-numbers"><code class="language-git"><%= new Buffer(rep.diff, 'base64').toString('utf8') %></code></pre>
           </td></tr>
           <tr class="toggled" id="<%= rep.name %>-err"><td colspan="5">
-            <pre><%= new Buffer(rep.stderr, 'base64').toString('utf8') %></pre>
+            <!-- Even though it is not a diff, language-git is still needed
+                 somehow for line numbers. -->
+            <pre class="line-numbers"><code class="language-git"><%= new Buffer(rep.stderr, 'base64').toString('utf8') %></code></pre>
           </td></tr>
         <% } %>
       <% } %>
@@ -257,5 +246,27 @@ Report of <%= l.slot %> <%= l.summary.rev %>
 <% } %>
 
 </div>
+
+<script type="text/javascript">
+  <%/* Can't use $.toggle() as we are using a custom `display` that is `none`
+       when the page first loads */%>
+  function toggle (id) {
+    var e = document.getElementById(id)
+    e.style.display = e.style.display == 'table-row' ? 'none' : 'table-row'
+  }
+  function hide (id) {
+    var e = document.getElementById(id)
+    e.style.display = 'none'
+  }
+  function show_diff (name) {
+    hide(name + '-err')
+    toggle(name + '-diff')
+  }
+  function show_err (name) {
+    hide(name + '-diff')
+    toggle(name + '-err')
+  }
+</script>
+<script src="/js/prism.js"></script>
 
 <% include footer.ejs %>

@@ -29,6 +29,12 @@ have an npm package, so any update must be done manually.
 The version of FooTable currently in the source tree is **2.0.3,** with some
 minor font path changes in public/css/footable.core.min.css.
 
+Prism Version
+-------------
+
+The Prism bundled with this copy of fateserver-node is generated on 2014-11-23
+from http://prismjs.com/download.html?themes=prism&languages=git&plugins=line-numbers
+
 TODO
 ----
 
