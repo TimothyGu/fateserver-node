@@ -19,3 +19,19 @@ If caching **is** enabled, and `with(){}` syntax is disabled, my tests show
 that it is 1.7x slower.
 
 See for yourself in the jade branch (only history page ported).
+
+FooTable Version
+----------------
+
+fateserver-node uses the MIT-licensed FooTable library. However, it does not
+have an npm package, so any update must be done manually.
+
+The version of FooTable currently in the source tree is **2.0.3,** with some
+minor font path changes in public/css/footable.core.min.css.
+
+TODO
+----
+
+1. Add proper compiler name parsing instead of showing
+   "(Ubuntu 4.8.2-19ubuntu1)"
+2. Port rest of style.less to ffmpeg-web.
