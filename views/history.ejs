@@ -72,7 +72,10 @@ Report history for <%= l.slot %>
 
 <div class="table-responsive">
   <table class="replist table" id="history">
-    <% var propsToDisplay = ['date', 'rev', 'nwarn', 'results'] %>
+    <% var propsToDisplay = ['date', 'rev', 'nwarn', 'results']
+         , extraClasses = {
+             rev: 'hidden-xs hidden-sm'
+           } %>
     <% include replist.ejs %>
   </table>
 </div>

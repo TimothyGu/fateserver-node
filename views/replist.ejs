@@ -35,9 +35,10 @@
 
 <% var now = l.moment.utc() %>
 <% propsToDisplay = propsToDisplay || [
-                      'date', 'rev', 'subarch', 'os'
-                    , 'cc', 'nwarn', 'results'
-                    ] %>
+                        'date', 'rev', 'subarch', 'os'
+                      , 'cc', 'nwarn', 'results'
+                      ] %>
+<% extraClasses = extraClasses || {} %>
 
 <% var headings = {
      date      : 'Time'
@@ -53,7 +54,9 @@
 
 <thead><tr>
 <% for (var j = 0; j < propsToDisplay.length; j++) { %>
-  <th>
+  <% var prop = propsToDisplay[j] %>
+  <th <%- extraClasses[prop] ? 'class="' + extraClasses[prop] + '"'
+                             : '' %>>
   <% if (l.sortEnabled) { %>
     <a href="?sort=<%= l.sort && l.sort[1] === propsToDisplay[j]
                      ? l.sort[2]
@@ -82,25 +85,29 @@
   <tr class="<%= repClass %>">
     <% for (var j = 0; j < propsToDisplay.length; j++) { %>
       <% var prop = propsToDisplay[j] %>
+      <% var htmlClasses = (extraClasses[prop] || '')
+                         + (prop === 'results' ? rep.rclass : '') %>
+      <% htmlClasses = htmlClasses ? 'class="' + htmlClasses + '"'
+                                   : '' %>
+      <td <%- htmlClasses %>>
       <% if (prop === 'date') { %>
-        <td><%= l.ts.formatDate(repMoment) %></td>
+        <%= l.ts.formatDate(repMoment) %>
       <% } else if (prop === 'date-link') { %>
-        <td><a href="<%= '/history/' + rep.slot %>"
-               title="View history for <%= rep.slot %>"
-               aria-label="View history for this slot">
+        <a href="<%= '/history/' + rep.slot %>"
+           title="View history for <%= rep.slot %>"
+           aria-label="View history for this slot">
           <%= l.ts.formatDate(repMoment) %>
-        </a></td>
+        </a>
       <% } else if (prop === 'rev') { %>
-        <td><%- l.config.linkGitHist(rep.rev) %></td>
+        <%- l.config.linkGitHist(rep.rev) %>
       <% } else if (prop === 'results') { %>
-        <td class="<%- rep.rclass %>">
-          <a href="<%= '/report/' + rep.slot + '/' + rep.date %>">
-            <%= rep.rtext %>
-          </a>
-        </td>
+        <a href="<%= '/report/' + rep.slot + '/' + rep.date %>">
+          <%= rep.rtext %>
+        </a>
       <% } else { %>
-        <td><%= rep[prop] %></td>
+        <%= rep[prop] %>
       <% } %>
+      </td>
     <% } %>
   </tr>
 <% } %>
