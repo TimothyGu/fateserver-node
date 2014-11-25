@@ -50,6 +50,7 @@ else
 fi
 
 exec <report
+head -n2 >summary
 
 ntest=0
 npass=0
@@ -92,13 +93,15 @@ unset IFS
 
 nwarn=$(grep -Eci '\<warning\>' compile.log) || nwarn=0
 
+echo "stats:$ntest:$npass:$nwarn" >>summary
+
 `dirname $0`/generateSummary.js report $nwarn > summary.json
 
 repdir=$slotdir/$date
 mkdir $repdir
 gzip -9 *.log
 xz -0 report
-cp -p summary.json report.xz *.log.gz $repdir
+cp -p summary summary.json report.xz *.log.gz $repdir
 chmod 644 $repdir/*
 rm -f $slotdir/previous
 test -e $slotdir/latest && mv $slotdir/latest $slotdir/previous
