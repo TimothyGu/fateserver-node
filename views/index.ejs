@@ -29,6 +29,19 @@
 <% include header2.ejs %>
 <%= l.config.branding %> FATE
 <% include header3.ejs %>
+
+<ul class="nav nav-tabs" role="tablist">
+<% for (var i = 0; i < l.branches.length; i ++) { %>
+  <li role="presentation"
+    <% if (l.branches[i] === l.branch) { %>
+      class="active"
+    <% } %>
+  >
+    <a href="/<%- l.branches[i] %>"><%= l.branches[i] %></a>
+  </li>
+<% } %>
+</ul>
+
 <div class="table-responsive">
   <table class="replist table footable" id="index">
     <% var propsToDisplay = [ 'date-link', 'rev', 'subarch', 'os', 'cc'

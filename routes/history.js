@@ -37,9 +37,8 @@ var config   = require('../lib/config')
 var nEntries = 50
 
 function handleHistory (slot, begin, res, next) {
+    begin = begin || 0
     var slotdir = path.join(config.dir, slot)
-
-    var repsName = []
 
     fs.readdir(slotdir, function handleFiles (err, files) {
         if (err) {
@@ -55,19 +54,21 @@ function handleHistory (slot, begin, res, next) {
             return next(errInner)
         }
 
-        repsName = files.filter(function (val) {
+        var repsNames = files.filter(function (val) {
             return val.match(/^[0-9]/)
         })
         res.locals.begin    = Number(begin)
         res.locals.nEntries = nEntries
 
-        async.map(repsName, function iterator (repName, out) {
+        // For every report, load its summary asynchronously
+        async.map(repsNames, function iterator (repName, out) {
             parse.loadSummary(slot, repName, function summaryCb (err, summary) {
                 // Ignore possible errors in one specific report in order
                 // not to destroy the entire history page.
                 return out(null, err ? null : summary)
             })
         }, function end (err, reps) {
+            // reps is an array of all summaries
             res.locals.reps  =
                 reps.filter(function (n) {  // Filter out empty/invalid ones
                         return n != null

@@ -32,9 +32,21 @@ cd $reptmp
 tar xzk
 
 header=$(head -n1 report)
-date=$(expr "$header" : 'fate:0:\([0-9]*\):')
-slot=$(expr "$header" : 'fate:0:[0-9]*:\([A-Za-z0-9_.-]*\):')
-rev=$(expr "$header" : "fate:0:$date:$slot:\([A-Za-z0-9_.-]*\):")
+version=$(expr "$header" : 'fate:\([0-9]*\):')
+date=$(expr "$header" : 'fate:[0-9]*:\([0-9]*\):')
+slot=$(expr "$header" : 'fate:[0-9]*:[0-9]*:\([A-Za-z0-9_.-]*\):')
+rev=$(expr "$header" : "fate:[0-9]*:$date:$slot:\([A-Za-z0-9_.-]*\):")
+branch=master
+if [ $version -eq 1 ]
+    branch=$(expr "$header" : "fate:[0-9]*:$date:$slot:$rev:[A-Za-z0-9_.-]*:[A-Za-z0-9_.-]*:\([A-Za-z0-9_.-]*\):")
+    branch=$(echo "$branch" | sed 's,^release/,v,')
+fi
+
+test -e "$FATEDIR/branches" || touch "$FATEDIR/branches"
+grep -q "^$branch$" "$FATEDIR/branches" || \
+    [ "$branch" = 'master' ] || \
+    (echo "$branch" >>"$FATEDIR/branches" && \
+     echo "Setting up new branch $branch" >&2)
 
 test -n "$date" && test -n "$slot" || die "Invalid report header"
 

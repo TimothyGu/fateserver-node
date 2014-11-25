@@ -91,18 +91,11 @@ app.use(compression({ threshold: '1kb' }))
 
 app.use(express.static(path.join(__dirname, 'public')))
 
-app.get('/', function (req, res, next) {
-    index(req, res, next)
-})
-app.get('/index.cgi', function (req, res, next) {
-    index(req, res, next)
-})
-
 app.get('/history/:slot', function (req, res, next) {
-    history(req.params.slot, req.query.begin || 0, res, next)
+    history(req.params.slot, req.query.begin, res, next)
 })
 app.get('/history.cgi', function (req, res, next) {
-    history(req.query.slot, req.query.begin || 0, res, next)
+    history(req.query.slot, req.query.begin, res, next)
 })
 
 app.get('/report/:slot/:time', function (req, res, next) {
@@ -111,6 +104,8 @@ app.get('/report/:slot/:time', function (req, res, next) {
 app.get('/report.cgi', function (req, res, next) {
     report(req.query.slot, req.query.time, res, next)
 })
+
+app.use(index)
 
 // ERROR HANDLING
 
