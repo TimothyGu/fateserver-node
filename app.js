@@ -37,6 +37,7 @@ var index   = require('./routes/index')
   , history = require('./routes/history')
   , report  = require('./routes/report')
   , log     = require('./routes/log')
+  , api     = require('./routes/api')
 
 var ts      = require('./lib/timestamp')
   , config  = require('./lib/config')
@@ -106,6 +107,7 @@ app.get('/report.cgi', function (req, res, next) {
 })
 
 app.use(index)
+app.use(api)
 
 // ERROR HANDLING
 
@@ -137,12 +139,15 @@ app.use(function (err, req, res, next) {
   var status = err.status || 500
   res.status(status)
   debug('msg: ' + err.message)
-  res.render('error', {
-    message: err.HTMLMessage || err.message
-  , error: null
-  , status: status
-  , _with: false
-  })
+  if (err.json) res.json(err)
+  else {
+    res.render('error', {
+      message: err.HTMLMessage || err.message
+    , error: null
+    , status: status
+    , _with: false
+    })
+  }
 })
 
 module.exports = app
