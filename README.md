@@ -26,8 +26,12 @@ FooTable Version
 fateserver-node uses the MIT-licensed FooTable library. However, it does not
 have an npm package, so any update must be done manually.
 
-The version of FooTable currently in the source tree is **2.0.3,** with some
-minor font path changes in public/css/footable.core.min.css.
+The version of FooTable currently in the source tree is **2.0.3**.
+
+However, the FooTable in the source tree is not vanilla from the source. The
+font loading routine is removed, and all font glyphs used by fateserver-node
+are redirected to the prettier FontAwesome glyphs in
+`public/css/footable.custom.css`.
 
 Prism Version
 -------------

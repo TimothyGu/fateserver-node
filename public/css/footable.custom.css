@@ -1,0 +1,27 @@
+/* This CSS file redirects all glyphs used by fateserver to their FontAwesome
+   counter parts. Copyright 2014 Tiancheng "Timothy" Gu, MIT License. */
+/* .fa */
+.footable.breakpoint > tbody > tr > td > span.footable-toggle,
+.footable > thead > tr > th > span.footable-sort-indicator {
+    font-family: FontAwesome;
+}
+/* .fa-caret-down */
+.footable.breakpoint > tbody > tr > td > span.footable-toggle:before {
+    content: "\f0d7";
+}
+/* .fa-caret-up */
+.footable.breakpoint > tbody > tr.footable-detail-show > td > span.footable-toggle:before {
+    content: "\f0d8";
+}
+/* .fa-sort */
+.footable > thead > tr > th > span.footable-sort-indicator:before {
+    content: "\f0dc";
+}
+/* .fa-sort-desc */
+.footable > thead > tr > th.footable-sorted-desc > span.footable-sort-indicator:before {
+    content: "\f0dd";
+}
+/* .fa-sort-asc */
+.footable > thead > tr > th.footable-sorted > span.footable-sort-indicator:before {
+    content: "\f0de";
+}
