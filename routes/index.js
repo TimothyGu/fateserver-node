@@ -39,88 +39,89 @@ var config   = require('../lib/config')
 var router = express.Router()
 
 function handleIndex (req, res, next) {
-    // req.params.branch, res.locals.branch, and res.locals.branches always
-    // contain the short branch name (e.g. v2.4).
-    // branch always contains the vanilla branch name.
-    if (req.params.branch) {
-        res.locals.branch = req.params.branch
-        var branch = req.params.branch.replace(/^v([0-9])/, 'release/$1')
-    } else {
-        var branch = 'master'
-        res.locals.branch = 'master'
+  // req.params.branch, res.locals.branch, and res.locals.branches always
+  // contain the short branch name (e.g. v2.4).
+  // branch always contains the vanilla branch name.
+  if (req.params.branch) {
+    res.locals.branch = req.params.branch
+    var branch = req.params.branch.replace(/^v([0-9])/, 'release/$1')
+  } else {
+    var branch = 'master'
+    res.locals.branch = 'master'
+  }
+  fs.readdir(config.dir, function handleSlots (err, slots) {
+    if (err) {
+      err.message = 'config.dir not found. Did you set up lib/config.js'
+                  + 'correctly?'
+      err.HTMLMessage = 'FATE data not found.'
+      err.status = 404
+      return next(err)
     }
-    fs.readdir(config.dir, function handleSlots (err, slots) {
-        if (err) {
-            err.message = 'config.dir not found. Did you set up lib/config.js'
-                        + 'correctly?'
-            err.HTMLMessage = 'FATE data not found.'
-            err.status = 404
-            return next(err)
-        }
 
-        async.parallel([
-            function readBranches (done) {
-                var branchesStream =
-                    fs.createReadStream(path.join(config.dir, 'branches'))
-                    .on('error', function() {
-                        res.locals.branches = ['master']
-                        done(null)
-                    })
-                var branches = []
-                var lr = new readline.createInterface({
-                    input: branchesStream
-                  , terminal: false
-                })
-                lr.on('line', function handleLine (line) {
-                    branches.push(line)
-                }).on('close', function branchesDone () {
-                    // Sort the branches from newest to oldest and add master
-                    // to the front.
-                    branches = branches.sort().reverse()
-                    branches.unshift('master')
-                    res.locals.branches = branches
-                    done(null)
-                })
-            }
-          , function readSlots (done) {
-                // For every slot get the summary of the latest results.
-                async.map(slots, function iterator (slot, out) {
-                    var slotdir = path.join(config.dir, slot)
-
-                    // If the slot is marked as hidden then skip over it.
-                    // All the null members of the array will be cleaned at
-                    // the end().
-                    if (fs.existsSync(path.join(slotdir, 'hidden'))) {
-                        return out(null, null)
-                    }
-
-                    // Load summary
-                    parse.loadSummary(slot, 'latest',
-                                      function summaryCb (err, summary) {
-                        // Ignore possible errors in one specific report in order
-                        // not to destroy the entire history page.
-                        // Also check if the branches match.
-                        return out(null, (!err && summary.branch === branch)
-                                       ? summary : null)
-                    })
-                }, function end (err, reps) {
-                    // The server side sorting is only for default sorting.
-                    // Client-side sorting through FooTable handles
-                    // everything else.
-                    var sortingKeys = ['subarch', 'os', 'cc', 'comment', 'slot']
-                    res.locals.reps =
-                        reps.filter(function (n) {  // Filter out null/invalid ones
-                                return n != null
-                            })
-                            .sort(sort.byKeys(sortingKeys))
-                    done(null)
-                })
-            }
-        ], function end () {
-            debug(res.locals.branches)
-            res.render('index.ejs', { _with: false })
+    async.parallel([
+      function readBranches (done) {
+        var branchesStream =
+          fs.createReadStream(path.join(config.dir, 'branches'))
+            .on('error', function() {
+              res.locals.branches = ['master']
+              done()
+            })
+        var branches = []
+        var lr = new readline.createInterface({
+          input: branchesStream
+        , terminal: false
         })
+        lr.on('line', branches.push)
+        .on('close', function branchesDone () {
+          // Sort the branches from newest to oldest and add master
+          // to the front.
+          branches = branches.sort().reverse()
+          branches.unshift('master')
+          res.locals.branches = branches
+          done()
+        })
+      }
+      , function readSlots (done) {
+        // For every slot get the summary of the latest results.
+        async.map(slots, function iterator (slot, out) {
+          var slotdir = path.join(config.dir, slot)
+
+          // If the slot is marked as hidden then skip over it.
+          // All the null members of the array will be cleaned at
+          // the end().
+          if (fs.existsSync(path.join(slotdir, 'hidden'))) {
+            return out(null, null)
+          }
+
+          // Load summary
+          parse.loadSummary(slot, 'latest',
+                    function summaryCb (err, summary) {
+            // Ignore possible errors in one specific report in order
+            // not to destroy the entire history page.
+            // Also check if the branches match.
+            return out(null, (!err && summary.branch === branch)
+                           ? summary : null)
+          })
+        }, function end (err, reps) {
+          // The server side sorting is only for default sorting.
+          // Client-side sorting through FooTable handles
+          // everything else.
+          var sortingKeys = ['subarch', 'os', 'cc', 'comment', 'slot']
+          res.locals.reps =
+            reps
+              .filter(function (n) {
+                // Filter out null/invalid ones
+                return n != null
+              })
+              .sort(sort.byKeys(sortingKeys))
+          done()
+        })
+      }
+    ], function end () {
+      debug(res.locals.branches)
+      res.render('index.ejs', { _with: false })
     })
+  })
 }
 
 router.get('/', handleIndex)

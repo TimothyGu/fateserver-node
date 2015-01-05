@@ -1,24 +1,24 @@
 {
-    "_comment": "Configuration file for JSDoc."
-  , "tags": {
-        "allowUnknownTags": true
-    }
-  , "source": {
-        "include": [
-            "lib/config.js"
-          , "lib/parse.js"
-          , "lib/sort.js"
-          , "lib/timestamp.js"
-        ]
-      , "includePattern": ".+\\.js(doc)?$"
-      , "excludePattern": "(^|\\/|\\\\)_"
-    }
-  , "plugins": [ "plugins/markdown" ]
-  , "markdown": {
-        "parser": "evilstreak"
-    }
-  , "templates": {
-        "cleverLinks": true
-      , "monospaceLinks": false
-    }
+  "_comment": "Configuration file for JSDoc."
+, "tags": {
+    "allowUnknownTags": true
+  }
+, "source": {
+    "include": [
+      "lib/config.js"
+    , "lib/parse.js"
+    , "lib/sort.js"
+    , "lib/timestamp.js"
+    ]
+    , "includePattern": ".+\\.js(doc)?$"
+    , "excludePattern": "(^|\\/|\\\\)_"
+  }
+, "plugins": [ "plugins/markdown" ]
+, "markdown": {
+    "parser": "evilstreak"
+}
+, "templates": {
+    "cleverLinks": true
+  , "monospaceLinks": false
+  }
 }

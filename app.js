@@ -25,7 +25,7 @@
 'use strict'
 
 var express = require('express')
-var path    = require('path')
+  , path    = require('path')
   , debug   = require('debug')('f:app')
   , morgan  = require('morgan')
   , compression = require('compression')
@@ -52,12 +52,12 @@ app.set('view engine', 'ejs')
 
 if (app.get('env') !== 'development') {
     app.enable('view cache')
-    debug('Cache enabled')
+  debug('Cache enabled')
 }
 /*
 app.use(function (req, res, next) {
-    debug(req.headers)
-    next()
+  debug(req.headers)
+  next()
 })
 */
 
@@ -68,21 +68,21 @@ app.locals.config = config
 app.locals.util   = require('./lib/ejs-util.js')
 
 app.use(function (req, res, next) {
-    if (toobusy()) {
-        res.status(503).send("Server too busy. Please try again later.")
-    } else {
-        next()
-    }
+  if (toobusy()) {
+    res.status(503).send("Server too busy. Please try again later.")
+  } else {
+    next()
+  }
 })
 
 app.use(morgan('short'))
 
 // ROUTING
 app.get('/log/:slot/:time/:log', function (req, res, next) {
-    log(req.params.slot, req.params.time, req.params.log, req, res, next)
+  log(req.params.slot, req.params.time, req.params.log, req, res, next)
 })
 app.get('/log.cgi', function (req, res, next) {
-    log(req.query.slot, req.query.time, req.query.log, req, res, next)
+  log(req.query.slot, req.query.time, req.query.log, req, res, next)
 })
 
 // Intentioanlly move log before auto-compression because we deal with it
@@ -92,17 +92,17 @@ app.use(compression({ threshold: '1kb' }))
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.get('/history/:slot', function (req, res, next) {
-    history(req.params.slot, req.query.begin, res, next)
+  history(req.params.slot, req.query.begin, res, next)
 })
 app.get('/history.cgi', function (req, res, next) {
-    history(req.query.slot, req.query.begin, res, next)
+  history(req.query.slot, req.query.begin, res, next)
 })
 
 app.get('/report/:slot/:time', function (req, res, next) {
-    report(req.params.slot, req.params.time, res, next)
+  report(req.params.slot, req.params.time, res, next)
 })
 app.get('/report.cgi', function (req, res, next) {
-    report(req.query.slot, req.query.time, res, next)
+  report(req.query.slot, req.query.time, res, next)
 })
 
 app.use(index)
@@ -111,38 +111,38 @@ app.use(index)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-    var err = new Error('Not Found')
-    err.status = 404
-    next(err)
+  var err = new Error('Not Found')
+  err.status = 404
+  next(err)
 })
 
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-    app.use(function (err, req, res, next) {
-        var status = err.status || 500
-        res.status(status)
-        res.render('error', {
-            message: err.message
-          , error: err
-          , status: status
-          , _with: false
-        })
+  app.use(function (err, req, res, next) {
+    var status = err.status || 500
+    res.status(status)
+    res.render('error', {
+      message: err.message
+    , error: err
+    , status: status
+    , _with: false
     })
+  })
 }
 
 // production error handler
 // no stacktraces leaked to user
 app.use(function (err, req, res, next) {
-    var status = err.status || 500
-    res.status(status)
-    debug('msg: ' + err.message)
-    res.render('error', {
-        message: err.HTMLMessage || err.message
-      , error: null
-      , status: status
-      , _with: false
-    })
+  var status = err.status || 500
+  res.status(status)
+  debug('msg: ' + err.message)
+  res.render('error', {
+    message: err.HTMLMessage || err.message
+  , error: null
+  , status: status
+  , _with: false
+  })
 })
 
 module.exports = app

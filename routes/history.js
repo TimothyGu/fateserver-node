@@ -37,48 +37,46 @@ var config   = require('../lib/config')
 var nEntries = 50
 
 function handleHistory (slot, begin, res, next) {
-    begin = begin || 0
-    var slotdir = path.join(config.dir, slot)
+  begin = begin || 0
+  var slotdir = path.join(config.dir, slot)
 
-    fs.readdir(slotdir, function handleFiles (err, files) {
-        if (err) {
-            err.HTMLMessage = 'Slot "' + slot + '" not found.'
-            err.status = 404
-            return next(err)
-        }
+  fs.readdir(slotdir, function handleFiles (err, files) {
+    if (err) {
+      err.HTMLMessage = 'Slot "' + slot + '" not found.'
+      err.status = 404
+      return next(err)
+    }
 
-        res.locals.slot     = slot
-        try {
-            res.locals.owner = parse.getSlotOwner(slot)
-        } catch (errInner) {
-            return next(errInner)
-        }
+    res.locals.slot    = slot
+    res.locals.owner   = parse.getSlotOwner(slot)
 
-        var repsNames = files.filter(function (val) {
-            return val.match(/^[0-9]/)
-        })
-        res.locals.begin    = Number(begin)
-        res.locals.nEntries = nEntries
-
-        // For every report, load its summary asynchronously
-        async.map(repsNames, function iterator (repName, out) {
-            parse.loadSummary(slot, repName, function summaryCb (err, summary) {
-                // Ignore possible errors in one specific report in order
-                // not to destroy the entire history page.
-                return out(null, err ? null : summary)
-            })
-        }, function end (err, reps) {
-            // reps is an array of all summaries
-            res.locals.reps  =
-                reps.filter(function (n) {  // Filter out empty/invalid ones
-                        return n != null
-                    })
-                    .sort(sort.by('desc-date'))  // Newest to oldest
-                    .slice(begin, begin + nEntries)
-            res.locals.total = reps.length
-            res.render('history.ejs', { _with: false })
-        })
+    var repsNames = files.filter(function (val) {
+      return val.match(/^[0-9]/)
     })
+    res.locals.begin    = Number(begin)
+    res.locals.nEntries = nEntries
+
+    // For every report, load its summary asynchronously
+    async.map(repsNames, function iterator (repName, out) {
+      parse.loadSummary(slot, repName, function summaryCb (err, summary) {
+        // Ignore possible errors in one specific report in order
+        // not to destroy the entire history page.
+        return out(null, err ? null : summary)
+      })
+    }, function end (err, reps) {
+      // reps is an array of all summaries
+      res.locals.reps  =
+        reps
+          .filter(function (n) {
+            // Filter out empty/invalid ones
+            return n != null
+          })
+          .sort(sort.by('desc-date'))  // Newest to oldest
+          .slice(begin, begin + nEntries)
+      res.locals.total = reps.length
+      res.render('history.ejs', { _with: false })
+    })
+  })
 }
 
 module.exports = handleHistory

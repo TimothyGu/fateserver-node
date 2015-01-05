@@ -10,8 +10,7 @@ General
 `*.js`
 ------
 
-For JavaScript files, fateserver-node uses the [NPM style][1], but with 4
-spaces for indentation instead of the standard 2 spaces.
+For JavaScript files, fateserver-node uses the [NPM style][1].
 
 [1]: https://www.npmjs.org/doc/misc/npm-coding-style.html
 

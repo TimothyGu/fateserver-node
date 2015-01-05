@@ -31,17 +31,17 @@ var debug = require('debug')('f:www')
 var config = require('../lib/config')
 
 if (cluster.isMaster) {
-    // Create a worker for each CPU
-    for (var i = 0; i < config.cpus; i++) {
-        debug('Worker ' + i + ' spawned.')
-        cluster.fork()
-    }
+  // Create a worker for each CPU
+  for (var i = 0; i < config.cpus; i++) {
+    console.log('Worker ' + i + ' spawned.')
+    cluster.fork()
+  }
 } else {
-    var app = require('../app')
+  var app = require('../app')
 
-    app.set('port', config.port)
+  app.set('port', config.port)
 
-    var server = app.listen(app.get('port'), function () {
-        debug('Express server listening on port ' + server.address().port)
-    })
+  var server = app.listen(app.get('port'), function () {
+    console.log('Express server listening on port ' + server.address().port)
+  })
 }
