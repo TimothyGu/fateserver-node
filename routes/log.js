@@ -32,34 +32,34 @@ var config   = require('../lib/config')
   , parse    = require('../lib/parse')
 
 function handleLog (slot, date, log, req, res, next) {
-    var logFile = path.join(slot, date, log + '.log.gz')
-    var logPath = path.join(config.dir, logFile)
-    debug('logPath: ' + logPath)
+  var logFile = path.join(slot, date, log + '.log.gz')
+  var logPath = path.join(config.dir, logFile)
+  debug('logPath: ' + logPath)
 
-    fs.readFile(logPath, function handleLogFile (err, data) {
+  fs.readFile(logPath, function handleLogFile (err, data) {
+    if (err) {
+      err.HTMLMessage = 'Log "' + logFile + '" not found.'
+      err.status = 404
+      return next(err)
+    }
+
+    res.set('Content-Type', 'text/plain')
+    var acceptedEncoding = req.get('Accept-Encoding')
+    if (acceptedEncoding && acceptedEncoding.match(/gzip/)) {
+      res.set('Content-Encoding', 'gzip')
+      return res.send(data)
+    } else {
+      var zlib = require('zlib')
+      debug('non-gzip')
+      zlib.gunzip(data, function unzipCb (err, data) {
         if (err) {
-            err.HTMLMessage = 'Log "' + logFile + '" not found.'
-            err.status = 404
-            return next(err)
+          err.status = 500
+          next(err)
         }
-
-        res.set('Content-Type', 'text/plain')
-        var acceptedEncoding = req.get('Accept-Encoding')
-        if (acceptedEncoding && acceptedEncoding.match(/gzip/)) {
-            res.set('Content-Encoding', 'gzip')
-            return res.send(data)
-        } else {
-            var zlib = require('zlib')
-            debug('non-gzip')
-            zlib.gunzip(data, function unzipCb (err, data) {
-                if (err) {
-                    err.status = 500
-                    next(err)
-                }
-                res.send(data)
-            })
-        }
-    })
+        res.send(data)
+      })
+    }
+  })
 }
 
 module.exports = handleLog
