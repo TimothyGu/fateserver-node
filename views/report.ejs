@@ -203,11 +203,13 @@ Report of <%= l.slot %> <%= l.summary.rev %>
                 <%= rep.name %>
               </span>
               <span class="pull-right">
-                <div class="btn btn-success btn-sm"
+                <div class="btn btn-success btn-xs"
+                     id="<%= rep.name + '-diff-btn' %>"
                      onclick="show_diff('<%= rep.name %>')">
                   diff
                 </div>
-                <div class="btn btn-success btn-sm"
+                <div class="btn btn-success btn-xs"
+                     id="<%= rep.name + '-err-btn' %>"
                      onclick="show_err('<%= rep.name %>')">
                   stderr
                 </div>
@@ -253,10 +255,12 @@ Report of <%= l.slot %> <%= l.summary.rev %>
   function toggle (id) {
     var e = document.getElementById(id)
     e.style.display = e.style.display == 'table-row' ? 'none' : 'table-row'
+    $('#' + id + '-btn').toggleClass('active')
   }
   function hide (id) {
     var e = document.getElementById(id)
     e.style.display = 'none'
+    $('#' + id + '-btn').removeClass('active')
   }
   function show_diff (name) {
     hide(name + '-err')
