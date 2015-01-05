@@ -24,8 +24,9 @@
 
 Error <%= locals.status %>:
 
+<pre>
 <% if (locals.error) { %>
   <%= locals.error.stack %>
 <% } else { %>
   <%= locals.message %>
-<% } %>
+<% } %></pre>
