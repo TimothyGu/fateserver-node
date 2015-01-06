@@ -79,7 +79,6 @@ function handleIndex (req, res, next) {
             // to the front.
             branches = branches.sort().reverse()
             branches.unshift('master')
-            console.log(branches)
             res.locals.branches = branches
             done()
           })
