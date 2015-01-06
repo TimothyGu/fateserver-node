@@ -71,15 +71,18 @@ function handleIndex (req, res, next) {
           input: branchesStream
         , terminal: false
         })
-        lr.on('line', branches.push)
-        .on('close', function branchesDone () {
-          // Sort the branches from newest to oldest and add master
-          // to the front.
-          branches = branches.sort().reverse()
-          branches.unshift('master')
-          res.locals.branches = branches
-          done()
-        })
+        lr.on('line', function (l) {
+            branches.push(l)
+          })
+          .on('close', function branchesDone () {
+            // Sort the branches from newest to oldest and add master
+            // to the front.
+            branches = branches.sort().reverse()
+            branches.unshift('master')
+            console.log(branches)
+            res.locals.branches = branches
+            done()
+          })
       }
       , function readSlots (done) {
         // For every slot get the summary of the latest results.
