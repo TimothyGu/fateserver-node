@@ -89,14 +89,14 @@ function handleTestAPI (req, res, next) {
     , test    = req.params.test
 
   parse.loadReport(slot, date, 2, function (err, obj) {
-    if (err) return next(err)
-    if (!obj.recs.hasOwnProperty(test)) {
-      var err = new Error('Test "' + test + '" not found')
-      err.json = true
-      err.status = 404
-      next(err)
+    for (var i = 0; i < obj.length; i++) {
+      if (obj[i].name !== test) continue
+      return res.json(obj[i])
     }
-    res.json(obj.recs[test])
+    var err = new Error('Test "' + test + '" not found')
+    err.json = true
+    err.status = 404
+    next(err)
   })
 }
 

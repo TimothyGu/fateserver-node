@@ -139,8 +139,13 @@ app.use(function (err, req, res, next) {
   var status = err.status || 500
   res.status(status)
   debug('msg: ' + err.message)
-  if (err.json) res.json(err)
-  else {
+  if (err.json) {
+    var newErr = {
+      status: err.status
+    , message: err.message
+    }
+    res.json(newErr)
+  } else {
     res.render('error', {
       message: err.HTMLMessage || err.message
     , error: null
