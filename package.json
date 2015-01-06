@@ -23,7 +23,9 @@
     "morgan": "~1.5.0",
     "toobusy": "~0.2.4",
     "xz-pipe": "0.0.x",
-    "memwatch": "~0.2.2"
+    "memwatch": "~0.2.2",
+    "lru-cache": "~2.5.0",
+    "rwlock": "~4.0.0"
   },
   "engine": "node >= 0.10.0",
   "devDependencies": {

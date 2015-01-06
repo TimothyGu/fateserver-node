@@ -27,9 +27,12 @@
 var fs       = require('fs')
   , path     = require('path')
   , readline = require('readline')
-  , debug    = require('debug')('f:r:index')
+  , debug    = require('debug')('f:r:api')
   , async    = require('async')
   , express  = require('express')
+  , ReadWriteLock = require('rwlock')
+  , lru      = require('lru-cache')
+  , cache    = lru(10)
 
 var config   = require('../lib/config')
   , parse    = require('../lib/parse')
@@ -83,15 +86,43 @@ function handleReportAPI (req, res, next) {
   })
 }
 
+var cacheLock = new ReadWriteLock()
 function handleTestAPI (req, res, next) {
   var slot    = req.params.slot
     , date    = req.params.date
     , test    = req.params.test
 
+  var cacheName = 'test_lut_' + slot + '_' + date
+  var cacheHasIt = false
+  cacheLock.readLock(function (release) {
+    if (cache.has(cacheName)) {
+      debug('cache hit')
+      var lut = cache.get(cacheName)
+      cacheHasIt = true
+      if (!lut.hasOwnProperty(test)) {
+        var err = new Error('Test "' + test + '" not found')
+        err.json = true
+        err.status = 404
+        next(err)
+      } else {
+        res.json(lut[test])
+      }
+    }
+    release()
+  })
+  if (cacheHasIt) return
   parse.loadReport(slot, date, 2, function (err, obj) {
+    debug('cache miss')
+    var lut = {}
     for (var i = 0; i < obj.length; i++) {
-      if (obj[i].name !== test) continue
-      return res.json(obj[i])
+      lut[obj[i].name] = obj[i]
+    }
+    cacheLock.writeLock(function (release) {
+      cache.set(cacheName, lut)
+      release()
+    })
+    if (lut.hasOwnProperty(test)) {
+      return res.json(lut[test])
     }
     var err = new Error('Test "' + test + '" not found')
     err.json = true
