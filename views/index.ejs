@@ -30,6 +30,17 @@
 <%= l.config.branding %> FATE
 <% include header3.ejs %>
 
+<p>
+  The FFmpeg Automated Testing Environmnet is the continuous integration
+  testing platform of FFmpeg. It aggregates results of regression tests of
+  FFmpeg from machines of various architectures and operating systems of
+  volunteers, to make sure nothing breaks in our new commits.
+</p>
+<p>
+  If you would like to contribute test results on your own system, see the
+  <a href="//ffmpeg.org/fate.html">official documentation</a> on doing so.
+</p>
+
 <ul class="nav nav-tabs" role="tablist">
 <% for (var i = 0; i < l.branches.length; i ++) { %>
   <li role="presentation"
