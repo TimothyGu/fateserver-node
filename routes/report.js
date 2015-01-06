@@ -51,7 +51,7 @@ function handleReport (slot, date, res, next) {
       parse.loadSummary(slot, date, callback)
     }
   , report: function (callback) {
-      parse.loadReport(slot, date, 1, callback)
+      parse.loadReport(slot, date, 0, callback)
     }
   , lastpass: function (callback) {
       parse.loadLastPass(slot, callback)

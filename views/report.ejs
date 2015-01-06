@@ -209,7 +209,7 @@ Report of <%= l.slot %> <%= l.summary.rev %>
                   diff
                 </div>
                 <div class="btn btn-success btn-xs"
-                     id="<%= rep.name + '-err-btn' %>"
+                     id="<%= rep.name + '-stderr-btn' %>"
                      onclick="show_err('<%= rep.name %>')">
                   stderr
                 </div>
@@ -219,12 +219,12 @@ Report of <%= l.slot %> <%= l.summary.rev %>
             <td><%- lastpass %></td>
           </tr>
           <tr class="toggled" id="<%= rep.name %>-diff"><td colspan="5">
-            <pre class="line-numbers"><code class="language-git"><%= new Buffer(rep.diff, 'base64').toString('utf8') %></code></pre>
+            <pre class="line-numbers"><code class="language-git">Loading...</code></pre>
           </td></tr>
-          <tr class="toggled" id="<%= rep.name %>-err"><td colspan="5">
+          <tr class="toggled" id="<%= rep.name %>-stderr"><td colspan="5">
             <!-- Even though it is not a diff, language-git is still needed
                  somehow for line numbers. -->
-            <pre class="line-numbers"><code class="language-git"><%= new Buffer(rep.stderr, 'base64').toString('utf8') %></code></pre>
+            <pre class="line-numbers"><code class="language-git">Loading...</code></pre>
           </td></tr>
         <% } %>
       <% } %>
@@ -249,28 +249,11 @@ Report of <%= l.slot %> <%= l.summary.rev %>
 
 </div>
 
-<script type="text/javascript">
-  <%/* Can't use $.toggle() as we are using a custom `display` that is `none`
-       when the page first loads */%>
-  function toggle (id) {
-    var e = document.getElementById(id)
-    e.style.display = e.style.display == 'table-row' ? 'none' : 'table-row'
-    $('#' + id + '-btn').toggleClass('active')
-  }
-  function hide (id) {
-    var e = document.getElementById(id)
-    e.style.display = 'none'
-    $('#' + id + '-btn').removeClass('active')
-  }
-  function show_diff (name) {
-    hide(name + '-err')
-    toggle(name + '-diff')
-  }
-  function show_err (name) {
-    hide(name + '-diff')
-    toggle(name + '-err')
-  }
+<script>
+  var slot = '<%- l.slot.replace("'", "\\'") %>'
+  var date = <%- l.summary.date %>
 </script>
+<script src="/js/report.js"></script>
 <script src="/js/prism.js"></script>
 
 <% include footer.ejs %>
