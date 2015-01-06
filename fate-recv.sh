@@ -108,8 +108,6 @@ nwarn=$(grep -Eci '\<warning\>' compile.log) || nwarn=0
 
 echo "stats:$ntest:$npass:$nwarn" >>summary
 
-`dirname $0`/generateSummary.js report $nwarn > summary.json
-
 repdir=$slotdir/$date
 mkdir $repdir
 gzip -9 *.log
