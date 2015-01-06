@@ -1,26 +1,27 @@
 /* Can't use $.toggle() as we are using a custom `display` that is `none`
    when the page first loads */
 function toggle (name, mode) {
-  var id = name + '-' + mode
-  var e = document.getElementById(id)
-  var ej = $(e)
-  e.style.display = e.style.display == 'table-row' ? 'none' : 'table-row'
+  var id = name.replace(/\./g, '\\.') + '-' + mode
+    , e = $('#' + id)
+  if (e.css('display') === 'none') var activating = 1
+  else                             var activating = 0
+  e.css('display', activating ? 'table-row' : 'none')
   $('#' + id + '-btn').toggleClass('active')
-  if (e.style.display === 'table-row') {
-    if (ej.hasClass('loaded')) return
+  if (activating) {
+    if (e.hasClass('loaded')) return
     $.getJSON('/api/' + slot + '/' + date + '/' + name, null,
               function success (data) {
-      ej.find('code.language-git').html(
-        decodeURIComponent(escape(atob(data[mode]))))
-      ej.addClass('loaded')
-      Prism.highlightAll() // FIXME
+      var codeElement = e.find('code.language-git')
+      codeElement.html(decodeURIComponent(escape(atob(data[mode]))))
+      e.addClass('loaded')
+      Prism.highlightElement(codeElement[0])
     })
   }
 }
 function hide (id) {
   var e = document.getElementById(id)
   e.style.display = 'none'
-  $('#' + id + '-btn').removeClass('active')
+  $('#' + id.replace(/\./g, '\\.') + '-btn').removeClass('active')
 }
 function show_diff (name) {
   hide(name + '-stderr')
