@@ -28,12 +28,12 @@ var fs       = require('fs')
   , path     = require('path')
   , debug    = require('debug')('f:r:log')
 
-var config   = require('../lib/config')
+var util     = require('../lib/util')
   , parse    = require('../lib/parse')
 
 function handleLog (slot, date, log, req, res, next) {
   var logFile = path.join(slot, date, log + '.log.gz')
-  var logPath = path.join(config.dir, logFile)
+  var logPath = path.join(util.dir, logFile)
   debug('logPath: ' + logPath)
 
   fs.readFile(logPath, function handleLogFile (err, data) {

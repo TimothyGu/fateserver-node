@@ -29,7 +29,7 @@ var fs       = require('fs')
   , debug    = require('debug')('f:r:report')
   , async    = require('async')
 
-var config   = require('../lib/config')
+var util     = require('../lib/util')
   , parse    = require('../lib/parse')
 
 function handleReport (slot, date, res, next) {
@@ -57,7 +57,7 @@ function handleReport (slot, date, res, next) {
       parse.loadLastPass(slot, callback)
     }
   , prevDate: function (callback) {
-      fs.readdir(path.join(config.dir, slot), function (err, files) {
+      fs.readdir(path.join(util.dir, slot), function (err, files) {
         if (err) {
           err.HTMLMessage = 'Slot "' + slot + '" not found.'
           err.status = 404

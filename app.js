@@ -40,12 +40,12 @@ var index   = require('./routes/index')
   , api     = require('./routes/api')
 
 var ts      = require('./lib/timestamp')
-  , config  = require('./lib/config')
+  , util    = require('./lib/util')
 
 memwatch.on('leak', require('debug')('memwatch'))
 
 var app = express()
-app.set('env', config.env)
+app.set('env', util.env)
 
 // VIEW ENGINE SETUP
 app.set('views', path.join(__dirname, 'views'))
@@ -65,8 +65,7 @@ app.use(function (req, res, next) {
 // EJS LOCALS
 app.locals.ts     = ts
 app.locals.moment = require('moment')
-app.locals.config = config
-app.locals.util   = require('./lib/ejs-util.js')
+app.locals.util   = util
 
 app.use(function (req, res, next) {
   if (toobusy()) {

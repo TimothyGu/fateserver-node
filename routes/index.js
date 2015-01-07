@@ -31,7 +31,7 @@ var fs       = require('fs')
   , async    = require('async')
   , express  = require('express')
 
-var config   = require('../lib/config')
+var util   = require('../lib/util')
   , parse    = require('../lib/parse')
   , ts       = require('../lib/timestamp')
   , sort     = require('../lib/sort')
@@ -49,9 +49,9 @@ function handleIndex (req, res, next) {
     var branch = 'master'
     res.locals.branch = 'master'
   }
-  fs.readdir(config.dir, function handleSlots (err, slots) {
+  fs.readdir(util.dir, function handleSlots (err, slots) {
     if (err) {
-      err.message = 'config.dir not found. Did you set up lib/config.js'
+      err.message = 'util.dir not found. Did you set up config.js'
                   + 'correctly?'
       err.HTMLMessage = 'FATE data not found.'
       err.status = 404
@@ -61,7 +61,7 @@ function handleIndex (req, res, next) {
     async.parallel([
       function readBranches (done) {
         var branchesStream =
-          fs.createReadStream(path.join(config.dir, 'branches'))
+          fs.createReadStream(path.join(util.dir, 'branches'))
             .on('error', function() {
               res.locals.branches = ['master']
               done()
@@ -86,7 +86,7 @@ function handleIndex (req, res, next) {
       , function readSlots (done) {
         // For every slot get the summary of the latest results.
         async.map(slots, function iterator (slot, out) {
-          var slotdir = path.join(config.dir, slot)
+          var slotdir = path.join(util.dir, slot)
 
           // If the slot is marked as hidden then skip over it.
           // All the null members of the array will be cleaned at

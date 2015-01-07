@@ -34,7 +34,7 @@ var fs       = require('fs')
   , lru      = require('lru-cache')
   , cache    = lru(10)
 
-var config   = require('../lib/config')
+var util     = require('../lib/util')
   , parse    = require('../lib/parse')
   , ts       = require('../lib/timestamp')
   , sort     = require('../lib/sort')
@@ -60,7 +60,7 @@ function handleReportAPI (req, res, next) {
       parse.loadLastPass(slot, callback)
     }
   , prevDate: function (callback) {
-      fs.readdir(path.join(config.dir, slot), function (err, files) {
+      fs.readdir(path.join(util.dir, slot), function (err, files) {
         if (err) {
           err.json = true
           err.HTMLMessage = 'Slot "' + slot + '" not found.'

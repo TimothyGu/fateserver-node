@@ -25,7 +25,7 @@
 <% var l = locals %>
 
 <% include header1.ejs %>
-<title><%= l.slot %> <%= l.summary.rev %> - <%= l.config.branding %> FATE</title>
+<title><%= l.slot %> <%= l.summary.rev %> - <%= l.util.branding %> FATE</title>
 <link rel="stylesheet" href="/css/prism.css" />
 <% include header2.ejs %>
 Report of <%= l.slot %> <%= l.summary.rev %>
@@ -124,7 +124,7 @@ Report of <%= l.slot %> <%= l.summary.rev %>
         </tr>
         <tr>
           <th>Revision</th>
-          <td><%- l.config.linkGitHist(l.summary.rev) %></td>
+          <td><%- l.util.linkGitHist(l.summary.rev) %></td>
         </tr>
         <tr>
           <th>Date</th>
@@ -186,7 +186,7 @@ Report of <%= l.slot %> <%= l.summary.rev %>
              if (l.lastpass[rep.name]) {
                // Only add link if the lastpass is older than the current rev
                if (l.summary.rev > l.lastpass[rep.name].rev) {
-                 lastpass = l.config.linkGitHist(l.summary.rev, l.lastpass[rep.name].rev)
+                 lastpass = l.util.linkGitHist(l.summary.rev, l.lastpass[rep.name].rev)
                  // Detect if this is the first time a test failed
                  if (l.lastpass[rep.name].date === l.prevDate) {
                    trClass = 'warn'

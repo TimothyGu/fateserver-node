@@ -29,7 +29,7 @@ var fs       = require('fs')
   , debug    = require('debug')('f:r:history')
   , async    = require('async')
 
-var config   = require('../lib/config')
+var util     = require('../lib/util')
   , parse    = require('../lib/parse')
   , ts       = require('../lib/timestamp')
   , sort     = require('../lib/sort')
@@ -38,7 +38,7 @@ var nEntries = 50
 
 function handleHistory (slot, begin, res, next) {
   begin = begin || 0
-  var slotdir = path.join(config.dir, slot)
+  var slotdir = path.join(util.dir, slot)
 
   fs.readdir(slotdir, function handleFiles (err, files) {
     if (err) {
