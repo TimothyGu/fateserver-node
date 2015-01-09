@@ -30,14 +30,13 @@ var fs       = require('fs')
   , debug    = require('debug')('f:r:api')
   , async    = require('async')
   , express  = require('express')
-  , ReadWriteLock = require('rwlock')
-  , lru      = require('lru-cache')
-  , cache    = lru(10)
 
 var util     = require('../lib/util')
   , parse    = require('../lib/parse')
   , ts       = require('../lib/timestamp')
   , sort     = require('../lib/sort')
+  , cache    = require('../lib/cache').cache
+  , cacheLock = require('../lib/cache').lock
 
 var router = express.Router()
 
@@ -86,7 +85,6 @@ function handleReportAPI (req, res, next) {
   })
 }
 
-var cacheLock = new ReadWriteLock()
 function handleTestAPI (req, res, next) {
   var slot    = req.params.slot
     , date    = req.params.date
