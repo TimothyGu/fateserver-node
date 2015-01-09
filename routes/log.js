@@ -46,9 +46,11 @@ function handleLog (slot, date, log, req, res, next) {
     res.set('Content-Type', 'text/plain')
     var acceptedEncoding = req.get('Accept-Encoding')
     if (acceptedEncoding && acceptedEncoding.match(/gzip/)) {
+      // If gzip is accepted as a Content-Encoding, send the .gz directly
       res.set('Content-Encoding', 'gzip')
       return res.send(data)
     } else {
+      // Otherwise, decompress it and then send it
       var zlib = require('zlib')
       debug('non-gzip')
       zlib.gunzip(data, function unzipCb (err, data) {

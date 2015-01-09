@@ -5,10 +5,10 @@
   }
 , "source": {
     "include": [
-      "lib/config.js"
-    , "lib/parse.js"
+      "lib/parse.js"
     , "lib/sort.js"
     , "lib/timestamp.js"
+    , "lib/util.js"
     ]
     , "includePattern": ".+\\.js(doc)?$"
     , "excludePattern": "(^|\\/|\\\\)_"
