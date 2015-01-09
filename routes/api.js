@@ -92,7 +92,7 @@ function handleTestAPI (req, res, next) {
     , date    = req.params.date
     , test    = req.params.test
 
-  var cacheName = 'test_lut_' + slot + '_' + date
+  var cacheName = ['report', 'lut', slot, date].join('_')
   var cacheHasIt = false
   cacheLock.readLock(function (release) {
     if (cache.has(cacheName)) {
