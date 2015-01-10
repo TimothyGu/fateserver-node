@@ -20,9 +20,9 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- */%>
+ */ -%>
 
-<% var l = locals %>
+<% var l = locals -%>
 
 <% include header1.ejs %>
 <title><%= l.slot %> <%= l.summary.rev %> - <%= l.util.branding %> FATE</title>
@@ -41,45 +41,45 @@ Report of <%= l.slot %> <%= l.summary.rev %>
 </ul>
 
 <div class="alert <%- l.summary.rclass %>" role="alert">
-  <% if (l.summary.status === 3) { %>
+  <% if (l.summary.status === 3) { -%>
     <strong>Error configuring!</strong>
-  <% } else if (l.summary.status === 2) { %>
+  <% } else if (l.summary.status === 2) { -%>
     <strong>Error compiling!</strong>
-  <% } else if (l.summary.status === 1) { %>
-    <% if (!l.summary.ntests) { %>
+  <% } else if (l.summary.status === 1) { -%>
+    <% if (!l.summary.ntests) { -%>
          <strong>Error testing!</strong>
-    <% } else { %>
+    <% } else { -%>
          <strong>Partially failed:</strong> <%= l.summary.rtext %> passed!
-    <% } %>
-  <% } else if (l.summary.status === 0) { %>
-    <% if (l.summary.ntests) { %>
+    <% } -%>
+  <% } else if (l.summary.status === 0) { -%>
+    <% if (l.summary.ntests) { -%>
          <strong>All tests passed!</strong>
-    <% } else { %>
+    <% } else { -%>
          <strong>Built successfully!</strong>
-    <% } %>
-  <% } %>
+    <% } -%>
+  <% } -%>
 </div>
 
 <ul class="nav nav-tabs" role="tablist" id="reportTab">
   <li role="presentation" class="active">
     <a href="#info" role="tab" data-toggle="tab">Information</a>
   </li>
-  <% if (l.summary.status === 1) { %>
+  <% if (l.summary.status === 1) { -%>
   <li role="presentation">
     <a href="#failed_tests" role="tab" data-toggle="tab">
       Failed Tests
       <span class="badge <%= l.summary.rclass %>"><%= l.summary.nfail %></span>
     </a>
   </li>
-  <% } %>
-  <% if (l.summary.npass > 0) { %>
+  <% } -%>
+  <% if (l.summary.npass > 0) { -%>
   <li role="presentation">
     <a href="#passed_tests" role="tab" data-toggle="tab">
       Passed Tests
       <span class="badge pass"><%= l.summary.npass %></span>
     </a>
   </li>
-  <% } %>
+  <% } -%>
 </ul>
 
 <div class="tab-content">
@@ -128,7 +128,7 @@ Report of <%= l.slot %> <%= l.summary.rev %>
         </tr>
         <tr>
           <th>Date</th>
-          <% var m = l.ts.getMoment(l.summary.date) %>
+          <% var m = l.ts.getMoment(l.summary.date) -%>
           <td><%= m.format('YYYY-MM-DD hh:mm:ss') %> UTC (<%= m.fromNow() %>)</td>
         </tr>
         <tr>
@@ -165,7 +165,7 @@ Report of <%= l.slot %> <%= l.summary.rev %>
   </div>
 </div>
 
-<% if (l.summary.status === 1) { %>
+<% if (l.summary.status === 1) { -%>
 <div role="tabpanel" class="tab-pane fade" id="failed_tests">
   <div class="table-responsive">
     <table class="replist table" id="tests">
@@ -177,7 +177,7 @@ Report of <%= l.slot %> <%= l.summary.rev %>
         </tr>
       </thead>
       <tbody>
-      <% for (var i = 0; i < l.report.length; i++) { %>
+      <% for (var i = 0; i < l.report.length; i++) { -%>
         <% var rep = l.report[i]
            if (rep.status) {
              var rep      = l.report[i]
@@ -196,7 +196,7 @@ Report of <%= l.slot %> <%= l.summary.rev %>
                  trClass = 'pass'
                }
              }
-        %>
+        -%>
           <tr class="<%- trClass %>">
             <td>
               <span class="pull-left">
@@ -226,26 +226,26 @@ Report of <%= l.slot %> <%= l.summary.rev %>
                  somehow for line numbers. -->
             <pre class="line-numbers"><code class="language-git">Loading...</code></pre>
           </td></tr>
-        <% } %>
-      <% } %>
+        <% } -%>
+      <% } -%>
       </tbody>
     </table>
   </div>
 </div>
-<% } %>
+<% } -%>
 
-<% if (l.summary.npass > 0) { %>
+<% if (l.summary.npass > 0) { -%>
 <div role="tabpanel" class="tab-pane fade" id="passed_tests">
   <% var allPassed = l.report.filter(function (value) {
        return value.status === 0
      })
-     for (var i = 0; i < allPassed.length; i++) { %>
+     for (var i = 0; i < allPassed.length; i++) { -%>
        <span class="col-xs-12 col-sm-4 col-md-3">
          <%= allPassed[i].name %>
        </span>
-  <% } %>
+  <% } -%>
 </div>
-<% } %>
+<% } -%>
 
 </div>
 
