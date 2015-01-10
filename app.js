@@ -86,12 +86,12 @@ app.use(log)
 
 // Intentioanlly move log before auto-compression because we deal with it
 // differently.
-app.use(compression({ threshold: '1kb' }))
+app.use(compression({threshold: '1kb'}))
 
-app.use(report)
+app.use(api)
 app.use(history)
 app.use(index)
-app.use(api)
+app.use(report)
 app.use(express.static(path.join(__dirname, 'public')))
 
 // ERROR HANDLING
