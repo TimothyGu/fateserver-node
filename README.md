@@ -1,7 +1,7 @@
 fateserver-node
 ===============
 
-[![Dependency Status](https://david-dm.org/TimothyGu/fateserver-node.png)](https://david-dm.org/TimothyGu/fateserver-node)
+[![Dependency Status](https://img.shields.io/david/TimothyGu/fateserver-node.svg?style=flat)](https://david-dm.org/TimothyGu/fateserver-node)
 
 This is a Node.js-based server for FATE, the FFmpeg Automated Testing
 Environment (FFmpeg) or FATE Automated Testing Environment (Libav). It is
