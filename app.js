@@ -29,9 +29,15 @@ var express = require('express')
   , debug   = require('debug')('f:app')
   , morgan  = require('morgan')
   , compression = require('compression')
-  , memwatch = require('memwatch')
   , toobusy = require('toobusy')
 toobusy.maxLag(100)
+
+try {
+  var memwatch = require('memwatch')
+  memwatch.on('leak', require('debug')('memwatch'))
+} catch (ex) {
+  // ignored
+}
 
 var index   = require('./routes/index')
   , history = require('./routes/history')
@@ -41,8 +47,6 @@ var index   = require('./routes/index')
 
 var ts      = require('./lib/timestamp')
   , util    = require('./lib/util')
-
-memwatch.on('leak', require('debug')('memwatch'))
 
 var app = express()
 app.set('env', util.env)
