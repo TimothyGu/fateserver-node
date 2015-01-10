@@ -1,2 +1,0 @@
-- Fix report death period
-- Cache report

@@ -46,6 +46,7 @@ TODO
    "(Ubuntu 4.8.2-19ubuntu1)"
 2. Port rest of style.less to ffmpeg-web.
 3. Minirep/minilog
+4. Fix report death period
 
 Before Sending Patches
 ----------------------
