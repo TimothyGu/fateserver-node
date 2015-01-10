@@ -29,14 +29,12 @@ var fs       = require('fs')
   , readline = require('readline')
   , debug    = require('debug')('f:r:index')
   , async    = require('async')
-  , express  = require('express')
+  , router   = require('express').Router()
 
 var util   = require('../lib/util')
   , parse    = require('../lib/parse')
   , ts       = require('../lib/timestamp')
   , sort     = require('../lib/sort')
-
-var router = express.Router()
 
 function handleIndex (req, res, next) {
   // req.params.branch, res.locals.branch, and res.locals.branches always

@@ -28,6 +28,7 @@ var fs       = require('fs')
   , path     = require('path')
   , debug    = require('debug')('f:r:report')
   , async    = require('async')
+  , router   = require('express').Router()
 
 var util     = require('../lib/util')
   , parse    = require('../lib/parse')
@@ -85,4 +86,10 @@ function handleReport (slot, date, res, next) {
   })
 }
 
-module.exports = handleReport
+router.get('/report/:slot/:time', function (req, res, next) {
+  handleReport(req.params.slot, req.params.time, res, next)
+})
+router.get('/report.cgi', function (req, res, next) {
+  handleReport(req.query.slot, req.query.time, res, next)
+})
+module.exports = router

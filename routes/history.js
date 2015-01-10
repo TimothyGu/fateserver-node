@@ -28,6 +28,7 @@ var fs       = require('fs')
   , path     = require('path')
   , debug    = require('debug')('f:r:history')
   , async    = require('async')
+  , router   = require('express').Router()
 
 var util     = require('../lib/util')
   , parse    = require('../lib/parse')
@@ -79,4 +80,11 @@ function handleHistory (slot, begin, res, next) {
   })
 }
 
-module.exports = handleHistory
+router.get('/history/:slot', function (req, res, next) {
+  handleHistory(req.params.slot, req.query.begin, res, next)
+})
+router.get('/history.cgi', function (req, res, next) {
+  handleHistory(req.query.slot, req.query.begin, res, next)
+})
+
+module.exports = router

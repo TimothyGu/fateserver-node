@@ -27,6 +27,7 @@
 var fs       = require('fs')
   , path     = require('path')
   , debug    = require('debug')('f:r:log')
+  , router   = require('express').Router()
 
 var util     = require('../lib/util')
   , parse    = require('../lib/parse')
@@ -64,4 +65,10 @@ function handleLog (slot, date, log, req, res, next) {
   })
 }
 
-module.exports = handleLog
+router.get('/log/:slot/:time/:log', function (req, res, next) {
+  handleLog(req.params.slot, req.params.time, req.params.log, req, res, next)
+})
+router.get('/log.cgi', function (req, res, next) {
+  handleLog(req.query.slot, req.query.time, req.query.log, req, res, next)
+})
+module.exports = router

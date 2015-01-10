@@ -130,6 +130,6 @@ function handleTestAPI (req, res, next) {
 }
 
 router.get('/api/:slot/:date', handleReportAPI)
-
 router.get('/api/:slot/:date/:test', handleTestAPI)
+
 module.exports = router

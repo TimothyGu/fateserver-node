@@ -78,35 +78,17 @@ app.use(function (req, res, next) {
 app.use(morgan('short'))
 
 // ROUTING
-app.get('/log/:slot/:time/:log', function (req, res, next) {
-  log(req.params.slot, req.params.time, req.params.log, req, res, next)
-})
-app.get('/log.cgi', function (req, res, next) {
-  log(req.query.slot, req.query.time, req.query.log, req, res, next)
-})
+app.use(log)
 
 // Intentioanlly move log before auto-compression because we deal with it
 // differently.
 app.use(compression({ threshold: '1kb' }))
 
-app.use(express.static(path.join(__dirname, 'public')))
-
-app.get('/history/:slot', function (req, res, next) {
-  history(req.params.slot, req.query.begin, res, next)
-})
-app.get('/history.cgi', function (req, res, next) {
-  history(req.query.slot, req.query.begin, res, next)
-})
-
-app.get('/report/:slot/:time', function (req, res, next) {
-  report(req.params.slot, req.params.time, res, next)
-})
-app.get('/report.cgi', function (req, res, next) {
-  report(req.query.slot, req.query.time, res, next)
-})
-
+app.use(report)
+app.use(history)
 app.use(index)
 app.use(api)
+app.use(express.static(path.join(__dirname, 'public')))
 
 // ERROR HANDLING
 
