@@ -15,23 +15,25 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+@Cpass:   #5cb85c;
+@Cfail:   #d9534f;
+@Cwarn:   #ffeb3b;
+@Cmain:   hsl(0, 0%, 19%);
+@Cinvert: hsl(0, 0%, 90%);
+
 .recent  { font-weight: bold; }
 .ancient { color: #888; }
 
-.table-responsive {
-    border: none;
-}
-
 .fail {
-    background: #d9534f !important;
+    background: @Cfail !important;
     color: white;
- }
+}
 .pass {
-    background: #5cb85c !important;
+    background: @Cpass !important;
     color: white;
 }
 .warn {
-    background: #ecd046 !important;
+    background: @Cwarn !important;
     color: black;
 }
 
@@ -42,21 +44,21 @@
     > th.pass,
     &.pass > td,
     &.pass > th {
-        background-color: #5cb85c;
+        background-color: @Cpass;
         color: white;
     }
     > td.fail,
     > th.fail,
     &.fail > td,
     &.fail > th {
-        background-color: #d9534f;
+        background-color: @Cfail;
         color: white;
     }
     > td.warn,
     > th.warn,
     &.warn > td,
     &.warn > th {
-        background-color: #ecd046;
+        background-color: @Cwarn;
         color: black;
     }
 }
@@ -129,12 +131,12 @@ table.minirep {
 }
 
 #tests .fail th {
-    background: #d9534f;
+    background: @Cfail;
     border-bottom: 2px solid #fcc;
 }
 
 #tests .pass th {
-    background: #5cb85c;
+    background: @Cpass;
     border-bottom: 2px solid #9f9;
     border-top: 0;
 }
@@ -173,7 +175,7 @@ pre {
 /* Button style */
 .btn-fail {
     color: #fff;
-    background-color: #d9534f;
+    background-color: @Cfail;
     border-color: #d4403a;
 }
 .btn-fail:hover,
@@ -187,7 +189,7 @@ pre {
 }
 .btn-pass {
     color: #fff;
-    background-color: #5cb85c;
+    background-color: @Cpass;
     border-color: #4cae4c;
 }
 .btn-pass:hover,
@@ -203,3 +205,13 @@ a.btn-default {
     color: #333;
 }
 
+/* Tab Styles */
+.nav-tabs > li {
+  &.active > a {
+    &,
+    &:hover,
+    &:focus {
+      color: @Cmain;
+    }
+  }
+}
