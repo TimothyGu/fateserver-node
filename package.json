@@ -8,6 +8,7 @@
   },
   "license": "MIT",
   "author": "Timothy Gu <timothygu99@gmail.com>",
+  "private": true,
   "scripts": {
     "start": "$(npm bin)/nodemon ./bin/www",
     "docs": "$(npm bin)/jsdoc -c jsdoc.json",
