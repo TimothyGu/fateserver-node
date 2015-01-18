@@ -20,15 +20,15 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- */%>
+ */-%>
 
-<% var l = locals %>
+<% var l = locals -%>
 
-<% include header1.ejs %>
+<% include header1.ejs -%>
 <title><%= l.util.branding %> FATE</title>
-<% include header2.ejs %>
+<% include header2.ejs -%>
 <%= l.util.branding %> FATE
-<% include header3.ejs %>
+<% include header3.ejs -%>
 
 <p>
   The FFmpeg Automated Testing Environmnet is the continuous integration
@@ -42,15 +42,15 @@
 </p>
 
 <ul class="nav nav-tabs" role="tablist">
-<% for (var i = 0; i < l.branches.length; i ++) { %>
+<% for (var i = 0; i < l.branches.length; i ++) { -%>
   <li role="presentation"
-    <% if (l.branches[i] === l.branch) { %>
+    <% if (l.branches[i] === l.branch) { -%>
       class="active"
-    <% } %>
+    <% } -%>
   >
     <a href="/<%- l.branches[i] %>"><%= l.branches[i] %></a>
   </li>
-<% } %>
+<% } -%>
 </ul>
 
 <div class="table-responsive">
@@ -63,8 +63,8 @@
                   , cc     : 'xs,phone'
                   , rev    : 'xs,phone,sm'
                   , subarch: 'xs'
-                  } %>
-    <% include replist.ejs %>
+                  } -%>
+    <% include replist.ejs -%>
   </table>
 </div>
-<% include footer.ejs %>
+<% include footer.ejs -%>

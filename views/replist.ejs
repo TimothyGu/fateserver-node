@@ -20,7 +20,7 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- */%>
+ */-%>
 
 <%/*
  * To use this, do something like this:
@@ -31,14 +31,14 @@
  *
  * Then include this file. The input array of summaries must be in
  * `l.reps`.
- */%>
+ */-%>
 
-<% var now = l.moment.utc() %>
+<% var now = l.moment.utc() -%>
 <% propsToDisplay = propsToDisplay || [
                       'date', 'rev', 'subarch', 'os'
                     , 'cc', 'nwarn', 'results'
-                    ] %>
-<% hide = hide || {} %>
+                    ] -%>
+<% hide = hide || {} -%>
 
 <% var headings = { date      : 'Time'
                   ,'date-link': 'Time'
@@ -53,37 +53,37 @@
    , fooTableOp = { nwarn     : 'data-ignore="true" data-type="numeric" '
                   , comment   : 'data-sort-ignore="true" '
                   }
-   %>
+   -%>
 
 <thead><tr>
-<% for (var j = 0; j < propsToDisplay.length; j++) { %>
-  <% var prop = propsToDisplay[j] %>
+<% for (var j = 0; j < propsToDisplay.length; j++) { -%>
+  <% var prop = propsToDisplay[j] -%>
   <th data-hide="<%- hide[prop] || '' %>" <%- fooTableOp[prop] %>>
     <%= headings[propsToDisplay[j]] %>
   </th>
-<% } %>
+<% } -%>
 </tr></thead>
 
 <tbody>
-<% for (var i = 0; i < l.reps.length; i++) { %>
-  <% var rep = l.reps[i] %>
-  <% var repClass = '' %>
-  <% var repMoment = l.ts.getMoment(rep.date) %>
+<% for (var i = 0; i < l.reps.length; i++) { -%>
+  <% var rep = l.reps[i] -%>
+  <% var repClass = '' -%>
+  <% var repMoment = l.ts.getMoment(rep.date) -%>
   <% if (now.unix() < repMoment.unix() + l.ts.RECENT_AGE) {
       repClass = 'recent'
     } else if (now.unix() > repMoment.unix() + l.ts.ANCIENT_AGE) {
       repClass = 'ancient'
     } else if (now.unix() > repMoment.unix() + l.ts.HIDDEN_AGE) {
       continue
-    } %>
+    } -%>
   <tr class="<%= repClass %>">
-    <% for (var j = 0; j < propsToDisplay.length; j++) { %>
-      <% var prop = propsToDisplay[j] %>
-      <% if (prop === 'date') { %>
+    <% for (var j = 0; j < propsToDisplay.length; j++) { -%>
+      <% var prop = propsToDisplay[j] -%>
+      <% if (prop === 'date') { -%>
         <td>
           <%= l.ts.formatDate(repMoment) %>
         </td>
-      <% } else if (prop === 'date-link') { %>
+      <% } else if (prop === 'date-link') { -%>
         <td>
           <a href="<%= '/history/' + rep.slot %>"
              title="View history for <%= rep.slot %>"
@@ -91,22 +91,22 @@
             <%= l.ts.formatDate(repMoment) %>
           </a>
         </td>
-      <% } else if (prop === 'rev') { %>
+      <% } else if (prop === 'rev') { -%>
         <td>
           <%- l.util.linkGitHist(rep.rev) %>
         </td>
-      <% } else if (prop === 'results') { %>
+      <% } else if (prop === 'results') { -%>
         <td class="<%- rep.rclass %>"
             data-value="<%- rep.status %><%- rep.rtext %>">
           <a href="<%= '/report/' + rep.slot + '/' + rep.date %>">
             <%= rep.rtext %>
           </a>
         </td>
-      <% } else { %>
+      <% } else { -%>
         <td><%= rep[prop] %></td>
-      <% } %>
+      <% } -%>
       </td>
-    <% } %>
+    <% } -%>
   </tr>
-<% } %>
+<% } -%>
 </tbody>

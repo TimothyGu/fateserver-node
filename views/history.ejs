@@ -20,15 +20,15 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- */%>
+ */-%>
 
-<% var l = locals %>
+<% var l = locals -%>
 
-<% include header1.ejs %>
+<% include header1.ejs -%>
 <title>Slot <%= l.slot %> - <%= l.util.branding %> FATE</title>
-<% include header2.ejs %>
+<% include header2.ejs -%>
 Report history for <%= l.slot %>
-<% include header3.ejs %>
+<% include header3.ejs -%>
 
 <ul class="pager">
   <li class="previous">
@@ -76,24 +76,24 @@ Report history for <%= l.slot %>
          , hide = {
              rev  : 'xs,phone'
            , nwarn: 'xs,phone,sm'
-           } %>
-    <% include replist.ejs %>
+           } -%>
+    <% include replist.ejs -%>
   </table>
 </div>
 <nav>
   <ul class="pager">
-    <% if (l.begin !== 0) { %>
-      <% var prevBegin = Math.max(0, l.begin - l.nEntries) %>
+    <% if (l.begin !== 0) { -%>
+      <% var prevBegin = Math.max(0, l.begin - l.nEntries) -%>
       <li><a href="/history/<%= l.slot %>?begin=<%= prevBegin %>">Previous</a></li>
-    <% } else { %>
+    <% } else { -%>
       <li class="disabled"><a href="#">Previous</a></li>
-    <% } %>
-    <% if (l.total > l.begin + l.nEntries) { %>
+    <% } -%>
+    <% if (l.total > l.begin + l.nEntries) { -%>
       <li><a href="/history/<%= l.slot %>?begin=<%= l.begin + l.nEntries %>">Next</a></li>
-    <% } else { %>
+    <% } else { -%>
       <li class="disabled"><a href="#">Next</a></li>
-    <% } %>
+    <% } -%>
   </ul>
 </nav>
-<% include footer.ejs %>
+<% include footer.ejs -%>
 
