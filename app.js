@@ -49,16 +49,11 @@ var ts      = require('./lib/timestamp')
   , util    = require('./lib/util')
 
 var app = express()
-app.set('env', util.env)
 
 // VIEW ENGINE SETUP
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 
-if (app.get('env') !== 'development') {
-    app.enable('view cache')
-  debug('Cache enabled')
-}
 /*
 app.use(function (req, res, next) {
   debug(req.headers)

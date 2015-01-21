@@ -2,8 +2,7 @@
 // this is not proper JSON but instead a JavaScript script designed to be
 // require()ed
 module.exports = {
-  env: 'production'
-, port: 80
+  port: 80
 , branding: 'FFmpeg'
 , cpus: 1
 , dir: '/var/www/fateweb'
