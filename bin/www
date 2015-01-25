@@ -30,6 +30,21 @@ var cluster = require('cluster')
 
 var util = require('../lib/util')
 
+function dropSudo () {
+  try {
+    console.log('Current uid: ' + process.getuid())
+    console.log('Current gid: ' + process.getgid())
+    process.initgroups(process.env.SUDO_USER, +process.env.SUDO_GID)
+    console.log('Dropping sudo group privileges as ' + process.env.SUDO_GID)
+    process.setgid(+process.env.SUDO_GID)
+    console.log('Dropping sudo privileges as ' + process.env.SUDO_UID)
+    process.setuid(+process.env.SUDO_UID)
+  } catch (e) {
+    console.log('Cowardly refusing to keep the process alive as root.')
+    throw e
+  }
+}
+
 if (cluster.isMaster) {
   // Create a worker for each CPU
   for (var i = 0; i < util.cpus; i++) {
@@ -43,5 +58,8 @@ if (cluster.isMaster) {
 
   var server = app.listen(app.get('port'), function () {
     console.log('Express server listening on port ' + server.address().port)
+    if (process.env.SUDO_UID || process.env.SUDO_GID) {
+      dropSudo()
+    }
   })
 }
