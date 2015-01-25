@@ -53,6 +53,7 @@ var app = express()
 // VIEW ENGINE SETUP
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
+app.engine('ejs', require('ejs-tj').__express)
 
 /*
 app.use(function (req, res, next) {
