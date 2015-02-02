@@ -36,39 +36,54 @@ Report history for <%= l.slot %>
   </li>
 </ul>
 
-<div class="table-responsive">
+<%
+  var info = [
+  //[ human readable,  variable,          escape?, skip if empty? ] 
+    [ 'Owner',         l.owner ]
+  , [ 'Architecture',  l.reps[0].subarch ]
+  , [ 'OS',            l.reps[0].os ]
+  , [ 'Compiler',      l.reps[0].cc ]
+  , [ 'Configuration', '<code>' + l.util.formatConfig(l.reps[0].config) + '</code>', true ]
+  , [ 'Comment',       l.reps[0].comment, false,   true ]
+  ]
+ %>
+
+<div class="hidden-xs table-responsive">
   <table class="table" id="config">
     <thead>
       <tr><th colspan="2">Information of the Last Run</th></tr>
     </thead>
     <tbody>
-      <tr>
-        <th>Owner</th>
-        <td><%= l.owner %></td>
-      </tr>
-      <tr>
-        <th>Architecture</th>
-        <td><%= l.reps[0].subarch %></td>
-      </tr>
-      <tr>
-        <th>OS</th>
-        <td><%= l.reps[0].os %></td>
-      </tr>
-      <tr>
-        <th>Compiler</th>
-        <td><%= l.reps[0].cc %></td>
-      </tr>
-      <tr>
-        <th>Configuration</th>
-        <td><code><%- l.util.formatConfig(l.reps[0].config) %></code></td>
-      </tr>
-      <tr>
-        <th>Comment</th>
-        <td><%= l.reps[0].comment %></td>
-      </tr>
+      <% for (var i = 0; i < info.length; i ++ ) { %>
+        <% var prop = info[i] %>
+        <% if (prop[3] && !prop[1]) continue %>
+        <tr>
+          <th><%- prop[0] %></th>
+          <% if (prop[2]) { %>
+            <td><%- prop[1] %></td>
+          <% } else { %>
+            <td><%= prop[1] %></td>
+          <% } %>
+        </tr>
+      <% } %>
     </tbody>
   </table>
 </div>
+
+<dl class="visible-xs-block dl-config">
+  <% for (var i = 0; i < info.length; i ++ ) { %>
+    <% var prop = info[i] %>
+    <% if (prop[3] && !prop[1]) continue %>
+    <dt><%- prop[0] %></dt>
+    <dd>
+      <% if (prop[2]) { %>
+        <%- prop[1] %>
+      <% } else { %>
+        <%= prop[1] %>
+      <% } %>
+    </dd>
+  <% } %>
+</dl>
 
 <div class="table-responsive">
   <table class="replist table footable" id="history">

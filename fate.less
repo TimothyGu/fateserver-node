@@ -18,8 +18,15 @@
 @Cpass:   #5cb85c;
 @Cfail:   #d9534f;
 @Cwarn:   #ffeb3b;
-@Cmain:   hsl(0, 0%, 19%);
+
 @Cinvert: hsl(0, 0%, 90%);
+@Cmain:                 hsl(0, 0%,    19%);
+@Cmaindark:          darken(@Cmain,    5%);
+@Cmaindarkdark:      darken(@Cmain,   10%);
+@Cborder:            darken(@Cmain,   13%);
+@Cmainlight:        lighten(@Cmain,    5%);
+@Cmainlightlight:   lighten(@Cmain,   10%);
+@Cmainlightlightl:  lighten(@Cmain,   55%);
 
 .recent  { font-weight: bold; }
 .ancient { color: #888; }
@@ -60,6 +67,24 @@
     &.warn > th {
         background-color: @Cwarn;
         color: black;
+    }
+}
+
+.dl-config {
+    background-color: white;
+    > dd {
+        margin-left: 0;
+        padding: 8px;
+        background-color: @Cmaindark;
+        > code {
+            width: 100%;
+            overflow-y: auto;
+        }
+    }
+    > dt {
+        padding: 8px;
+        background-color: @Cmainlightlight;
+        border-bottom: 2px solid @Cmainlightlightl;
     }
 }
 
