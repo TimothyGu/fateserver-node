@@ -95,6 +95,12 @@
         <td>
           <%- l.util.linkGitHist(rep.rev) %>
         </td>
+      <% } else if (prop === 'nwarn') { -%>
+        <td>
+          <a href="<%= [ '/log', rep.slot, rep.date, 'compile' ].join('/') %>">
+            <%= rep.nwarn %>
+          </a>
+        </td>
       <% } else if (prop === 'results') { -%>
         <td class="<%- rep.rclass %>"
             data-value="<%- rep.status %><%- rep.rtext %>">
