@@ -35,8 +35,7 @@ var util     = require('../lib/util')
   , parse    = require('../lib/parse')
   , ts       = require('../lib/timestamp')
   , sort     = require('../lib/sort')
-  , cache    = require('../lib/cache').cache
-  , cacheLock = require('../lib/cache').lock
+  , cache    = require('../lib/cache')
 
 var router = express.Router()
 
@@ -92,7 +91,7 @@ function handleTestAPI (req, res, next) {
 
   var cacheName = ['report', 'lut', slot, date].join('_')
   var cacheHasIt = false
-  cacheLock.readLock(function (release) {
+  cache.lock.readLock(function (release) {
     if (cache.has(cacheName)) {
       debug('cache hit')
       var lut = cache.get(cacheName)
@@ -115,7 +114,7 @@ function handleTestAPI (req, res, next) {
     for (var i = 0; i < obj.length; i++) {
       lut[obj[i].name] = obj[i]
     }
-    cacheLock.writeLock(function (release) {
+    cache.lock.writeLock(function (release) {
       cache.set(cacheName, lut)
       release()
     })
