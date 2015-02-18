@@ -121,7 +121,7 @@ function handleTestAPI (req, res, next) {
     if (lut.hasOwnProperty(test)) {
       return res.json(lut[test])
     }
-    var err = new Error('Test "' + test + '" not found')
+    err.message = 'Test "' + test + '" not found'
     err.json = true
     err.status = 404
     next(err)
