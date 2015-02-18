@@ -37,14 +37,15 @@ var util   = require('../lib/util')
   , sort     = require('../lib/sort')
 
 function handleIndex (req, res, next) {
+  var branch
   // req.params.branch, res.locals.branch, and res.locals.branches always
   // contain the short branch name (e.g. v2.4).
   // branch always contains the vanilla branch name.
   if (req.params.branch) {
     res.locals.branch = req.params.branch
-    var branch = req.params.branch.replace(/^v([0-9])/, 'release/$1')
+    branch = req.params.branch.replace(/^v([0-9])/, 'release/$1')
   } else {
-    var branch = 'master'
+    branch = 'master'
     res.locals.branch = 'master'
   }
   fs.readdir(util.dir, function handleSlots (err, slots) {
