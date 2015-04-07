@@ -50,7 +50,9 @@
                   , nwarn     : 'Warnings'
                   , results   : 'Results'
                   }
-   , fooTableOp = { nwarn     : 'data-ignore="true" data-type="numeric" '
+   , fooTableOp = { date      : 'data-type="numeric"'
+                  ,'date-link': 'data-type="numeric"'
+                  , nwarn     : 'data-ignore="true" data-type="numeric" '
                   , comment   : 'data-sort-ignore="true" '
                   }
    -%>
@@ -80,11 +82,11 @@
     <% for (var j = 0; j < propsToDisplay.length; j++) { -%>
       <% var prop = propsToDisplay[j] -%>
       <% if (prop === 'date') { -%>
-        <td>
+        <td data-value="<%- repMoment.unix() %>">
           <%= l.ts.formatDate(repMoment) %>
         </td>
       <% } else if (prop === 'date-link') { -%>
-        <td>
+        <td data-value="<%- repMoment.unix() %>">
           <a href="<%= '/history/' + rep.slot %>"
              title="View history for <%= rep.slot %>"
              aria-label="View history for this slot">
