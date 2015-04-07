@@ -106,6 +106,7 @@ function handleIndex (req, res, next) {
           // The server side sorting is only for default sorting.
           // Client-side sorting through FooTable handles
           // everything else.
+          // XXX: should we implement CGI-style server-side sorting too?
           var sortingKeys = ['subarch', 'os', 'cc', 'comment', 'slot']
           res.locals.reps =
             reps
