@@ -27,9 +27,6 @@
 
 var cluster = require('cluster')
   , debug = require('debug')('f:www')
-  , axm = require('axm')
-
-axm.catchAll()
 
 var util = require('../lib/util')
 
