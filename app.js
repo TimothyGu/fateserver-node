@@ -29,8 +29,6 @@ var express = require('express')
   , debug   = require('debug')('f:app')
   , morgan  = require('morgan')
   , compression = require('compression')
-  , toobusy = require('toobusy')
-toobusy.maxLag(100)
 
 try {
   var memwatch = require('memwatch')
@@ -38,6 +36,10 @@ try {
 } catch (ex) {
   // ignored
 }
+
+try {
+  var toobusy = require('toobusy')
+} catch (ex) {}
 
 var index   = require('./routes/index')
   , history = require('./routes/history')
@@ -68,7 +70,7 @@ app.locals.moment = require('moment')
 app.locals.util   = util
 
 app.use(function (req, res, next) {
-  if (toobusy()) {
+  if (toobusy && toobusy()) {
     res.status(503).send("Server too busy. Please try again later.")
   } else {
     next()
