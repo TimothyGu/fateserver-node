@@ -90,18 +90,17 @@ function handleIndex (req, res, next) {
           // If the slot is marked as hidden then skip over it.
           // All the null members of the array will be cleaned at
           // the end().
-          if (fs.existsSync(path.join(slotdir, 'hidden'))) {
-            return out(null, null)
-          }
-
-          // Load summary
-          parse.loadSummary(slot, 'latest',
-                    function summaryCb (err, summary) {
-            // Ignore possible errors in one specific report in order
-            // not to destroy the entire history page.
-            // Also check if the branches match.
-            return out(null, (!err && summary.branch === branch)
-                           ? summary : null)
+          fs.exists(path.join(slotdir, 'hidden'), function (exists) {
+            if (exists) return out(null, null)
+            // Load summary
+            parse.loadSummary(slot, 'latest',
+                              function summaryCb (err, summary) {
+              // Ignore possible errors in one specific report in order
+              // not to destroy the entire history page.
+              // Also check if the branches match.
+              return out(null, (!err && summary.branch === branch)
+                             ? summary : null)
+            })
           })
         }, function end (err, reps) {
           // The server side sorting is only for default sorting.
