@@ -25,6 +25,7 @@
 'use strict'
 
 var express = require('express')
+  , fs      = require('fs')
   , path    = require('path')
   , debug   = require('debug')('f:app')
   , morgan  = require('morgan')
@@ -49,6 +50,11 @@ var index   = require('./routes/index')
 
 var ts      = require('./lib/timestamp')
   , util    = require('./lib/util')
+  , config  = {}
+
+try {
+  config    = require('./config')
+} catch (ex) {}
 
 var app = express()
 
@@ -70,7 +76,16 @@ app.use(function (req, res, next) {
   }
 })
 
-app.use(morgan('short'))
+if (app.get('env') === 'development') {
+  app.use(morgan('short'))
+} else {
+  app.use(morgan('combined', {
+    stream: fs.createWriteStream(
+              config['access.log'] || (__dirname + '/access.log')
+            , { flags: 'a' }
+            )
+  }))
+}
 
 // ROUTING
 app.use(log)
