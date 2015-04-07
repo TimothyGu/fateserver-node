@@ -45,7 +45,7 @@ function dropSudo () {
   }
 }
 
-if (cluster.isMaster) {
+if (cluster.isMaster && util.cpus >= 2) {
   // Create a worker for each CPU
   for (var i = 0; i < util.cpus; i++) {
     console.log('Worker ' + i + ' spawned.')
