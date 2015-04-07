@@ -57,13 +57,6 @@ app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 app.engine('ejs', require('ejs-tj').__express)
 
-/*
-app.use(function (req, res, next) {
-  debug(req.headers)
-  next()
-})
-*/
-
 // EJS LOCALS
 app.locals.ts     = ts
 app.locals.moment = require('moment')
