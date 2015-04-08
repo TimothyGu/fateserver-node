@@ -72,12 +72,12 @@
   <% var repClass = '' -%>
   <% var repMoment = l.ts.getMoment(rep.date) -%>
   <% if (now.unix() < repMoment.unix() + l.ts.RECENT_AGE) {
-      repClass = 'recent'
-    } else if (now.unix() > repMoment.unix() + l.ts.HIDDEN_AGE) {
-      continue
-    } else if (now.unix() > repMoment.unix() + l.ts.ANCIENT_AGE) {
-      repClass = 'ancient'
-    } -%>
+       repClass = 'recent'
+     } else if (now.unix() > repMoment.unix() + l.ts.HIDDEN_AGE) {
+       continue
+     } else if (now.unix() > repMoment.unix() + l.ts.ANCIENT_AGE) {
+       repClass = 'ancient'
+     } -%>
   <tr class="<%= repClass %>">
     <% for (var j = 0; j < propsToDisplay.length; j++) { -%>
       <% var prop = propsToDisplay[j] -%>
