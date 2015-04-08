@@ -49,8 +49,6 @@ function handleHistory (slot, begin, res, next) {
     }
 
     res.locals.slot    = slot
-    res.locals.owner   = parse.getSlotOwner(slot)
-
     var repsNames = files.filter(function (val) {
       return val.match(/^[0-9]/)
     })
@@ -75,7 +73,10 @@ function handleHistory (slot, begin, res, next) {
           .sort(sort.by('desc-date'))  // Newest to oldest
           .slice(begin, begin + nEntries)
       res.locals.total = reps.length
-      res.render('history.ejs', { _with: false })
+      parse.getSlotOwner(slot, function (e, owner) {
+        res.locals.owner = owner
+        res.render('history.ejs', { _with: false })
+      })
     })
   })
 }

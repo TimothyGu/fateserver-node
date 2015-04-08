@@ -44,10 +44,7 @@ function handleReport (slot, date, res, next) {
   res.locals.date = date
 
   async.parallel({
-    owner: function (callback) {
-      var owner = parse.getSlotOwner(slot)
-      callback(null, owner)
-    }
+    owner: parse.getSlotOwner.bind(null, slot)
   , summary: function (callback) {
       parse.loadSummary(slot, date, callback)
     }
