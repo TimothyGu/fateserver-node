@@ -115,7 +115,10 @@ function handleIndex (req, res, next) {
               // not to destroy the entire history page.
               if (err || !check(summary)) return out(null, null)
               
-              out(null, summary)
+              parse.loadSummary(slot, 'previous', function prevCb (err, prev) {
+                if (err || !prev) return out(null, [ summary ])
+                out(null, [ summary, prev ])
+              })
             })
           })
         }, function end (err, reps) {
@@ -129,7 +132,9 @@ function handleIndex (req, res, next) {
                 // Filter out null/invalid ones
                 return n != null
               })
-              .sort(defaultSortingFn)
+              .sort(function (a, b) {
+                return defaultSortingFn(a[0], b[0]) 
+              })
           done()
         })
       }

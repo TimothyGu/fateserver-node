@@ -68,7 +68,14 @@
 
 <tbody>
 <% for (var i = 0; i < l.reps.length; i++) { -%>
-  <% var rep = l.reps[i] -%>
+  <%# When `compareWithPrev` is true rep is the current one, while `prevRep`
+    # is, well, the previous one. When it's false `prevRep` is undefined. %>
+  <% var rep = l.reps[i]
+       , prevRep = undefined -%>
+  <% if (compareWithPrev) {
+       prevRep = rep[1]
+       rep     = rep[0]
+     } -%>
   <% var repClass = '' -%>
   <% var repMoment = l.ts.getMoment(rep.date) -%>
   <% if (now.unix() < repMoment.unix() + l.ts.RECENT_AGE) {
@@ -77,6 +84,18 @@
        continue
      } else if (now.unix() > repMoment.unix() + l.ts.ANCIENT_AGE) {
        repClass = 'ancient'
+     } -%>
+  <% if (prevRep) {
+       var passedMoreThanFailed = rep.npass > rep.nfail
+       if (prevRep.status > rep.status
+        || passedMoreThanFailed ? prevRep.nfail > rep.nfail
+                                : prevRep.npass < rep.npass) {
+         repClass += ' pass'
+       } else if (prevRep.status < rep.status
+               || passedMoreThanFailed ? prevRep.nfail < rep.nfail
+                                       : prevRep.npass > rep.npass) {
+         repClass += ' warn'
+       }
      } -%>
   <tr class="<%= repClass %>">
     <% for (var j = 0; j < propsToDisplay.length; j++) { -%>
