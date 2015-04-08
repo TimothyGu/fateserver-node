@@ -3,9 +3,7 @@
 function toggle (name, mode) {
   var id = name.replace(/\./g, '\\.') + '-' + mode
     , e = $('#' + id)
-    , activating
-  if (e.css('display') === 'none') activating = 1
-  else                             activating = 0
+    , activating = e.css('display') === 'none'
   e.css('display', activating ? 'table-row' : 'none')
   $('#' + id + '-btn').toggleClass('active')
   if (activating) {
