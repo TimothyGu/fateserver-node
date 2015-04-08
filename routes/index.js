@@ -36,6 +36,16 @@ var util   = require('../lib/util')
   , ts       = require('../lib/timestamp')
   , sort     = require('../lib/sort')
 
+function checkQuery (check, src) {
+  if (!src) return false
+  var keys = Object.keys(check)
+  for (var i = 0; i < keys.length; i++) {
+    var key = check[keys[i]]
+    if (check[key] !== src[key]) return false
+  }
+  return true
+}
+
 function handleIndex (req, res, next) {
   var branch
   // req.params.branch, res.locals.branch, and res.locals.branches always
@@ -48,6 +58,9 @@ function handleIndex (req, res, next) {
     branch = 'master'
     res.locals.branch = 'master'
   }
+  // TODO
+  var check = checkQuery.bind({ branch: branch })
+
   fs.readdir(util.dir, function handleSlots (err, slots) {
     if (err) {
       err.message = 'util.dir not found. Did you set up config.js'
@@ -97,9 +110,9 @@ function handleIndex (req, res, next) {
                               function summaryCb (err, summary) {
               // Ignore possible errors in one specific report in order
               // not to destroy the entire history page.
-              // Also check if the branches match.
-              return out(null, (!err && summary.branch === branch)
-                             ? summary : null)
+              if (err || !check(summary)) return out(null, null)
+              
+              out(null, summary)
             })
           })
         }, function end (err, reps) {
