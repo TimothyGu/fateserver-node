@@ -131,7 +131,9 @@ Report of <%= l.slot %> <%= l.summary.rev %>
         <tr>
           <th>Date</th>
           <% var m = l.ts.getMoment(l.summary.date) -%>
-          <td><%= m.format('YYYY-MM-DD hh:mm:ss') %> UTC (<%= m.fromNow() %>)</td>
+          <td><time datetime="<%- m.format() %>">
+            <%- m.format('YYYY-MM-DD hh:mm:ss') %> UTC (<%= m.fromNow() %>)
+          </time></td>
         </tr>
         <tr>
           <th>Warnings</th>

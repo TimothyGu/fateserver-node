@@ -102,14 +102,14 @@
       <% var prop = propsToDisplay[j] -%>
       <% if (prop === 'date') { -%>
         <td data-value="<%- repMoment.unix() %>">
-          <%= l.ts.formatDate(repMoment) %>
+          <%- l.ts.formatDate(repMoment) %>
         </td>
       <% } else if (prop === 'date-link') { -%>
         <td data-value="<%- repMoment.unix() %>">
           <a href="<%= '/history/' + rep.slot %>"
              title="View history for <%= rep.slot %>"
              aria-label="View history for this slot">
-            <%= l.ts.formatDate(repMoment) %>
+            <%- l.ts.formatDate(repMoment) %>
           </a>
         </td>
       <% } else if (prop === 'rev') { -%>
