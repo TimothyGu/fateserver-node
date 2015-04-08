@@ -1,8 +1,8 @@
 [
   { "name"            : "main"
   , "script"          : "bin/www"
-  , "error_file"      : "logs/stderr.log"
-  , "out_file"        : "logs/stdout.log"
+  , "error_file"      : "logs/stdio.log"
+  , "out_file"        : "logs/stdio.log"
   , "watch"           : true
   , "exec_mode"       : "cluster"
   , "instances"       : 2
