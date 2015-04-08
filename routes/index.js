@@ -36,6 +36,9 @@ var util   = require('../lib/util')
   , ts       = require('../lib/timestamp')
   , sort     = require('../lib/sort')
 
+var defaultSortingKeys = ['subarch', 'os', 'cc', 'comment', 'slot']
+  , defaultSortingFn   = sort.byKeys(defaultSortingKeys)
+
 function checkQuery (check, src) {
   if (!src) return false
   var keys = Object.keys(check)
@@ -120,14 +123,13 @@ function handleIndex (req, res, next) {
           // Client-side sorting through FooTable handles
           // everything else.
           // XXX: should we implement CGI-style server-side sorting too?
-          var sortingKeys = ['subarch', 'os', 'cc', 'comment', 'slot']
           res.locals.reps =
             reps
               .filter(function (n) {
                 // Filter out null/invalid ones
                 return n != null
               })
-              .sort(sort.byKeys(sortingKeys))
+              .sort(defaultSortingFn)
           done()
         })
       }
