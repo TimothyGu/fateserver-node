@@ -4,8 +4,7 @@
 module.exports = {
   port: 80
 , branding: 'FFmpeg'
-, cpus: 1
 , dir: '/var/www/fateweb'
 , cache: 50
-,'access.log': 'access.log'
+,'access.log': 'logs/access.log'
 }
