@@ -25,8 +25,7 @@
 
 'use strict'
 
-var cluster = require('cluster')
-  , debug = require('debug')('f:www')
+var debug = require('debug')('f:www')
 
 var util = require('../lib/util')
 
@@ -45,21 +44,13 @@ function dropSudo () {
   }
 }
 
-if (cluster.isMaster && util.cpus >= 2) {
-  // Create a worker for each CPU
-  for (var i = 0; i < util.cpus; i++) {
-    console.log('Worker ' + i + ' spawned.')
-    cluster.fork()
+var app = require('../app')
+
+app.set('port', util.port)
+
+var server = app.listen(app.get('port'), function () {
+  console.log('Express server listening on', server.address().port)
+  if (process.env.SUDO_UID || process.env.SUDO_GID) {
+    dropSudo()
   }
-} else {
-  var app = require('../app')
-
-  app.set('port', util.port)
-
-  var server = app.listen(app.get('port'), function () {
-    console.log('Express server listening on port ' + server.address().port)
-    if (process.env.SUDO_UID || process.env.SUDO_GID) {
-      dropSudo()
-    }
-  })
-}
+})
