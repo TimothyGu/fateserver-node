@@ -62,7 +62,7 @@ function handleIndex (req, res, next) {
     res.locals.branch = 'master'
   }
   // TODO
-  var check = checkQuery.bind({ branch: branch })
+  var check = checkQuery.bind(null, { branch: branch })
 
   fs.readdir(util.dir, function handleSlots (err, slots) {
     if (err) {
