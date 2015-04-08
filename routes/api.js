@@ -45,15 +45,9 @@ function handleReportAPI (req, res, next) {
 
   async.parallel({
     owner: parse.getSlotOwner.bind(null, slot)
-  , summary: function (callback) {
-      parse.loadSummary(slot, date, callback)
-    }
-  , report: function (callback) {
-      parse.loadReport(slot, date, 0, callback)
-    }
-  , lastpass: function (callback) {
-      parse.loadLastPass(slot, callback)
-    }
+  , summary: parse.loadSummary.bind(null, date)
+  , report: parse.loadReport.bind(null, slot, date, 0)
+  , lastpass: parse.loadLastPass.bind(null, slot)
   , prevDate: function (callback) {
       fs.readdir(path.join(util.dir, slot), function (err, files) {
         if (err) {
