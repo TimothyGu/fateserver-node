@@ -130,7 +130,8 @@ function handleIndex (req, res, next) {
             reps
               .filter(function (n) {
                 // Filter out null/invalid ones
-                return n != null
+                // Also hack to make broken results invisible
+                return n != null && n[0].os
               })
               .sort(function (a, b) {
                 return defaultSortingFn(a[0], b[0]) 

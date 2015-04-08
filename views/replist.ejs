@@ -76,8 +76,6 @@
        prevRep = rep[1]
        rep     = rep[0]
      } -%>
-  <%# hack to make broken results invisible %>
-  <% if (!rep.os) continue -%>
   <% var repClass = '' -%>
   <% var repMoment = l.ts.getMoment(rep.date) -%>
   <% if (now.unix() < repMoment.unix() + l.ts.RECENT_AGE) {
