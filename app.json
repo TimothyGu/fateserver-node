@@ -1,0 +1,11 @@
+[
+  { "name"            : "main"
+  , "script"          : "bin/www"
+  , "error_file"      : "logs/stderr.log"
+  , "out_file"        : "logs/stdout.log"
+  , "watch"           : true
+  , "exec_mode"       : "cluster"
+  , "instances"       : 2
+  , "env": { "NODE_ENV": "production" }
+  }
+]
