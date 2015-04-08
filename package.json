@@ -29,7 +29,7 @@
     "xz-pipe": "~0.0.0"
   },
   "optionalDependencies": {
-    "toobusy": "~0.2.4",
+    "toobusy": "~0.2.4"
   },
   "engine": "node >= 0.10.0",
   "devDependencies": {
