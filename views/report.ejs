@@ -94,10 +94,12 @@ Report of <%= l.slot %> <%= l.summary.rev %>
           <th>Architecture</th>
           <td><%= l.summary.arch %></td>
         </tr>
-        <tr>
-          <th>Arch variant</th>
-          <td><%= l.summary.subarch %></td>
-        </tr>
+        <% if (l.summary.arch !== l.summary.subarch) { -%>
+          <tr>
+            <th>Arch variant</th>
+            <td><%= l.summary.subarch %></td>
+          </tr>
+        <% } -%>
         <tr>
           <th>CPU</th>
           <td><%= l.summary.cpu %></td>
