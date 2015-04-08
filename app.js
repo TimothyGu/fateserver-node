@@ -76,9 +76,8 @@ app.use(function (req, res, next) {
   }
 })
 
-if (app.get('env') === 'development') {
-  app.use(morgan('short'))
-} else {
+app.use(morgan('short'))
+if (app.get('env') === 'production') {
   app.use(morgan('combined', {
     stream: fs.createWriteStream(
               config['access.log'] || (__dirname + '/access.log')
