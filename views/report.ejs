@@ -46,7 +46,7 @@ Report of <%= l.slot %> <%= l.summary.rev %>
   <% } else if (l.summary.status === 2) { -%>
     <strong>Error compiling!</strong>
   <% } else if (l.summary.status === 1) { -%>
-    <% if (!l.summary.ntests) { -%>
+    <% if (!l.summary.npass) { -%>
          <strong>Error testing!</strong>
     <% } else { -%>
          <strong>Partially failed:</strong> <%= l.summary.rtext %> passed!
