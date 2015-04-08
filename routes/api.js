@@ -45,7 +45,7 @@ function handleReportAPI (req, res, next) {
 
   async.parallel({
     owner: parse.getSlotOwner.bind(null, slot)
-  , summary: parse.loadSummary.bind(null, date)
+  , summary: parse.loadSummary.bind(null, slot, date)
   , report: parse.loadReport.bind(null, slot, date, 0)
   , lastpass: parse.loadLastPass.bind(null, slot)
   , prevDate: function (callback) {
