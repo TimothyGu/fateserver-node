@@ -10,7 +10,8 @@
   "author": "Timothy Gu <timothygu99@gmail.com>",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www",
+    "start": "pm2 start -i 0 ./bin/www",
+    "stop": "pm2 kill",
     "docs": "jsdoc -c jsdoc.json",
     "build": "lessc --clean-css fate.less >public/css/fate.min.css"
   },
