@@ -23,17 +23,17 @@ function toggle (name, mode) {
   // width.
   // `setTimeout` used to get the REAL width as the browser might adjust the
   // width of the parent <div> after this function is called.
-  if (!init) {
+  if (!initWidth) {
     setTimeout(function () {
       adjustWidth()
-      init = true
+      initWidth = true
     }, 100)
   }
 }
 // Timeout object used to debounce resize events
 var resized;
 $(window).on('resize', function(){
-  if (!init) return
+  if (!initWidth) return
   clearTimeout(resized)
   resized = setTimeout(adjustWidth, 400)
 })
