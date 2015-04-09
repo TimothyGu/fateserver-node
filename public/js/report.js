@@ -1,16 +1,8 @@
+var initWidth = false
+
 /* Can't use $.toggle() as we are using a custom `display` that is `none`
    when the page first loads */
-var init = false
 function toggle (name, mode) {
-  if (!init) {
-    // 8 is the padding
-    var width = $('#tests > tbody > tr:first').width() - 8 * 2 + 'px'
-    var pre = document.getElementsByTagName('pre')
-    for (var i = 0; i < pre.length; i++) {
-      pre[i].style.width = width
-    }
-    init = true
-  }
   var id = name.replace(/\./g, '\\.') + '-' + mode
     , e = $('#' + id)
     , activating = e.css('display') === 'none'
@@ -26,7 +18,35 @@ function toggle (name, mode) {
       Prism.highlightElement(codeElement[0])
     })
   }
+  // This hack needed because we are embedding a <pre> into a <td>, and
+  // `width: 100%` refers to the width of the <pre> text rather than the parent
+  // width.
+  // `setTimeout` used to get the REAL width as the browser might adjust the
+  // width of the parent <div> after this function is called.
+  if (!init) {
+    setTimeout(function () {
+      adjustWidth()
+      init = true
+    }, 100)
+  }
 }
+// Timeout object used to debounce resize events
+var resized;
+$(window).on('resize', function(){
+  if (!init) return
+  clearTimeout(resized)
+  resized = setTimeout(adjustWidth, 400)
+})
+
+function adjustWidth () {
+  // 8 is the padding
+  var width = $('#failed_tests').width() - 8 * 2 + 'px'
+  var pre = document.getElementsByTagName('pre')
+  for (var i = 0; i < pre.length; i++) {
+    pre[i].style.width = width
+  }
+}
+
 function hide (id) {
   var e = document.getElementById(id)
   e.style.display = 'none'

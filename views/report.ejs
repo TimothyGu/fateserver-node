@@ -253,11 +253,10 @@ Report of <%= l.slot %> <%= l.summary.rev %>
 
 </div>
 
+<% include footer.ejs %>
 <script>
   var slot = '<%- l.slot.replace("'", "\\'") %>'
   var date = <%- l.summary.date %>
 </script>
 <script src="/js/report.js"></script>
 <script src="/js/prism.js"></script>
-
-<% include footer.ejs %>
