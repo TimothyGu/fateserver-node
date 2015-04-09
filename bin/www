@@ -29,28 +29,10 @@ var debug = require('debug')('f:www')
 
 var util = require('../lib/util')
 
-function dropSudo () {
-  try {
-    console.log('Current uid: ' + process.getuid())
-    console.log('Current gid: ' + process.getgid())
-    process.initgroups(process.env.SUDO_USER, +process.env.SUDO_GID)
-    console.log('Dropping sudo group privileges as ' + process.env.SUDO_GID)
-    process.setgid(+process.env.SUDO_GID)
-    console.log('Dropping sudo privileges as ' + process.env.SUDO_UID)
-    process.setuid(+process.env.SUDO_UID)
-  } catch (e) {
-    console.log('Cowardly refusing to keep the process alive as root.')
-    throw e
-  }
-}
-
 var app = require('../app')
 
 app.set('port', util.port)
 
 var server = app.listen(app.get('port'), function () {
   console.log('Express server listening on', server.address().port)
-  if (process.env.SUDO_UID || process.env.SUDO_GID) {
-    dropSudo()
-  }
 })
