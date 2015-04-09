@@ -26,7 +26,7 @@
 
 <% include header1.ejs %>
 <title><%= l.slot %> <%= l.summary.rev %> - <%= l.util.branding %> FATE</title>
-<link rel="stylesheet" href="/css/prism.css" />
+<link rel="stylesheet" href="/css/prism.min.css" />
 <% include header2.ejs %>
 Report of <%= l.slot %> <%= l.summary.rev %>
 <% include header3.ejs %>
@@ -258,5 +258,5 @@ Report of <%= l.slot %> <%= l.summary.rev %>
   var slot = '<%- l.slot.replace("'", "\\'") %>'
   var date = <%- l.summary.date %>
 </script>
-<script src="/js/report.js"></script>
-<script src="/js/prism.js"></script>
+<script src="/js/report.min.js"></script>
+<script src="/js/prism.min.js"></script>
