@@ -51,6 +51,7 @@ function checkQuery (check, src) {
 
 function handleIndex (req, res, next) {
   var branch
+  res.setHeader('Cache-Control', 'public, max-age=60') // one minute
   // req.params.branch, res.locals.branch, and res.locals.branches always
   // contain the short branch name (e.g. v2.4).
   // branch always contains the vanilla branch name.
