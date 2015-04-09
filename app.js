@@ -50,11 +50,6 @@ var index   = require('./routes/index')
 
 var ts      = require('./lib/timestamp')
   , util    = require('./lib/util')
-  , config  = {}
-
-try {
-  config    = require('./config')
-} catch (ex) {}
 
 var app = express()
 
@@ -79,10 +74,7 @@ app.use(function (req, res, next) {
 app.use(morgan('short'))
 if (app.get('env') === 'production') {
   app.use(morgan('combined', {
-    stream: fs.createWriteStream(
-              config['access.log'] || (__dirname + '/access.log')
-            , { flags: 'a' }
-            )
+    stream: fs.createWriteStream(util.log, { flags: 'a' })
   }))
 }
 
