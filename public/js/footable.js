@@ -653,6 +653,17 @@
                 }
             });
 
+            // adding .footable-first-column and .footable-last-column to the first and last th and td of each row in order to allow
+            // for styling if the first or last column is hidden (which won't work using :first-child or :last-child)
+            $table.find('> thead > tr > th.footable-last-column, > tbody > tr > td.footable-last-column').removeClass('footable-last-column');
+            $table.find('> thead > tr > th.footable-first-column, > tbody > tr > td.footable-first-column').removeClass('footable-first-column');
+            $table.find('> thead > tr, > tbody > tr')
+                .find('> th.footable-visible:last, > td.footable-visible:last')
+                .addClass('footable-last-column')
+                .end()
+                .find('> th.footable-visible:first, > td.footable-visible:first')
+                .addClass('footable-first-column');
+
             ft.raise(evt.redrawn);
         };
 
