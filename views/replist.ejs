@@ -78,12 +78,14 @@
      } -%>
   <% var repClass = '' -%>
   <% var repMoment = l.ts.getMoment(rep.date) -%>
-  <% if (now.unix() < repMoment.unix() + l.ts.RECENT_AGE) {
-       repClass += ' recent'
-     } else if (now.unix() > repMoment.unix() + l.ts.HIDDEN_AGE) {
-       continue
-     } else if (now.unix() > repMoment.unix() + l.ts.ANCIENT_AGE) {
-       repClass += ' ancient'
+  <% if (!ignoreTimestamp) {
+       if (now.unix() < repMoment.unix() + l.ts.RECENT_AGE) {
+         repClass += ' recent'
+       } else if (now.unix() > repMoment.unix() + l.ts.HIDDEN_AGE) {
+         continue
+       } else if (now.unix() > repMoment.unix() + l.ts.ANCIENT_AGE) {
+         repClass += ' ancient'
+       }
      } -%>
   <% if (prevRep) {
        var passedMoreThanFailed = rep.npass > rep.nfail
