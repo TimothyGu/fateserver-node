@@ -28,15 +28,18 @@ have an npm package, so any update must be done manually.
 
 The version of FooTable currently in the source tree is **2.0.3**.
 
-However, the FooTable in the source tree is not vanilla from the source. The
-font loading routine is removed, and all font glyphs used by fateserver-node
-are redirected to the prettier FontAwesome glyphs in
+However, the FooTable in the source tree is not vanilla from the source. On the
+stylesheet part, the font loading routine is removed, and all font glyphs used
+by fateserver-node are redirected to the prettier FontAwesome glyphs in
 `public/css/footable.custom.css`.
+
+On the JavaScript part, a [patch](https://github.com/TimothyGu/fateserver-node/commit/5684db8648f457e5358127f0543e701436a36af0)
+is applied to greatly improve performance.
 
 Prism Version
 -------------
 
-The Prism bundled with this copy of fateserver-node is generated on 2014-11-23
+The Prism bundled with this copy of fateserver-node is generated on 2015-04-09
 from http://prismjs.com/download.html?themes=prism&languages=git&plugins=line-numbers
 
 TODO
