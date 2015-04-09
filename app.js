@@ -52,6 +52,7 @@ var ts      = require('./lib/timestamp')
   , util    = require('./lib/util')
 
 var app = express()
+if (util.proxy) app.enable('trust proxy')
 
 // VIEW ENGINE SETUP
 app.set('views', path.join(__dirname, 'views'))
