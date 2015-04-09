@@ -38,7 +38,7 @@ var util     = require('../lib/util')
 var nEntries = 50
 
 function handleHistory (slot, begin, res, next) {
-  begin = begin || 0
+  begin = +begin || 0
   var slotdir = path.join(util.dir, slot)
 
   fs.readdir(slotdir, function handleFiles (err, files) {
@@ -49,11 +49,14 @@ function handleHistory (slot, begin, res, next) {
     }
 
     res.locals.slot    = slot
+    res.locals.begin    = begin
+    res.locals.nEntries = nEntries
     var repsNames = files.filter(function (val) {
       return val.match(/^[0-9]/)
-    })
-    res.locals.begin    = Number(begin)
-    res.locals.nEntries = nEntries
+    }).sort().reverse()
+
+    res.locals.total = repsNames.length
+    repsNames = repsNames.slice(begin, begin + nEntries)
 
     // For every report, load its summary asynchronously
     async.map(repsNames, function iterator (repName, out) {
@@ -70,9 +73,6 @@ function handleHistory (slot, begin, res, next) {
             // Filter out empty/invalid ones
             return n != null
           })
-          .sort(sort.by('desc-date'))  // Newest to oldest
-          .slice(begin, begin + nEntries)
-      res.locals.total = reps.length
       parse.getSlotOwner(slot, function (e, owner) {
         res.locals.owner = owner
         res.render('history.ejs', { _with: false })
