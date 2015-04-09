@@ -3,12 +3,7 @@
 var init = false
 function toggle (name, mode) {
   if (!init) {
-    // 8 is the padding
-    var width = $('#tests > tbody > tr:first').width() - 8 * 2 + 'px'
-    var pre = document.getElementsByTagName('pre')
-    for (var i = 0; i < pre.length; i++) {
-      pre[i].style.width = width
-    }
+    adjustWidth()
     init = true
   }
   var id = name.replace(/\./g, '\\.') + '-' + mode
@@ -27,6 +22,22 @@ function toggle (name, mode) {
     })
   }
 }
+var resized;
+$(window).on('resize', function(){
+  if (!init) return
+  clearTimeout(resized)
+  resized = setTimeout(adjustWidth, 400)
+})
+
+function adjustWidth () {
+  // 8 is the padding
+  var width = $('#failed_tests').width() - 8 * 2 + 'px'
+  var pre = document.getElementsByTagName('pre')
+  for (var i = 0; i < pre.length; i++) {
+    pre[i].style.width = width
+  }
+}
+
 function hide (id) {
   var e = document.getElementById(id)
   e.style.display = 'none'
