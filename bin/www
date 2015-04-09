@@ -28,11 +28,14 @@
 var debug = require('debug')('f:www')
 
 var util = require('../lib/util')
-
-var app = require('../app')
+  , app = require('../app')
 
 app.set('port', util.port)
 
-var server = app.listen(app.get('port'), function () {
+var args = [ app.get('port') ]
+if (util.proxy) args.push('127.0.0.1')
+args.push(function () {
   console.log('Express server listening on', server.address().port)
 })
+
+var server = app.listen.apply(app, args)
