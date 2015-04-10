@@ -60,3 +60,32 @@ function show_err (name) {
   hide(name + '-diff')
   toggle(name, 'stderr')
 }
+
+(function (w) {
+  function getId (str) {
+    return str.substring(str.indexOf('#') + 1)
+  }
+
+  // if an id is specified in the URL respect it
+  function showById () {
+    var id = getId(w.location.hash) || 'info'
+    $('a[href="#' + id + '"]').tab('show')
+  }
+
+  $(showById)
+  w.addEventListener('popstate', showById)
+
+  // if a tab is activated update the URL accordingly
+  // can't use show.bs.tab here as we don't want to push another state when
+  // the user clicks back.
+  $('#reportTab a[role="tab"]').on('click', function () {
+    var urlWithoutHash = w.location.origin + w.location.pathname
+    var id = getId(this.href)
+    var current = getId(w.location.hash)
+
+    // noop if the action is useless
+    if (current === id || !current && id === 'info') return
+
+    w.history.pushState({}, '', urlWithoutHash + '#' + id);
+  })
+})(window)
