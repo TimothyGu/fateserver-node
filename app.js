@@ -86,7 +86,7 @@ app.use(log)
 
 // Intentioanlly move log before auto-compression because we deal with it
 // differently.
-app.use(compression({threshold: '1kb'}))
+if (!util.proxy) app.use(compression({threshold: '1kb'}))
 
 app.use(api)
 app.use(history)
