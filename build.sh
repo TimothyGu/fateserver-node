@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -e
+set -e -v
 export PATH="`npm bin`:$PATH"
 
 cd less
