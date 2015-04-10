@@ -1,5 +1,6 @@
 /*!
- * Copyright (c) 2014-2015 Tiancheng “Timothy” Gu
+ * Copyright © 2014-2015 Tiancheng “Timothy” Gu
+ * Licensed under the MIT License
  */
 var initWidth = false
 

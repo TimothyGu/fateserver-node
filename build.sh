@@ -14,6 +14,7 @@ cleancss css/footable.custom.css > css/footable.custom.min.css
 cd js
 ug() {
   uglifyjs ${1}.js -c -m                          \
+    --comments '/(^\!|@author)/'                  \
     --source-map      ${1}.min.map                \
     -o                ${1}.min.js
 }
