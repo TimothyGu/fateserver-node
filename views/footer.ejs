@@ -14,15 +14,14 @@
     <script src="/js/footable.min.js"></script>
     <script src="/js/footable.sort.min.js"></script>
     <script>
-      $('.footable').footable({
-        breakpoints: {
-          xs: 360
-        , sm: 750
-        , md: 970
-        }
-      })
       $(function () {
-        $('.footable').footable()
+        $('.footable').footable({
+          breakpoints: {
+            xs: 360
+          , sm: 750
+          , md: 970
+          }
+        })
       })
     </script>
   </body>
