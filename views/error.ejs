@@ -22,7 +22,11 @@
  % THE SOFTWARE.
  %%>
 
-Error <%= locals.status %>:
+<% include header1.ejs -%>
+<title>Error <%= locals.status %> - <%= locals.util.branding %> FATE</title>
+<% include header2.ejs -%>
+Error <%= locals.status %>
+<% include header3.ejs -%>
 
 <pre>
 <% if (locals.error) { -%>
@@ -30,3 +34,5 @@ Error <%= locals.status %>:
 <% } else { -%>
   <%= locals.message -%>
 <% } -%></pre>
+
+<% include footer.ejs -%>
