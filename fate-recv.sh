@@ -112,7 +112,7 @@ repdir=$slotdir/$date
 mkdir $repdir
 gzip -9 *.log
 xz -0 report
-cp -p summary summary.json report.xz *.log.gz $repdir
+cp -p summary report.xz *.log.gz $repdir
 chmod 644 $repdir/*
 rm -f $slotdir/previous
 test -e $slotdir/latest && mv $slotdir/latest $slotdir/previous
