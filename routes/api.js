@@ -27,7 +27,6 @@
 var fs       = require('fs')
   , path     = require('path')
   , readline = require('readline')
-  , debug    = require('debug')('f:r:api')
   , async    = require('async')
   , express  = require('express')
 
@@ -84,7 +83,6 @@ function handleTestAPI (req, res, next) {
   var cacheHasIt = false
   cache.lock.readLock(function (release) {
     if (cache.has(cacheName)) {
-      debug('cache hit')
       var lut = cache.get(cacheName)
       cacheHasIt = true
       if (!lut.hasOwnProperty(test)) {
@@ -100,7 +98,6 @@ function handleTestAPI (req, res, next) {
   })
   if (cacheHasIt) return
   parse.loadReport(slot, date, 2, function (err, obj) {
-    debug('cache miss')
     var lut = {}
     for (var i = 0; i < obj.length; i++) {
       lut[obj[i].name] = obj[i]

@@ -27,7 +27,6 @@
 var fs       = require('fs')
   , path     = require('path')
   , readline = require('readline')
-  , debug    = require('debug')('f:r:index')
   , async    = require('async')
   , router   = require('express').Router()
 
@@ -141,7 +140,6 @@ function handleIndex (req, res, next) {
         })
       }
     ], function end () {
-      debug(res.locals.branches)
       res.render('index.ejs', { _with: false })
     })
   })

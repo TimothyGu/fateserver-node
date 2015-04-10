@@ -27,13 +27,12 @@
 var express = require('express')
   , fs      = require('fs')
   , path    = require('path')
-  , debug   = require('debug')('f:app')
   , morgan  = require('morgan')
   , compression = require('compression')
 
 try {
   var memwatch = require('memwatch')
-  memwatch.on('leak', require('debug')('memwatch'))
+  memwatch.on('leak', console.warn)
 } catch (ex) {
   // ignored
 }
@@ -121,7 +120,6 @@ if (app.get('env') === 'development') {
 app.use(function (err, req, res, next) {
   var status = err.status || 500
   res.status(status)
-  debug('msg: ' + err.message)
   if (err.json) {
     var newErr = {
       status: err.status

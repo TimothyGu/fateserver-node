@@ -26,7 +26,6 @@
 
 var fs       = require('fs')
   , path     = require('path')
-  , debug    = require('debug')('f:r:log')
   , router   = require('express').Router()
   , zlib     = require('zlib')
 
@@ -37,7 +36,6 @@ function handleLog (slot, date, log, req, res, next) {
   var logFile = path.join(slot, date, log + '.log.gz')
   var logPath = path.join(util.dir, logFile)
   res.setHeader('Cache-Control', 'public, max-age=31536000') // a year
-  debug('logPath: ' + logPath)
 
   fs.readFile(logPath, function handleLogFile (err, data) {
     if (err) {
@@ -54,7 +52,6 @@ function handleLog (slot, date, log, req, res, next) {
       return res.send(data)
     } else {
       // Otherwise, decompress it and then send it
-      debug('non-gzip')
       zlib.gunzip(data, function unzipCb (err, data) {
         if (err) {
           err.status = 500

@@ -26,7 +26,6 @@
 
 var fs       = require('fs')
   , path     = require('path')
-  , debug    = require('debug')('f:r:history')
   , async    = require('async')
   , router   = require('express').Router()
 
