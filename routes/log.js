@@ -35,7 +35,7 @@ var util     = require('../lib/util')
 function handleLog (slot, date, log, req, res, next) {
   var logFile = path.join(slot, date, log + '.log.gz')
   var logPath = path.join(util.dir, logFile)
-  res.setHeader('Cache-Control', 'public, max-age=31536000') // a year
+  res.set('Cache-Control', 'public, max-age=31536000') // a year
 
   fs.readFile(logPath, function handleLogFile (err, data) {
     if (err) {

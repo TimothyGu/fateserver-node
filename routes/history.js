@@ -39,7 +39,7 @@ var nEntries = 50
 function handleHistory (slot, begin, res, next) {
   begin = +begin || 0
   var slotdir = path.join(util.dir, slot)
-  res.setHeader('Cache-Control', 'public, max-age=60') // one minute
+  res.set('Cache-Control', 'public, max-age=60') // one minute
 
   fs.readdir(slotdir, function handleFiles (err, files) {
     if (err) {

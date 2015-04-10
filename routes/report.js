@@ -39,7 +39,7 @@ function handleReport (slot, date, res, next) {
     return next(err)
   }
 
-  res.setHeader('Cache-Control', 'public, max-age=86400') // a week
+  res.set('Cache-Control', 'public, max-age=86400') // a week
   res.locals.slot = slot
   res.locals.date = date
 

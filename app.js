@@ -122,9 +122,9 @@ if (app.get('env') === 'development') {
 app.use(function (err, req, res, next) {
   var status = err.status || 500
   if (status === 404) {
-    res.setHeader('Cache-Control', 'public, max-age=2592000') // one month
+    res.set('Cache-Control', 'public, max-age=2592000') // one month
   } else {
-    res.setHeader('Cache-Control', 'public, max-age=60') // one minute
+    res.set('Cache-Control', 'public, max-age=60') // one minute
   }
   res.status(status)
   if (err.json) {
@@ -147,7 +147,7 @@ app.use(function (err, req, res, next) {
 // Error handler for errors in the error handler(s)
 app.use(function (err, req, res, next) {
   // Hopefully I'll fix this quick enough
-  res.setHeader('Cache-Control', 'public, max-age=60')
+  res.set('Cache-Control', 'public, max-age=60')
   res.status(500).send('Something’s horribly broken. File a ticket please.')
 })
 
