@@ -126,14 +126,21 @@ app.use(function (err, req, res, next) {
     , message: err.message
     }
     res.json(newErr)
+  } else if (err.textOnly) {
+    res.send(err.message)
   } else {
     res.render('error', {
-      message: err.HTMLMessage || err.message
+      message: err.message
     , error: null
     , status: status
     , _with: false
     })
   }
+})
+
+// Error handler for errors in the error handler(s)
+app.use(function (err, req, res, next) {
+  res.status(500).send('Something’s horribly broken. File a ticket please.')
 })
 
 module.exports = app

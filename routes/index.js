@@ -68,7 +68,7 @@ function handleIndex (req, res, next) {
     if (err) {
       err.message = 'util.dir not found. Did you set up config.js'
                   + 'correctly?'
-      err.HTMLMessage = 'FATE data not found.'
+      err.message = 'FATE data not found.'
       err.status = 404
       return next(err)
     }

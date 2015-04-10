@@ -51,7 +51,7 @@ function handleReportAPI (req, res, next) {
       fs.readdir(path.join(util.dir, slot), function (err, files) {
         if (err) {
           err.json = true
-          err.HTMLMessage = 'Slot "' + slot + '" not found.'
+          err.message = 'Slot "' + slot + '" not found.'
           err.status = 404
           return callback(err)
         }

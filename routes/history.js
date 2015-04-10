@@ -43,7 +43,7 @@ function handleHistory (slot, begin, res, next) {
 
   fs.readdir(slotdir, function handleFiles (err, files) {
     if (err) {
-      err.HTMLMessage = 'Slot "' + slot + '" not found.'
+      err.message = 'Slot "' + slot + '" not found.'
       err.status = 404
       return next(err)
     }

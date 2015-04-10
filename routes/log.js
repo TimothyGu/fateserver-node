@@ -39,8 +39,9 @@ function handleLog (slot, date, log, req, res, next) {
 
   fs.readFile(logPath, function handleLogFile (err, data) {
     if (err) {
-      err.HTMLMessage = 'Log "' + logFile + '" not found.'
+      err.message = 'Log "' + logFile + '" not found.'
       err.status = 404
+      err.textOnly = true
       return next(err)
     }
 
