@@ -15,7 +15,6 @@ cd js
 ug() {
   uglifyjs ${1}.js -c -m                          \
     --source-map      ${1}.min.map                \
-    --source-map-root ${1}.js                     \
     -o                ${1}.min.js
 }
 
