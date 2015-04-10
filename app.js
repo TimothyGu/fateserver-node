@@ -62,6 +62,7 @@ app.engine('ejs', require('ejs-tj').__express)
 app.locals.ts     = ts
 app.locals.moment = require('moment')
 app.locals.util   = util
+app.locals._with  = false
 
 app.use(function (req, res, next) {
   if (toobusy && toobusy()) {
@@ -110,7 +111,6 @@ if (app.get('env') === 'development') {
       message: err.message
     , error: err
     , status: status
-    , _with: false
     })
   })
 }
@@ -133,7 +133,6 @@ app.use(function (err, req, res, next) {
       message: err.message
     , error: null
     , status: status
-    , _with: false
     })
   }
 })
