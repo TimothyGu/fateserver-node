@@ -1,3 +1,6 @@
+/*!
+ * Copyright (c) 2014-2015 Tiancheng “Timothy” Gu
+ */
 var initWidth = false
 
 /* Can't use $.toggle() as we are using a custom `display` that is `none`
@@ -30,7 +33,7 @@ function toggle (name, mode) {
     }, 100)
   }
 }
-// Timeout object used to debounce resize events
+
 var resized;
 $(window).on('resize', function(){
   if (!initWidth) return
