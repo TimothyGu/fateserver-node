@@ -28,6 +28,7 @@ var fs       = require('fs')
   , path     = require('path')
   , debug    = require('debug')('f:r:log')
   , router   = require('express').Router()
+  , zlib     = require('zlib')
 
 var util     = require('../lib/util')
   , parse    = require('../lib/parse')
@@ -53,7 +54,6 @@ function handleLog (slot, date, log, req, res, next) {
       return res.send(data)
     } else {
       // Otherwise, decompress it and then send it
-      var zlib = require('zlib')
       debug('non-gzip')
       zlib.gunzip(data, function unzipCb (err, data) {
         if (err) {
