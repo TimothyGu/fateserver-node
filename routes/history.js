@@ -75,7 +75,7 @@ function handleHistory (slot, begin, res, next) {
           })
       parse.getSlotOwner(slot, function (e, owner) {
         res.locals.owner = owner
-        res.render('history.ejs', { _with: false })
+        res.render('history.ejs')
       })
     })
   })

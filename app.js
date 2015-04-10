@@ -29,6 +29,7 @@ var express = require('express')
   , path    = require('path')
   , morgan  = require('morgan')
   , compression = require('compression')
+  , ejs     = require('ejs-tj')
 
 try {
   var memwatch = require('memwatch')
@@ -56,13 +57,14 @@ if (util.proxy) app.enable('trust proxy')
 // VIEW ENGINE SETUP
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
-app.engine('ejs', require('ejs-tj').__express)
+app.engine('ejs', ejs.__express)
 
 // EJS LOCALS
 app.locals.ts     = ts
 app.locals.moment = require('moment')
 app.locals.util   = util
 app.locals._with  = false
+ejs.localsName = 'l'
 
 app.use(function (req, res, next) {
   if (toobusy && toobusy()) {

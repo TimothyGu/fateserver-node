@@ -140,7 +140,7 @@ function handleIndex (req, res, next) {
         })
       }
     ], function end () {
-      res.render('index.ejs', { _with: false })
+      res.render('index.ejs')
     })
   })
 }

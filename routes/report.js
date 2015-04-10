@@ -70,9 +70,6 @@ function handleReport (slot, date, res, next) {
     }
   }, function (err, results) {
     if (err) return next(err)
-    // .render() supports both options and locals
-    // Putting an option into the locals object.
-    results._with = false
     res.render('report.ejs', results)
   })
 }

@@ -23,16 +23,16 @@
  %%>
 
 <% include header1.ejs -%>
-<title>Error <%= locals.status %> - <%= locals.util.branding %> FATE</title>
+<title>Error <%= l.status %> - <%= l.util.branding %> FATE</title>
 <% include header2.ejs -%>
-Error <%= locals.status %>
+Error <%= l.status %>
 <% include header3.ejs -%>
 
 <pre>
-<% if (locals.error) { -%>
-  <%= locals.error.stack %>
+<% if (l.error) { -%>
+  <%= l.error.stack %>
 <% } else { -%>
-  <%= locals.message -%>
+  <%= l.message -%>
 <% } -%>
 </pre>
 
