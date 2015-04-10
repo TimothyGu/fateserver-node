@@ -5,7 +5,7 @@
   , "out_file"        : "logs/stdio.log"
   , "watch"           : true
   , "exec_mode"       : "cluster"
-  , "instances"       : 2
+  , "instances"       : 1
   , "env": { "NODE_ENV": "production" }
   }
 ]
