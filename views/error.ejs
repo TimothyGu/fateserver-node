@@ -28,12 +28,12 @@
 Error <%= l.status %>
 <% include header3.ejs -%>
 
-<pre>
 <% if (l.error) { -%>
-  <%= l.error.stack %>
+  <pre>
+    <%= l.error.stack %>
+  </pre>
 <% } else { -%>
   <%= l.message -%>
 <% } -%>
-</pre>
 
 <% include footer.ejs -%>
