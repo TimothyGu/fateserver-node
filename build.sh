@@ -11,9 +11,15 @@ cd ../public
 cleancss css/prism.css           > css/prism.min.css
 cleancss css/footable.custom.css > css/footable.custom.min.css
 
-uglifyjs js/prism.js    -c -m -o js/prism.min.js
-uglifyjs js/footable.js -c -m -o js/footable.min.js
-uglifyjs js/report.js   -c -m                          \
-    --source-map      js/report.min.map                \
-    --source-map-root js/report.js                     \
-    -o                js/report.min.js
+cd js
+ug() {
+  uglifyjs ${1}.js -c -m                          \
+    --source-map      ${1}.min.map                \
+    --source-map-root ${1}.js                     \
+    -o                ${1}.min.js
+}
+
+ug prism
+ug footable
+ug footable.sort
+ug report
