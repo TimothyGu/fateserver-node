@@ -75,28 +75,22 @@ function handleIndex (req, res, next) {
 
     async.parallel([
       function readBranches (done) {
-        var branchesStream =
-          fs.createReadStream(path.join(util.dir, 'branches'))
-            .on('error', function() {
-              res.locals.branches = ['master']
-              done()
-            })
-        var branches = []
-        var lr = new readline.createInterface({
-          input: branchesStream
-        , terminal: false
+        fs.readFile(path.join(util.dir, 'branches'), 'utf8',
+                    function (err, data) {
+          if (err) {
+            res.locals.branches = ['master']
+            return done()
+          }
+          // readline? nah.
+          var branches = data
+                           .split('\n')
+                           .filter(function (b) { return b })
+                           .sort()
+                           .reverse()
+          branches.unshift('master')
+          res.locals.branches = branches
+          done()
         })
-        lr.on('line', function (l) {
-            branches.push(l)
-          })
-          .on('close', function branchesDone () {
-            // Sort the branches from newest to oldest and add master
-            // to the front.
-            branches = branches.sort().reverse()
-            branches.unshift('master')
-            res.locals.branches = branches
-            done()
-          })
       }
       , function readSlots (done) {
         // For every slot get the summary of the latest results.
