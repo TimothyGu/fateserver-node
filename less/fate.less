@@ -242,6 +242,17 @@ a.btn-default {
 
 /* Tab Styles */
 .nav-tabs > li {
+  & > a {
+    & {
+      color: #c9c9c9;
+    }
+    &:hover,
+    &:focus {
+      color: #fff;
+      background: rgba(255,255,255,0.2);
+      border-color: rgba(255,255,255,0.2);
+    }
+  }
   &.active > a {
     &,
     &:hover,
