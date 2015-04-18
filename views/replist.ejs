@@ -14,11 +14,6 @@
  %-%>
 
 <% var now = l.moment.utc() -%>
-<% propsToDisplay = propsToDisplay || [
-                      'date', 'rev', 'subarch', 'os'
-                    , 'cc', 'nwarn', 'results'
-                    ] -%>
-<% hide = hide || {} -%>
 
 <% var headings = { date      : 'Time'
                   ,'date-link': 'Time'
