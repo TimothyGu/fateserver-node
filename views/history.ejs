@@ -16,7 +16,7 @@ Report history for <%= l.slot %>
 
 <%
   var info = [
-  //[ human readable,  variable,          escape?, skip if empty? ] 
+//  [ human readable,  variable,          escape?, skip if empty? ]
     [ 'Owner',         l.owner ]
   , [ 'Architecture',  l.reps[0].subarch ]
   , [ 'OS',            l.reps[0].os ]
@@ -26,6 +26,7 @@ Report history for <%= l.slot %>
   ]
  %>
 
+<%# This table is only for bigger screens where two columns can be used. -%>
 <div class="hidden-xs table-responsive">
   <table class="table" id="config">
     <thead>
@@ -48,6 +49,9 @@ Report history for <%= l.slot %>
   </table>
 </div>
 
+<%# A <dl> is easier to style in a single-column fashion.
+  # XXX: generate this with client-side JavaScript?
+  #      investigate other CSS options? -%>
 <dl class="visible-xs-block dl-config">
   <% for (var i = 0; i < info.length; i ++ ) { %>
     <% var prop = info[i] %>
@@ -65,24 +69,56 @@ Report history for <%= l.slot %>
 
 <div class="table-responsive">
   <table class="replist table footable" id="history">
-    <% var propsToDisplay = ['date', 'rev', 'nwarn', 'results']
-         , hide = {
-             rev  : 'xs,phone'
-           , nwarn: 'xs,phone'
-           }
-         , ignoreTimestamp = true
-         , compareWithPrev = false -%>
-    <% include replist.ejs -%>
+    <% var propsToDisplay = ['date', 'rev', 'nwarn', 'results'] -%>
+    <thead><tr>
+      <th data-type="numeric">Time</th>
+      <th data-hide="xs,phone">Revision</th>
+      <th data-hide="xs,phone" data-ignore="true" data-type="numeric">
+        Warnings
+      </th>
+      <th>Results</th>
+    </tr></thead>
+
+    <tbody>
+    <% for (var i = 0; i < l.reps.length; i++) { -%>
+      <% var rep = l.reps[i] -%>
+      <% var repMoment = l.ts.getMoment(rep.date) -%>
+      <tr>
+        <td data-value="<%- repMoment.unix() %>">
+          <%- l.ts.formatDate(repMoment) %>
+        </td>
+        <td>
+          <%- l.util.linkGitHist(rep.rev) %>
+        </td>
+        <td>
+          <a href="<%= [ '/log', rep.slot, rep.date, 'compile' ].join('/') %>">
+            <%= rep.nwarn %>
+          </a>
+        </td>
+        <td class="<%- rep.rclass %>"
+            data-value="<%- rep.status %><%- rep.rtext %>">
+          <a href="<%= '/report/' + rep.slot + '/' + rep.date %>">
+            <%= rep.rtext %>
+          </a>
+        </td>
+      </tr>
+    <% } -%>
+    </tbody>
   </table>
 </div>
 <nav>
   <ul class="pager">
+    <%# If the beginning of this page is not the real beginning, then add a
+      # previous button -%>
     <% if (l.begin !== 0) { -%>
       <% var prevBegin = Math.max(0, l.begin - l.nEntries) -%>
       <li><a href="/history/<%= l.slot %>?begin=<%= prevBegin %>">Previous</a></li>
     <% } else { -%>
       <li class="disabled"><a href="#">Previous</a></li>
     <% } -%>
+
+    <%# If the total number of entries is greater than the beginning of this
+      # page + number of entries on this page, then add a next button -%>
     <% if (l.total > l.begin + l.nEntries) { -%>
       <li><a href="/history/<%= l.slot %>?begin=<%= l.begin + l.nEntries %>">Next</a></li>
     <% } else { -%>
