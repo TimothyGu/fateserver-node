@@ -161,9 +161,8 @@ Report of <%= l.slot %> <%= l.summary.rev %>
       <tbody>
       <% for (var i = 0; i < l.report.length; i++) { -%>
         <% var rep = l.report[i]
-           if (rep.status) {
-             var rep      = l.report[i]
-               , trClass  = ''
+           if (rep.status !== '0') {
+             var trClass  = ''
                , lastpass = 'N / A'
              if (l.lastpass[rep.name]) {
                // Only add link if the lastpass is older than the current rev
