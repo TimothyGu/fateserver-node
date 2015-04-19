@@ -33,18 +33,73 @@
 
 <div class="table-responsive">
   <table class="replist table footable" id="index">
-    <% var propsToDisplay = [ 'date-link', 'rev', 'subarch', 'os', 'cc'
-                            , 'comment','nwarn', 'results'
-                            ]
-         , hide = { comment: 'xs,phone,sm'
-                  , nwarn  : 'xs,phone,sm,md'
-                  , cc     : 'xs,phone'
-                  , rev    : 'xs,phone,sm'
-                  , subarch: 'xs'
-                  }
-         , ignoreTimestamp = false
-         , compareWithPrev = true -%>
-    <% include replist.ejs -%>
+    <thead><tr>
+      <th data-type="numeric">Time</th>
+      <th data-hide="xs,phone,sm">Revision</th>
+      <th data-hide="xs">Arch</th>
+      <th>OS</th>
+      <th data-hide="xs,phone">Compiler</th>
+      <th data-hide="xs,phone,sm" data-sort-ignore="true">Comment</th>
+      <th data-hide="xs,phone,sm,md" data-ignore="true" data-type="numeric">
+        Warnings
+      </th>
+      <th>Results</th>
+    </tr></thead>
+
+    <tbody>
+    <% for (var i = 0; i < l.reps.length; i++) { -%>
+      <% var rep = l.reps[i][0]
+           , prevRep = l.reps[i][1] -%>
+      <% var repClass = '' -%>
+      <% var repMoment = l.ts.getMoment(rep.date) -%>
+      <% var nowUnix = l.moment.unix()
+           , repUnix = repMoment.unix() -%>
+      <% if (nowUnix < repUnix + l.ts.RECENT_AGE) {
+           repClass += ' recent'
+         } else if (nowUnix > repUnix + l.ts.HIDDEN_AGE) {
+           continue
+         } else if (nowUnix > repUnix + l.ts.ANCIENT_AGE) {
+           repClass += ' ancient'
+         } -%>
+      <% if (prevRep) {
+           var passedMoreThanFailed = rep.npass > rep.nfail
+           if (prevRep.status > rep.status
+           || (passedMoreThanFailed ? prevRep.nfail > rep.nfail
+                                    : prevRep.npass < rep.npass)) {
+             repClass += ' pass'
+           } else if (prevRep.status < rep.status
+                  || (passedMoreThanFailed ? prevRep.nfail < rep.nfail
+                                           : prevRep.npass > rep.npass)) {
+             repClass += ' warn'
+           }
+         } -%>
+      <tr class="<%= repClass %>">
+        <td data-value="<%- repUnix %>">
+          <a href="<%= '/history/' + rep.slot %>"
+             title="View history for <%= rep.slot %>"
+             aria-label="View history for this slot">
+            <%- l.ts.formatDate(repMoment) %>
+          </a>
+        </td>
+        <td><%- l.util.linkGitHist(rep.rev) %></td>
+        <td><%= rep.subarch %></td>
+        <td><%= rep.os %></td>
+        <td><%= rep.cc %></td>
+        <td><%= rep.comment %></td>
+        <td>
+          <a href="<%= [ '/log', rep.slot, rep.date, 'compile' ].join('/') %>">
+            <%= rep.nwarn %>
+          </a>
+        </td>
+        <td class="<%- rep.rclass %>"
+            data-value="<%- rep.status %><%- rep.rtext %>">
+          <a href="<%= '/report/' + rep.slot + '/' + rep.date %>">
+            <%= rep.rtext %>
+          </a>
+        </td>
+      </tr>
+    <% } -%>
+    </tbody>
   </table>
 </div>
 <% include footer.ejs -%>
