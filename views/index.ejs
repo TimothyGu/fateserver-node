@@ -50,29 +50,31 @@
     <% for (var i = 0; i < l.reps.length; i++) { -%>
       <% var rep = l.reps[i][0]
            , prevRep = l.reps[i][1] -%>
-      <% var repClass = '' -%>
+      <% var repClass = [] -%>
       <% var repMoment = l.ts.getMoment(rep.date) -%>
-      <% var nowUnix = l.moment.unix()
+      <% var nowUnix = l.moment().unix()
            , repUnix = repMoment.unix() -%>
+      <% console.log(nowUnix) %>
       <% if (nowUnix < repUnix + l.ts.RECENT_AGE) {
-           repClass += ' recent'
+           repClass.push('recent')
          } else if (nowUnix > repUnix + l.ts.HIDDEN_AGE) {
            continue
          } else if (nowUnix > repUnix + l.ts.ANCIENT_AGE) {
-           repClass += ' ancient'
+           repClass.push('ancient')
          } -%>
-      <% if (prevRep) {
+      <% if (prevRep && repClass.indexOf('ancient') === -1) {
            var passedMoreThanFailed = rep.npass > rep.nfail
            if (   prevRep.status > rep.status
                || (passedMoreThanFailed ? prevRep.nfail > rep.nfail
                                         : prevRep.npass < rep.npass)) {
-             repClass += ' pass'
+             repClass.push('pass')
            } else if (   prevRep.status < rep.status
                       || (passedMoreThanFailed ? prevRep.nfail < rep.nfail
                                                : prevRep.npass > rep.npass)) {
-             repClass += ' warn'
+             repClass.push('warn')
            }
          } -%>
+      <% repClass = repClass.join(' ') -%>
       <tr class="<%- repClass %>">
         <td class="nowrap" data-value="<%- repUnix %>">
           <a href="<%= '/history/' + rep.slot %>"
