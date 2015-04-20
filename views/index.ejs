@@ -73,8 +73,8 @@
              repClass += ' warn'
            }
          } -%>
-      <tr class="<%= repClass %>">
-        <td data-value="<%- repUnix %>">
+      <tr class="<%- repClass %>">
+        <td class="nowrap" data-value="<%- repUnix %>">
           <a href="<%= '/history/' + rep.slot %>"
              title="View history for <%= rep.slot %>"
              aria-label="View history for this slot">
@@ -82,16 +82,16 @@
           </a>
         </td>
         <td><%- l.util.linkGitHist(rep.rev) %></td>
-        <td><%= rep.subarch %></td>
-        <td><%= rep.os %></td>
+        <td class="nowrap"><%= rep.subarch %></td>
+        <td class="nowrap"><%= rep.os %></td>
         <td><%= rep.cc %></td>
         <td><%= rep.comment %></td>
-        <td>
+        <td class="nowrap">
           <a href="<%= [ '/log', rep.slot, rep.date, 'compile' ].join('/') %>">
             <%= rep.nwarn %>
           </a>
         </td>
-        <td class="<%- rep.rclass %>"
+        <td class="nowrap <%- rep.rclass %>"
             data-value="<%- rep.status %><%- rep.rtext %>">
           <a href="<%= '/report/' + rep.slot + '/' + rep.date %>">
             <%= rep.rtext %>

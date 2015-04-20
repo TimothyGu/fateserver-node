@@ -84,18 +84,18 @@ Report history for <%= l.slot %>
       <% var rep = l.reps[i] -%>
       <% var repMoment = l.ts.getMoment(rep.date) -%>
       <tr>
-        <td data-value="<%- repMoment.unix() %>">
+        <td class="nowrap" data-value="<%- repMoment.unix() %>">
           <%- l.ts.formatDate(repMoment) %>
         </td>
         <td>
           <%- l.util.linkGitHist(rep.rev) %>
         </td>
-        <td>
+        <td class="nowrap">
           <a href="<%= [ '/log', rep.slot, rep.date, 'compile' ].join('/') %>">
             <%= rep.nwarn %>
           </a>
         </td>
-        <td class="<%- rep.rclass %>"
+        <td class="nowrap <%- rep.rclass %>"
             data-value="<%- rep.status %><%- rep.rtext %>">
           <a href="<%= '/report/' + rep.slot + '/' + rep.date %>">
             <%= rep.rtext %>
