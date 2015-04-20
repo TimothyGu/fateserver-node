@@ -63,13 +63,13 @@
          } -%>
       <% if (prevRep) {
            var passedMoreThanFailed = rep.npass > rep.nfail
-           if (prevRep.status > rep.status
-           || (passedMoreThanFailed ? prevRep.nfail > rep.nfail
-                                    : prevRep.npass < rep.npass)) {
+           if (   prevRep.status > rep.status
+               || (passedMoreThanFailed ? prevRep.nfail > rep.nfail
+                                        : prevRep.npass < rep.npass)) {
              repClass += ' pass'
-           } else if (prevRep.status < rep.status
-                  || (passedMoreThanFailed ? prevRep.nfail < rep.nfail
-                                           : prevRep.npass > rep.npass)) {
+           } else if (   prevRep.status < rep.status
+                      || (passedMoreThanFailed ? prevRep.nfail < rep.nfail
+                                               : prevRep.npass > rep.npass)) {
              repClass += ' warn'
            }
          } -%>
