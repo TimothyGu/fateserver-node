@@ -48,8 +48,9 @@
 
     <tbody>
     <% for (var i = 0; i < l.reps.length; i++) { -%>
-      <% var rep = l.reps[i][0]
-           , prevRep = l.reps[i][1] -%>
+      <% var rep = l.reps[i][0] -%>
+      <% var prevRep = l.reps[i][1] -%>
+      <% var nwarnClass = '' -%>
       <% var repClass = [] -%>
       <% var repMoment = l.ts.getMoment(rep.date) -%>
       <% var nowUnix = l.moment().unix()
@@ -73,6 +74,10 @@
              repClass.push('warn')
            }
          } -%>
+      <% if (prevRep && prevRep.status < 2 && rep.status < 2) {
+           if      (prevRep.nwarn > rep.nwarn) nwarnClass = 'pass'
+           else if (prevRep.nwarn < rep.nwarn) nwarnClass = 'fail'
+         } -%>
       <% repClass = repClass.join(' ') -%>
       <tr class="<%- repClass %>">
         <td class="nowrap" data-value="<%- repUnix %>">
@@ -87,7 +92,7 @@
         <td class="nowrap"><%= rep.os %></td>
         <td><%= rep.cc %></td>
         <td><%= rep.comment %></td>
-        <td class="nowrap">
+        <td class="nowrap <%- nwarnClass %>">
           <a href="<%= [ '/log', rep.slot, rep.date, 'compile' ].join('/') %>">
             <%= rep.nwarn %>
           </a>
