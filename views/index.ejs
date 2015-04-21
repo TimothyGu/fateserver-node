@@ -54,7 +54,6 @@
       <% var repMoment = l.ts.getMoment(rep.date) -%>
       <% var nowUnix = l.moment().unix()
            , repUnix = repMoment.unix() -%>
-      <% console.log(nowUnix) %>
       <% if (nowUnix < repUnix + l.ts.RECENT_AGE) {
            repClass.push('recent')
          } else if (nowUnix > repUnix + l.ts.HIDDEN_AGE) {
