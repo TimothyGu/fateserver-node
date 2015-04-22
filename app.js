@@ -54,7 +54,6 @@ app.use(function (req, res, next) {
   }
 })
 
-app.use(morgan('short'))
 if (app.get('env') === 'production') {
   app.use(morgan('combined', {
     stream: fs.createWriteStream(util.log, { flags: 'a' })
