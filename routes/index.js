@@ -34,8 +34,7 @@ function handleIndex (req, res, next) {
   var branch = res.locals.branch = req.params.branch || 'master'
   // TODO
   var check = checkQuery.bind(null, {
-            // no special treatment for master should be needed
-    branch: branch.replace(/^v([0-9])/, 'release/$1')
+    branch: branch
   })
 
   fs.readdir(util.dir, function handleSlots (err, slots) {
