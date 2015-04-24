@@ -69,6 +69,14 @@ Report of <%= l.slot %> <%= l.summary.rev %>
       </thead>
       <tbody>
         <tr>
+          <th>Owner</th>
+          <td><%= l.owner %></td>
+        </tr>
+        <tr>
+          <th>Branch</th>
+          <td><%= l.summary.branch %></td>
+        </tr>
+        <tr>
           <th>Architecture</th>
           <td><%= l.summary.arch %></td>
         </tr>
@@ -85,10 +93,6 @@ Report of <%= l.slot %> <%= l.summary.rev %>
         <tr>
           <th>OS</th>
           <td><%= l.summary.os %></td>
-        </tr>
-        <tr>
-          <th>Owner</th>
-          <td><%= l.owner %></td>
         </tr>
         <tr>
           <th>Compiler</th>
