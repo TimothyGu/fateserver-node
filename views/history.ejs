@@ -18,6 +18,7 @@ Report history for <%= l.slot %>
   var info = [
 //  [ human readable,  variable,          escape?, skip if empty? ]
     [ 'Owner',         l.owner ]
+  , [ 'Branch',        l.reps[0].branch ]
   , [ 'Architecture',  l.reps[0].subarch ]
   , [ 'OS',            l.reps[0].os ]
   , [ 'Compiler',      l.reps[0].cc ]
