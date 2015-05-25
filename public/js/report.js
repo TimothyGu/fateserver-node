@@ -2,7 +2,8 @@
  * Copyright © 2014-2015 Tiancheng “Timothy” Gu
  * Licensed under the MIT License
  */
-var initWidth = false
+
+var toggledAtLeastOnce = false
 
 /* Can't use $.toggle() as we are using a custom `display` that is `none`
    when the page first loads */
@@ -13,7 +14,7 @@ function toggle (name, mode) {
   e.css('display', activating ? 'table-row' : 'none')
   $('#' + id + '-btn').toggleClass('active')
   if (activating) {
-    if (e.hasClass('loaded')) return
+    if (e.hasClass('loaded')) return adjustWidth()
     $.getJSON('/api/' + slot + '/' + date + '/' + name, null,
               function success (data) {
       var codeElement = e.find('code.language-git')
@@ -23,19 +24,32 @@ function toggle (name, mode) {
       // This hack needed because we are embedding a <pre> into a <td>, and
       // `width: 100%` refers to the width of the <pre> text rather than the parent
       // width.
-      if (!initWidth) {
-        adjustWidth()
-        initWidth = true
-      }
+      adjustWidth()
+      toggledAtLeastOnce = true
     })
   }
 }
 
 var resized;
+var handlerAttached = false
 $(window).on('resize', function(){
-  if (!initWidth) return
+  if (!toggledAtLeastOnce) return
   clearTimeout(resized)
-  resized = setTimeout(adjustWidth, 400)
+  resized = setTimeout(function () {
+    var container = document.getElementById('failed_tests')
+    if (container.scrollWidth > 0) return adjustWidth()
+
+    if (handlerAttached) return
+    handlerAttached = true
+    var tabs = $('a[data-toggle="tab"]')
+    return tabs.on('shown.bs.tab', function handler (e) {
+      if (e.target.href.split('#')[1] === container.id) {
+        setTimeout(adjustWidth, 100)
+        handlerAttached = false
+        tabs.off('shown.bs.tab', handler)
+      }
+    })
+  }, 400)
 })
 
 function adjustWidth () {
