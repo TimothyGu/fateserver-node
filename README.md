@@ -49,9 +49,9 @@ TODO
    "(Ubuntu 4.8.2-19ubuntu1)"
 2. Minirep/minilog
 3. properly support error in configuration
+4. Convert to promises
 
 Before Sending Patches
 ----------------------
 
 1. `xz -8`
-2. `npm shrinkwrap` or check in node_modules
