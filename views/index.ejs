@@ -3,7 +3,12 @@
  %-%>
 
 <% include header1.ejs -%>
-<title>FFmpeg FATE</title>
+<title>
+  <% if (l.branch !== 'master') { -%>
+    <%= l.branch %> –
+  <% } -%>
+  FFmpeg FATE
+</title>
 <% include header2.ejs -%>
 FFmpeg FATE
 <% include header3.ejs -%>
