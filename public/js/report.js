@@ -41,7 +41,7 @@ $(window).on('resize', function(){
 function adjustWidth () {
   // 8 is the padding
   var width = $('#failed_tests').width() - 8 * 2 + 'px'
-  var pre = document.getElementsByTagName('pre')
+  var pre = document.getElementsByClassName('line-numbers')
   for (var i = 0; i < pre.length; i++) {
     pre[i].style.width = width
   }
