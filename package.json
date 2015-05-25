@@ -28,7 +28,8 @@
     "xz-pipe": "~0.0.0"
   },
   "optionalDependencies": {
-    "toobusy": "~0.2.4"
+    "toobusy": "~0.2.4",
+    "memwatch": "~0.2.2"
   },
   "engine": "node >= 0.10.0",
   "devDependencies": {
@@ -37,7 +38,6 @@
     "jsdoc": "*",
     "less": "^2.2.0",
     "less-plugin-clean-css": "^1.4.0",
-    "memwatch": "~0.2.2",
     "nodemon": "*",
     "uglifyjs": "^2.4.10"
   }
