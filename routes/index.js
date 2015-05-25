@@ -30,12 +30,12 @@ function checkQuery (check, src) {
 
 function handleIndex (req, res, next) {
   res.set('Cache-Control', 'public, max-age=60') // one minute
-  // Always contain the short branch name (e.g. v2.4).
+  // Always contain the branch name like n2.4
   var branch = res.locals.branch = req.params.branch || 'master'
   // TODO
-  var check = checkQuery.bind(null, {
-    branch: branch
-  })
+  // var check = checkQuery.bind(null, {
+  //   branch: branch
+  // })
 
   fs.readdir(util.dir, function handleSlots (err, slots) {
     if (err) {
@@ -67,6 +67,23 @@ function handleIndex (req, res, next) {
         return next(err)
       }
 
+      var match = branch.match(/^v([0-9]\.[0-9])$/)
+      var re
+      if (match) {
+        // If the branch is a release branch, filter slot names
+        re = RegExp('-n' + match[1] + '$')
+        slots = slots.filter(function (s) { return re.test(s) })
+      } else if (branch === 'master') {
+        // If not, filter out all release branches
+        re = /-n[0-9]\.[0-9]$/
+        slots = slots.filter(function (s) { return !re.test(s) })
+      } else {
+        // If it is not a branch at all
+        err = new Error('Need to update branch list. Please file a bug report.')
+        err.status = 500
+        return next(err)
+      }
+
       // For every slot get the summary of the latest results.
       async.map(slots, function iterator (slot, out) {
         var slotdir = path.join(util.dir, slot)
@@ -81,7 +98,7 @@ function handleIndex (req, res, next) {
                             function summaryCb (err, summary) {
             // Ignore possible errors in one specific report in order
             // not to destroy the entire history page.
-            if (err || !check(summary)) return out(null, null)
+            if (err) return out(null, null)
             
             parse.loadSummary(slot, 'previous', function prevCb (err, prev) {
               if (err || !prev) return out(null, [ summary ])
