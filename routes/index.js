@@ -30,6 +30,7 @@ function checkQuery (check, src) {
 
 function handleIndex (req, res, next) {
   res.set('Cache-Control', 'public, max-age=60') // one minute
+  if (req.params.branch === 'master') return res.redirect(301, '/')
   // Always contain the branch name like n2.4
   var branch = res.locals.branch = req.params.branch || 'master'
   // TODO
