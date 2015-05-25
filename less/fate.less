@@ -51,24 +51,33 @@
 .table > thead > tr,
 .table > tbody > tr,
 .table > tfoot > tr {
-    > td.pass,
-    > th.pass,
     &.pass > td,
     &.pass > th {
         background-color: @Cpass;
         color: white;
     }
-    > td.fail,
-    > th.fail,
     &.fail > td,
     &.fail > th {
         background-color: @Cfail;
         color: white;
     }
-    > td.warn,
-    > th.warn,
     &.warn > td,
     &.warn > th {
+        background-color: @Cwarn;
+        color: black;
+    }
+    > td.pass,
+    > th.pass {
+        background-color: @Cpass;
+        color: white;
+    }
+    > td.fail,
+    > th.fail {
+        background-color: @Cfail;
+        color: white;
+    }
+    > td.warn,
+    > th.warn {
         background-color: @Cwarn;
         color: black;
     }
