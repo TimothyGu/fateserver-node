@@ -20,18 +20,14 @@ function toggle (name, mode) {
       codeElement.html(decodeURIComponent(escape(atob(data[mode]))))
       e.addClass('loaded')
       Prism.highlightElement(codeElement[0])
+      // This hack needed because we are embedding a <pre> into a <td>, and
+      // `width: 100%` refers to the width of the <pre> text rather than the parent
+      // width.
+      if (!initWidth) {
+        adjustWidth()
+        initWidth = true
+      }
     })
-  }
-  // This hack needed because we are embedding a <pre> into a <td>, and
-  // `width: 100%` refers to the width of the <pre> text rather than the parent
-  // width.
-  // `setTimeout` used to get the REAL width as the browser might adjust the
-  // width of the parent <div> after this function is called.
-  if (!initWidth) {
-    setTimeout(function () {
-      adjustWidth()
-      initWidth = true
-    }, 100)
   }
 }
 
