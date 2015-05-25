@@ -222,7 +222,7 @@ Report of <%= l.slot %> <%= l.summary.rev %>
 <% if (l.summary.npass > 0) { -%>
 <div role="tabpanel" class="tab-pane" id="passed_tests">
   <% var allPassed = l.report.filter(function (value) {
-       return value.status === 0
+       return value.status === '0'
      })
      for (var i = 0; i < allPassed.length; i++) { -%>
        <span class="col-xs-12 col-sm-4 col-md-3">
