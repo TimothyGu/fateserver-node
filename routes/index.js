@@ -39,7 +39,7 @@ function handleIndex (req, res, next) {
 
   fs.readdirAsync(util.dir)
   .bind({ branch: branch })
-  .then(function handleSlots (slots) {
+  .then(function (slots) {
     this.slots = slots
     fs.readFileAsync(join(util.dir, 'branches'), 'utf8').bind(this)
     .then(function (data) {
@@ -80,7 +80,7 @@ function handleIndex (req, res, next) {
       }
 
       // For every slot get the summary of the latest results.
-      return Promise.map(slots, function iterator (slot) {
+      return Promise.map(slots, function (slot) {
         var slotdir = join(util.dir, slot)
 
         // If the slot is marked as hidden then skip over it.
@@ -90,8 +90,8 @@ function handleIndex (req, res, next) {
           if (exists) return Promise.resolve(null)
           // Load summary
           return parse.loadSummary(slot, 'latest')
-          .then(function summaryCb (summary) {
-            return parse.loadSummary(slot, 'previous').then(function prevCb (prev) {
+          .then(function (summary) {
+            return parse.loadSummary(slot, 'previous').then(function (prev) {
               return [ summary, prev ]
             }, function () {
               return [ summary ]
@@ -101,7 +101,7 @@ function handleIndex (req, res, next) {
             // not to destroy the entire history page.
           })
         })
-      }).then(function end (reps) {
+      }).then(function (reps) {
         // The server side sorting is only for default sorting.
         // Client-side sorting through FooTable handles
         // everything else.

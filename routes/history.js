@@ -23,7 +23,7 @@ function handleHistory (slot, begin, res, next) {
   var slotdir = join(util.dir, slot)
   res.set('Cache-Control', 'public, max-age=60') // one minute
 
-  fs.readdirAsync(slotdir).then(function handleFiles (files) {
+  fs.readdirAsync(slotdir).then(function (files) {
     res.locals.slot     = slot
     res.locals.begin    = begin
     res.locals.nEntries = nEntries
@@ -36,7 +36,7 @@ function handleHistory (slot, begin, res, next) {
 
     // For every report, load its summary asynchronously
     return Promise.props({
-      reps: Promise.map(repsNames, function iterator (repName) {
+      reps: Promise.map(repsNames, function (repName) {
         return parse.loadSummary(slot, repName).catch(noop)
       })
     , owner: parse.getSlotOwner(slot).catch(noop)
