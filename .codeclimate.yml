@@ -1,0 +1,4 @@
+exclude_paths:
+  - public/js/footable.js
+  - public/js/footable.sort.js
+  - public/js/prism.js
