@@ -4,10 +4,11 @@
 
 'use strict'
 
-var fs       = require('fs')
+var Promise  = require('bluebird')
+  , fs       = Promise.promisifyAll(require('fs'))
   , join     = require('path')
   , router   = require('express').Router()
-  , zlib     = require('zlib')
+  , zlib     = Promise.promisifyAll(require('zlib'))
 
 var util     = require('../lib/util')
   , parse    = require('../lib/parse')
@@ -17,14 +18,7 @@ function handleLog (slot, date, log, req, res, next) {
   var logPath = join(util.dir, logFile)
   res.set('Cache-Control', 'public, max-age=31536000') // a year
 
-  fs.readFile(logPath, function handleLogFile (err, data) {
-    if (err) {
-      err.message = 'Log "' + logFile + '" not found.'
-      err.status = 404
-      err.textOnly = true
-      return next(err)
-    }
-
+  fs.readFileAsync(logPath).then(function (data) {
     res.set('Content-Type', 'text/plain')
     var acceptedEncoding = req.get('Accept-Encoding')
     if (acceptedEncoding && acceptedEncoding.match(/gzip/)) {
@@ -33,15 +27,18 @@ function handleLog (slot, date, log, req, res, next) {
       return res.send(data)
     } else {
       // Otherwise, decompress it and then send it
-      zlib.gunzip(data, function unzipCb (err, data) {
-        if (err) {
-          err.status = 500
-          next(err)
-        }
-        res.send(data)
+      return zlib.gunzipAsync(data).then(res.send.bind(res), function (err) {
+        err.status = 500
+        err.textOnly = true
+        return next(err)
       })
     }
-  })
+  }, function (err) {
+    err.message = 'Log "' + logFile + '" not found.'
+    err.status = 404
+    err.textOnly = true
+    return next(err)
+  }).catch(next)
 }
 
 router.get('/log/:slot/:time/:log', function (req, res, next) {
