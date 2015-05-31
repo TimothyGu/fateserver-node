@@ -5,7 +5,7 @@
 'use strict'
 
 var fs       = require('fs')
-  , path     = require('path')
+  , join     = require('path').join
   , readline = require('readline')
   , async    = require('async')
   , router   = require('express').Router()
@@ -47,7 +47,7 @@ function handleIndex (req, res, next) {
       return next(err)
     }
 
-    fs.readFile(path.join(util.dir, 'branches'), 'utf8',
+    fs.readFile(join(util.dir, 'branches'), 'utf8',
                 function (err, data) {
       if (err) {
         res.locals.branches = ['master']
@@ -87,12 +87,12 @@ function handleIndex (req, res, next) {
 
       // For every slot get the summary of the latest results.
       async.map(slots, function iterator (slot, out) {
-        var slotdir = path.join(util.dir, slot)
+        var slotdir = join(util.dir, slot)
 
         // If the slot is marked as hidden then skip over it.
         // All the null members of the array will be cleaned at
         // the end().
-        fs.exists(path.join(slotdir, 'hidden'), function (exists) {
+        fs.exists(join(slotdir, 'hidden'), function (exists) {
           if (exists) return out(null, null)
           // Load summary
           parse.loadSummary(slot, 'latest',

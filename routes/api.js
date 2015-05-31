@@ -5,7 +5,7 @@
 'use strict'
 
 var fs       = require('fs')
-  , path     = require('path')
+  , join     = require('path').join
   , readline = require('readline')
   , async    = require('async')
   , express  = require('express')
@@ -28,7 +28,7 @@ function handleReportAPI (req, res, next) {
   , report: parse.loadReport.bind(null, slot, date, 0)
   , lastpass: parse.loadLastPass.bind(null, slot)
   , prevDate: function (callback) {
-      fs.readdir(path.join(util.dir, slot), function (err, files) {
+      fs.readdir(join(util.dir, slot), function (err, files) {
         if (err) {
           err.json = true
           err.message = 'Slot "' + slot + '" not found.'

@@ -5,7 +5,7 @@
 'use strict'
 
 var fs       = require('fs')
-  , path     = require('path')
+  , join     = require('path').join
   , async    = require('async')
   , router   = require('express').Router()
 
@@ -29,7 +29,7 @@ function handleReport (slot, date, res, next) {
   , report: parse.loadReport.bind(null, slot, date, 0)
   , lastpass: parse.loadLastPass.bind(null, slot)
   , prevDate: function (callback) {
-      fs.readdir(path.join(util.dir, slot), function (err, files) {
+      fs.readdir(join(util.dir, slot), function (err, files) {
         if (err) {
           err.message = 'Slot "' + slot + '" not found.'
           err.status = 404

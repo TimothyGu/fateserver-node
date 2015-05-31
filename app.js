@@ -6,7 +6,7 @@
 
 var express = require('express')
   , fs      = require('fs')
-  , path    = require('path')
+  , join    = require('path').join
   , morgan  = require('morgan')
   , compression = require('compression')
   , ejs     = require('ejs-tj')
@@ -35,7 +35,7 @@ var app = express()
 if (util.proxy) app.enable('trust proxy')
 
 // VIEW ENGINE SETUP
-app.set('views', path.join(__dirname, 'views'))
+app.set('views', join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 app.engine('ejs', ejs.__express)
 
@@ -71,7 +71,7 @@ app.use(api)
 app.use(history)
 app.use(report)
 app.use(index)
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(join(__dirname, 'public')))
 
 // ERROR HANDLING
 

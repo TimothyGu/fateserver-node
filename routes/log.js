@@ -5,7 +5,7 @@
 'use strict'
 
 var fs       = require('fs')
-  , path     = require('path')
+  , join     = require('path')
   , router   = require('express').Router()
   , zlib     = require('zlib')
 
@@ -13,8 +13,8 @@ var util     = require('../lib/util')
   , parse    = require('../lib/parse')
 
 function handleLog (slot, date, log, req, res, next) {
-  var logFile = path.join(slot, date, log + '.log.gz')
-  var logPath = path.join(util.dir, logFile)
+  var logFile = join(slot, date, log + '.log.gz')
+  var logPath = join(util.dir, logFile)
   res.set('Cache-Control', 'public, max-age=31536000') // a year
 
   fs.readFile(logPath, function handleLogFile (err, data) {

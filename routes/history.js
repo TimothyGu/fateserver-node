@@ -5,7 +5,7 @@
 'use strict'
 
 var fs       = require('fs')
-  , path     = require('path')
+  , join     = require('path').join
   , async    = require('async')
   , router   = require('express').Router()
 
@@ -18,7 +18,7 @@ var nEntries = 50
 
 function handleHistory (slot, begin, res, next) {
   begin = +begin || 0
-  var slotdir = path.join(util.dir, slot)
+  var slotdir = join(util.dir, slot)
   res.set('Cache-Control', 'public, max-age=60') // one minute
 
   fs.readdir(slotdir, function handleFiles (err, files) {
