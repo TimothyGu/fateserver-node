@@ -4,7 +4,8 @@
 
 'use strict'
 
-var fs       = require('fs')
+var Promise  = require('bluebird')
+  , fs       = Promise.promisifyAll(require('fs'))
   , join     = require('path').join
   , async    = require('async')
   , router   = require('express').Router()
@@ -23,35 +24,28 @@ function handleReport (slot, date, res, next) {
   res.locals.slot = slot
   res.locals.date = date
 
-  async.parallel({
-    owner: parse.getSlotOwner.bind(null, slot)
-  , summary: parse.loadSummary.bind(null, slot, date)
-  , report: parse.loadReport.bind(null, slot, date, 0)
-  , lastpass: parse.loadLastPass.bind(null, slot)
-  , prevDate: function (callback) {
-      fs.readdir(join(util.dir, slot), function (err, files) {
-        if (err) {
-          err.message = 'Slot "' + slot + '" not found.'
-          err.status = 404
-          return callback(err)
-        }
+  Promise.props({
+    owner: parse.getSlotOwner(slot)
+  , summary: parse.loadSummary(slot, date)
+  , report: parse.loadReport(slot, date, 0)
+  , lastpass: parse.loadLastPass(slot)
+  , prevDate: fs.readdirAsync(join(util.dir, slot)).then(function (files) {
+      var runs = files
+        .filter(function (val) {
+          return val.match(/^[0-9]/)
+        })
+        .sort()
 
-        var runs = files
-          .filter(function (val) {
-            return val.match(/^[0-9]/)
-          })
-          .sort()
-
-        var prevIndex = runs.indexOf(date) - 1
-        callback(null, prevIndex >= 0
-                     ? Number(runs[prevIndex])
-                     : null)
-      })
-    }
-  }, function (err, results) {
-    if (err) return next(err)
-    res.render('report.ejs', results)
-  })
+      var prevIndex = runs.indexOf(date) - 1
+      return prevIndex >= 0 ? Number(runs[prevIndex])
+                            : null
+    }, function (err) {
+      err.message = 'Slot "' + slot + '" not found.'
+      err.status = 404
+      return Promise.reject(err)
+    })
+  }).then(res.render.bind(res, 'report.ejs'))
+  .catch(next)
 }
 
 router.get('/report/:slot/:time', function (req, res, next) {

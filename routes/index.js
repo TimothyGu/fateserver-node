@@ -4,10 +4,9 @@
 
 'use strict'
 
-var fs       = require('fs')
+var Promise  = require('bluebird')
+  , fs       = Promise.promisifyAll(require('fs'))
   , join     = require('path').join
-  , readline = require('readline')
-  , async    = require('async')
   , router   = require('express').Router()
 
 var util   = require('../lib/util')
@@ -38,43 +37,38 @@ function handleIndex (req, res, next) {
   //   branch: branch
   // })
 
-  fs.readdir(util.dir, function handleSlots (err, slots) {
-    if (err) {
-      err.message = 'util.dir not found. Did you set up config.js'
-                  + 'correctly?'
-      err.message = 'FATE data not found.'
-      err.status = 404
-      return next(err)
-    }
-
-    fs.readFile(join(util.dir, 'branches'), 'utf8',
-                function (err, data) {
-      if (err) {
-        res.locals.branches = ['master']
-      } else {
-        // readline? nah.
-        var branches = data
-                         .split('\n')
-                         .filter(function (b) { return b })
-                         .sort()
-                         .reverse()
-        branches.unshift('master')
-        res.locals.branches = branches
-      }
-      
-      if (res.locals.branches.indexOf(branch) === -1) {
+  fs.readdirAsync(util.dir)
+  .bind({ branch: branch })
+  .then(function handleSlots (slots) {
+    this.slots = slots
+    fs.readFileAsync(join(util.dir, 'branches'), 'utf8').bind(this)
+    .then(function (data) {
+      // readline? nah.
+      var branches = data
+                       .split('\n')
+                       .filter(function (b) { return b })
+                       .sort()
+                       .reverse()
+      branches.unshift('master')
+      return res.locals.branches = branches
+    }, function () {
+      return res.locals.branches = [ 'master' ]
+    }).then(function (branches) {
+      var err
+      if (branches.indexOf(this.branch) === -1) {
         err = new Error('Branch not found')
         err.status = 404
-        return next(err)
+        return Promise.reject(err)
       }
 
-      var match = branch.match(/^v([0-9]\.[0-9])$/)
+      var match = this.branch.match(/^v([0-9]\.[0-9])$/)
       var re
+      var slots = this.slots
       if (match) {
         // If the branch is a release branch, filter slot names
         re = RegExp('-n' + match[1] + '$')
         slots = slots.filter(function (s) { return re.test(s) })
-      } else if (branch === 'master') {
+      } else if (this.branch === 'master') {
         // If not, filter out all release branches
         re = /-n[0-9]\.[0-9]$/
         slots = slots.filter(function (s) { return !re.test(s) })
@@ -82,32 +76,32 @@ function handleIndex (req, res, next) {
         // If it is not a branch at all
         err = new Error('Need to update branch list. Please file a bug report.')
         err.status = 500
-        return next(err)
+        return Promise.reject(err)
       }
 
       // For every slot get the summary of the latest results.
-      async.map(slots, function iterator (slot, out) {
+      return Promise.map(slots, function iterator (slot) {
         var slotdir = join(util.dir, slot)
 
         // If the slot is marked as hidden then skip over it.
-        // All the null members of the array will be cleaned at
-        // the end().
-        fs.exists(join(slotdir, 'hidden'), function (exists) {
-          if (exists) return out(null, null)
+        return new Promise(
+          fs.exists.bind(fs, join(slotdir, 'hidden'))
+        ).then(function (exists) {
+          if (exists) return Promise.resolve(null)
           // Load summary
-          parse.loadSummary(slot, 'latest',
-                            function summaryCb (err, summary) {
+          return parse.loadSummary(slot, 'latest')
+          .then(function summaryCb (summary) {
+            return parse.loadSummary(slot, 'previous').then(function prevCb (prev) {
+              return [ summary, prev ]
+            }, function () {
+              return [ summary ]
+            })
+          }, function () {
             // Ignore possible errors in one specific report in order
             // not to destroy the entire history page.
-            if (err) return out(null, null)
-            
-            parse.loadSummary(slot, 'previous', function prevCb (err, prev) {
-              if (err || !prev) return out(null, [ summary ])
-              out(null, [ summary, prev ])
-            })
           })
         })
-      }, function end (err, reps) {
+      }).then(function end (reps) {
         // The server side sorting is only for default sorting.
         // Client-side sorting through FooTable handles
         // everything else.
@@ -125,7 +119,13 @@ function handleIndex (req, res, next) {
         res.render('index.ejs')
       })
     })
-  })
+  }, function (err) {
+    err.message = 'util.dir not found. Did you set up config.js'
+                + 'correctly?'
+    err.message = 'FATE data not found.'
+    err.status = 404
+    return Promise.reject(err)
+  }).catch(next)
 }
 
 router.get('/', handleIndex)

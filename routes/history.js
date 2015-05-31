@@ -4,9 +4,9 @@
 
 'use strict'
 
-var fs       = require('fs')
+var Promise  = require('bluebird')
+  , fs       = Promise.promisifyAll(require('fs'))
   , join     = require('path').join
-  , async    = require('async')
   , router   = require('express').Router()
 
 var util     = require('../lib/util')
@@ -16,19 +16,15 @@ var util     = require('../lib/util')
 
 var nEntries = 50
 
+function noop () {}
+
 function handleHistory (slot, begin, res, next) {
   begin = +begin || 0
   var slotdir = join(util.dir, slot)
   res.set('Cache-Control', 'public, max-age=60') // one minute
 
-  fs.readdir(slotdir, function handleFiles (err, files) {
-    if (err) {
-      err.message = 'Slot "' + slot + '" not found.'
-      err.status = 404
-      return next(err)
-    }
-
-    res.locals.slot    = slot
+  fs.readdirAsync(slotdir).then(function handleFiles (files) {
+    res.locals.slot     = slot
     res.locals.begin    = begin
     res.locals.nEntries = nEntries
     var repsNames = files.filter(function (val) {
@@ -39,26 +35,27 @@ function handleHistory (slot, begin, res, next) {
     repsNames = repsNames.slice(begin, begin + nEntries)
 
     // For every report, load its summary asynchronously
-    async.map(repsNames, function iterator (repName, out) {
-      parse.loadSummary(slot, repName, function summaryCb (err, summary) {
-        // Ignore possible errors in one specific report in order
-        // not to destroy the entire history page.
-        return out(null, err ? null : summary)
+    return Promise.props({
+      reps: Promise.map(repsNames, function iterator (repName) {
+        return parse.loadSummary(slot, repName).catch(noop)
       })
-    }, function end (err, reps) {
+    , owner: parse.getSlotOwner(slot).catch(noop)
+    }).then(function (results) {
       // reps is an array of all summaries
       res.locals.reps  =
-        reps
+        results.reps
           .filter(function (n) {
             // Filter out empty/invalid ones
             return n != null
           })
-      parse.getSlotOwner(slot, function (e, owner) {
-        res.locals.owner = owner
-        res.render('history.ejs')
-      })
+      res.locals.owner = results.owner
+      res.render('history.ejs')
     })
-  })
+  }, function (err) {
+    err.message = 'Slot "' + slot + '" not found.'
+    err.status = 404
+    return next(err)
+  }).catch(next)
 }
 
 router.get('/history/:slot', function (req, res, next) {
