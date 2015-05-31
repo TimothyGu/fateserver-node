@@ -7,7 +7,6 @@
 var Promise  = require('bluebird')
   , fs       = Promise.promisifyAll(require('fs'))
   , join     = require('path').join
-  , async    = require('async')
   , router   = require('express').Router()
 
 var util     = require('../lib/util')

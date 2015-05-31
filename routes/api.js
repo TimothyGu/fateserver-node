@@ -8,7 +8,6 @@ var Promise  = require('bluebird')
   , fs       = Promise.promisifyAll(require('fs'))
   , join     = require('path').join
   , readline = require('readline')
-  , async    = require('async')
   , express  = require('express')
 
 var util     = require('../lib/util')
